@@ -8,12 +8,12 @@ namespace neobooru.Controllers
 {
     public class PostsController : Controller
     {
-        public IActionResult Trending()
+        public IActionResult List()
         {
             return View();
         }
 
-        public IActionResult List()
+        public IActionResult Trending()
         {
             return View();
         }
