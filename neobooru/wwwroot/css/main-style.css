@@ -80,12 +80,12 @@ a:focus {
 
     #sidebar .sidebar-header {
         padding: 20px;
-        background: #10ac84;
+        background: #218c74;
     }
 
     #sidebar ul.components {
         /*padding: 20px 0;*/
-        border-bottom: 1px solid #47748b;
+        /* border-bottom: 1px solid #10ac84; */
     }
 
     #sidebar ul p {
