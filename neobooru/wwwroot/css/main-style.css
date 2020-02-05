@@ -1,8 +1,4 @@
-﻿/*
-    DEMO STYLE
-*/
-
-@import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
+﻿@import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
 
 body {
     font-family: 'Poppins', sans-serif;
@@ -68,47 +64,44 @@ a:focus {
     left: 0;
     height: 100vh;
     z-index: 999;
-    /* background: #7386D5; */
     background: #1dd1a1;
     color: #fff;
     transition: all 0.3s;
 }
 
-    #sidebar.active {
-        margin-left: -250px;
-    }
+#sidebar.active {
+    margin-left: -250px;
+}
 
-    #sidebar .sidebar-header {
-        padding: 20px;
-        background: #218c74;
-    }
+#sidebar .sidebar-header {
+    padding: 20px;
+    background: #218c74;
+}
 
-    #sidebar ul.components {
-        /*padding: 20px 0;*/
-        /* border-bottom: 1px solid #10ac84; */
-    }
+#sidebar ul.components {
+}
 
-    #sidebar ul p {
-        color: #fff;
-        padding: 10px;
-    }
+#sidebar ul p {
+    color: #fff;
+    padding: 10px;
+}
 
-    #sidebar ul li a {
-        padding: 10px;
-        font-size: 1.1em;
-        display: block;
-    }
+#sidebar ul li a {
+    padding: 10px;
+    font-size: 1.1em;
+    display: block;
+}
 
-        #sidebar ul li a:hover {
-            color: #10ac84;
-            background: #fff;
-        }
+#sidebar ul li a:hover {
+    color: #10ac84;
+    background: #fff;
+}
 
-    #sidebar ul li.active > a,
-    a[aria-expanded="true"] {
-        color: #fff;
-        background: #10ac84;
-    }
+#sidebar ul li.active > a,
+a[aria-expanded="true"] {
+    color: #fff;
+    background: #10ac84;
+}
 
 a[data-toggle="collapse"] {
     position: relative;
@@ -132,13 +125,13 @@ ul.CTAs {
     padding: 20px;
 }
 
-    ul.CTAs a {
-        text-align: center;
-        font-size: 0.9em !important;
-        display: block;
-        border-radius: 5px;
-        margin-bottom: 5px;
-    }
+ul.CTAs a {
+    text-align: center;
+    font-size: 0.9em !important;
+    display: block;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
 
 a.download {
     background: #fff;
@@ -165,9 +158,9 @@ a.article:hover {
     right: 0;
 }
 
-    #content.active {
-        width: 100%;
-    }
+#content.active {
+    width: 100%;
+}
 
 /* ---------------------------------------------------
     MEDIAQUERIES
@@ -193,4 +186,17 @@ a.article:hover {
     #sidebarCollapse span {
         display: none;
     }
+}
+
+/* ---------------------------------------------------
+    PAGINATION
+----------------------------------------------------- */
+.custom-active-page {
+    background: #10ac84 !important;
+    color: #fafafa !important;
+    border: 1px #10ac84 solid !important;
+}
+
+.custom-notactive-page {
+    color: #1dd1a1 !important;
 }

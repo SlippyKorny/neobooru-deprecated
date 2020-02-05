@@ -7,30 +7,24 @@
 
     <title>Collapsible sidebar using Bootstrap 4</title>
 
-    <!-- Bootstrap CSS CDN -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
-    <!-- Our Custom CSS -->
     <link rel="stylesheet" href="~/css/main-style.css">
-    <!-- Scrollbar Custom CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
-
-    <!-- Font Awesome JS -->
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
 
 </head>
 <body>
-    <!-- @RenderBody() -->
     <div class="wrapper">
-        <!-- Sidebar  -->
         <nav id="sidebar">
             <div class="sidebar-header">
                 <h3>Neobooru</h3>
             </div>
 
             <ul class="list-unstyled components">
-                <li class="active"><a href="#" data-toggle="collapse" aria-expanded="false">Posts</a></li>
-                <li><a href="#" data-toggle="collapse" aria-expanded="false">Artists</a></li>
+                <li class="active"><a href="/posts/list">Posts</a></li>
+                @* <li><a asp-controller="ArtistsController" asp-action="List" data-toggle="collapse" aria-expanded="false">Artists</a></li> *@
+                <li><a href="/artists/list">Artists</a></li>
                 <li><a href="#" data-toggle="collapse" aria-expanded="false">Pools</a></li>
                 <li><a href="#" data-toggle="collapse" aria-expanded="false">Profile</a></li>
                 <li><a href="#" data-toggle="collapse" aria-expanded="false">Forum</a></li>
@@ -42,172 +36,61 @@
                 <li>
                     <a href="#" class="download">Support our project!</a>
                 </li>
-
             </ul>
         </nav>
 
-        <div id="content">
+            <div id="content">
+                <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                    <div class="container-fluid">
 
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <div class="container-fluid">
+                        <button type="button" id="sidebarCollapse" class="btn sidebar-btn">
+                            <i class="fas fa-align-left"></i>
+                            <span>Toggle Sidebar</span>
+                        </button>
+                        <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                            <i class="fas fa-align-justify"></i>
+                        </button>
 
-                    <button type="button" id="sidebarCollapse" class="btn sidebar-btn">
-                        <i class="fas fa-align-left"></i>
-                        <span>Toggle Sidebar</span>
-                    </button>
-                    <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <i class="fas fa-align-justify"></i>
-                    </button>
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="nav navbar-nav ml-auto">
+                                <li class="nav-item active">
+                                    <a class="nav-link" href="#">List</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">Trending</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">Upload</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">Help</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
 
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="nav navbar-nav ml-auto">
-                            <li class="nav-item active">
-                                <a class="nav-link" href="#">List</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Trending</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Upload</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Help</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
+                @RenderBody()
 
-            <div id="search-section">
-                <form>
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <button class="btn" style="background: #1dd1a1; color: white;"><svg class="svg-inline--fa fa-align-left fa-w-14" aria-hidden="true" data-prefix="fas" data-icon="align-left" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M288 44v40c0 8.837-7.163 16-16 16H16c-8.837 0-16-7.163-16-16V44c0-8.837 7.163-16 16-16h256c8.837 0 16 7.163 16 16zM0 172v40c0 8.837 7.163 16 16 16h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16zm16 312h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm256-200H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16h256c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16z"></path></svg> Toggle Search Options</button>
-                        </div>
-                        <input type="text" class="form-control" placeholder="Ex: blue_sky cloud 1girl" aria-label="Recipient's username" aria-describedby="basic-addon2">
-                        <div class="input-group-append">
-                            <button class="btn" style="background: #218c74; color: white;">Search</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-
-            <div id="art-container">
-                <div class="row">
-                    <div class="col-sm">
-                        <div class="card w-20">
-                            <img src="~/img/prototyping/arts/6.jpg" class="card-img-top" />
-                            <div class="card-footer">
-                                <h5 class="card-title">Crystalic Girl</h5>
-                                <p class="card-text">Made by idkWho <br />Uploaded: 2020-02-03 13:30:26</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm">
-                        <div class="card w-20">
-                            <img src="~/img/prototyping/arts/2.jpg" class="card-img-top" />
-                            <div class="card-footer">
-                                <h5 class="card-title">Neko Girl</h5>
-                                <p class="card-text">Made by idkWho <br />Uploaded: 2020-02-03 13:30:26</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm">
-                        <div class="card w-20">
-                            <img src="~/img/prototyping/arts/8.jpg" class="card-img-top" />
-                            <div class="card-footer">
-                                <h5 class="card-title">Neko Girl</h5>
-                                <p class="card-text">Made by idkWho <br />Uploaded: 2020-02-03 13:30:26</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm">
-                        <div class="card w-20">
-                            <img src="~/img/prototyping/arts/4.jpg" class="card-img-top" />
-                            <div class="card-footer">
-                                <h5 class="card-title">Neko Girl</h5>
-                                <p class="card-text">Made by idkWho <br />Uploaded: 2020-02-03 13:30:26</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm">
-                        <div class="card w-20">
-                            <img src="~/img/prototyping/arts/10.jpg" class="card-img-top" />
-                            <div class="card-footer">
-                                <h5 class="card-title">Neko Girl</h5>
-                                <p class="card-text">Made by ixy <br />Uploaded: 2020-02-03 13:30:26</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row mt-3">
-                        <div class="col-sm">
-                            <div class="card w-20">
-                                <img src="~/img/prototyping/arts/1.jpg" class="card-img-top" />
-                                <div class="card-footer">
-                                    <h5 class="card-title">Neko Girl</h5>
-                                    <p class="card-text">Made by ixy <br />Uploaded: 2020-02-03 13:30:26</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm">
-                            <div class="card w-20">
-                                <img src="~/img/prototyping/arts/2.jpg" class="card-img-top" />
-                                <div class="card-footer">
-                                    <h5 class="card-title">Neko Girl</h5>
-                                    <p class="card-text">Made by ixy <br />Uploaded: 2020-02-03 13:30:26</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm">
-                            <div class="card w-20">
-                                <img src="~/img/prototyping/arts/3.jpg" class="card-img-top" />
-                                <div class="card-footer">
-                                    <h5 class="card-title">Neko Girl</h5>
-                                    <p class="card-text">Made by ixy <br />Uploaded: 2020-02-03 13:30:26</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm">
-                            <div class="card w-20">
-                                <img src="~/img/prototyping/arts/4.jpg" class="card-img-top" />
-                                <div class="card-footer">
-                                    <h5 class="card-title">Neko Girl</h5>
-                                    <p class="card-text">Made by ixy <br />Uploaded: 2020-02-03 13:30:26</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm">
-                            <div class="card w-20">
-                                <img src="~/img/prototyping/arts/5.jpg" class="card-img-top" />
-                                <div class="card-footer">
-                                    <h5 class="card-title">Neko Girl</h5>
-                                    <p class="card-text">Made by ixy <br />Uploaded: 2020-02-03 13:30:26</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
-    </div>
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $("#sidebar").mCustomScrollbar({
-                theme: "minimal"
-            });
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $("#sidebar").mCustomScrollbar({
+                    theme: "minimal"
+                });
 
-            $('#sidebarCollapse').on('click', function () {
-                $('#sidebar, #content').toggleClass('active');
-                $('.collapse.in').toggleClass('in');
-                $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+                $('#sidebarCollapse').on('click', function () {
+                    $('#sidebar, #content').toggleClass('active');
+                    $('.collapse.in').toggleClass('in');
+                    $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+                });
             });
-        });
-    </script>
-    <!-- <script src="~/js/site.js"></script> -->
-</body>
-</html>
+        </script>
+    </body>
+    </html>

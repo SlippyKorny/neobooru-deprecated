@@ -8,6 +8,7 @@ namespace neobooru.Controllers
 {
     public class ArtistsController : Controller
     {
+        // GET: artists/List
         public IActionResult List()
         {
             return View();

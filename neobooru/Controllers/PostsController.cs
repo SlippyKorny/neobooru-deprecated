@@ -8,6 +8,7 @@ namespace neobooru.Controllers
 {
     public class PostsController : Controller
     {
+        // GET: posts/List
         public IActionResult List()
         {
             return View();
