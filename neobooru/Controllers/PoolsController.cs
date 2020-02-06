@@ -8,6 +8,7 @@ namespace neobooru.Controllers
 {
     public class PoolsController : Controller
     {
+        // GET: pools/List
         public IActionResult List()
         {
             return View();

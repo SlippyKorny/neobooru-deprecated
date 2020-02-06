@@ -22,14 +22,13 @@
             </div>
 
             <ul class="list-unstyled components">
-                <li class="active"><a href="/posts/list">Posts</a></li>
-                @* <li><a asp-controller="ArtistsController" asp-action="List" data-toggle="collapse" aria-expanded="false">Artists</a></li> *@
-                <li><a href="/artists/list">Artists</a></li>
-                <li><a href="#" data-toggle="collapse" aria-expanded="false">Pools</a></li>
-                <li><a href="#" data-toggle="collapse" aria-expanded="false">Profile</a></li>
-                <li><a href="#" data-toggle="collapse" aria-expanded="false">Forum</a></li>
-                <li><a href="#storeSubmenu" data-toggle="collapse" aria-expanded="false">Store</a></li>
-                <li><a href="#helpSubmenu" data-toggle="collapse" aria-expanded="false">Help</a></li>
+                <li @(ViewData["Section"].Equals("Posts") ? "class=active" : "")><a href="/posts/list">Posts</a></li>
+                <li @(ViewData["Section"].Equals("Artists") ? "class=active" : "")><a href="/artists/list">Artists</a></li>
+                <li @(ViewData["Section"].Equals("Pools") ? "class=active" : "")><a href="/pools/List">Pools</a></li>
+                <li @(ViewData["Section"].Equals("Profile") ? "class=active" : "")><a href="#">Profile</a></li>
+                <li @(ViewData["Section"].Equals("Forum") ? "class=active" : "")><a href="#">Forum</a></li>
+                <li @(ViewData["Section"].Equals("Store") ? "class=active" : "")><a href="#">Store</a></li>
+                <li @(ViewData["Section"].Equals("Help") ? "class=active" : "")><a href="#">Help</a></li>
             </ul>
 
             <ul class="list-unstyled CTAs">
