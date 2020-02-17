@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title>Collapsible sidebar using Bootstrap 4</title>
+    <title>@(ViewData["Section"]) @(ViewData["Subsection"]) | neobooru</title>
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
     <link rel="stylesheet" href="~/css/main-style.css">
@@ -25,7 +25,7 @@
                 <li @(ViewData["Section"].Equals("Posts") ? "class=active" : "")><a href="/posts/list">Posts</a></li>
                 <li @(ViewData["Section"].Equals("Artists") ? "class=active" : "")><a href="/artists/list">Artists</a></li>
                 <li @(ViewData["Section"].Equals("Pools") ? "class=active" : "")><a href="/pools/List">Pools</a></li>
-                <li @(ViewData["Section"].Equals("Profile") ? "class=active" : "")><a href="#">Profile</a></li>
+                <li @(ViewData["Section"].Equals("Profile") ? "class=active" : "")><a href="/profile/myprofile">Profile</a></li>
                 <li @(ViewData["Section"].Equals("Forum") ? "class=active" : "")><a href="#">Forum</a></li>
                 <li @(ViewData["Section"].Equals("Store") ? "class=active" : "")><a href="#">Store</a></li>
                 <li @(ViewData["Section"].Equals("Help") ? "class=active" : "")><a href="#">Help</a></li>

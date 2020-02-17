@@ -8,6 +8,7 @@ namespace neobooru.Controllers
 {
     public class ProfileController : Controller
     {
+        // GET: profile/myprofile
         public IActionResult MyProfile()
         {
             return View();
