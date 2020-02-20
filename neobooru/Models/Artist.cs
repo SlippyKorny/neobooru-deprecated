@@ -9,23 +9,23 @@ namespace neobooru.Models
     public class Artist
     {
         [Key]
-        public Guid id { get; set; }
+        public Guid Id { get; set; }
 
         [Required]
-        public String artistName { get; set; }
+        public String ArtistName { get; set; }
 
         [Required]
-        public DateTime registeredAt { get; set; }
+        public DateTime RegisteredAt { get; set; }
 
-        public int profileViews { get; set; }
+        public int ProfileViews { get; set; }
 
         // TODO: One artist to many users relation - subscriptions
 
-        public String largePfpUrl { get; set; }
+        public String LargePfpUrl { get; set; }
 
         [Required]
-        public String pfpUrl { get; set; }
+        public String PfpUrl { get; set; }
 
-        public String previewPfpUrl { get; set; }
+        public String PreviewPfpUrl { get; set; }
     }
 }

@@ -9,35 +9,37 @@ namespace neobooru.Models
     public class Art
     {
         [Key]
-        public Guid id { get; set; }
+        public Guid Id { get; set; }
 
-        public String fileUrl { get; set; }
+        public String FileUrl { get; set; }
 
-        public String previewFileUrl { get; set; }
-
-        [Required]
-        public String largeFileUrl { get; set; }
+        public String PreviewFileUrl { get; set; }
 
         [Required]
-        public DateTime createdAt { get; set; }
+        public String LargeFileUrl { get; set; }
 
-        public DateTime updatedAt { get; set; }
+        [Required]
+        public DateTime CreatedAt { get; set; }
+
+        public DateTime UpdatedAt { get; set; }
 
         // TODO: Uploader ID or reference to the model
 
-        public Artist author { get; set; }
+        public string Name { get; set; }
 
-        public int stars { get; set; }
+        public Artist Author { get; set; }
 
-        public String source { get; set; }
+        public int Stars { get; set; }
 
-        public String md5Hash { get; set; }
+        public String Source { get; set; }
 
-        public float height { get; set; }
+        public String Md5Hash { get; set; }
 
-        public float width { get; set; }
+        public float Height { get; set; }
 
-        public int fileSize { get; set; }
+        public float Width { get; set; }
+
+        public int FileSize { get; set; }
 
         public virtual ICollection<Tag> tags { get; set; }
 

@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20200217170517_AddingIdentity.cs" />
+    <Compile Remove="Migrations\20200217170517_AddingIdentity.Designer.cs" />
+    <Compile Remove="Migrations\20200218224553_ReaddingIdentity.cs" />
+    <Compile Remove="Migrations\20200218224553_ReaddingIdentity.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.1" />

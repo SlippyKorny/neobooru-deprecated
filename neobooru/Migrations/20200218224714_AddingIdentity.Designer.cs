@@ -10,7 +10,7 @@ using neobooru.Models;
 namespace neobooru.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200217170517_AddingIdentity")]
+    [Migration("20200218224714_AddingIdentity")]
     partial class AddingIdentity
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
