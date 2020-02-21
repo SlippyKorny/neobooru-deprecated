@@ -20,7 +20,7 @@ namespace neobooru.Controllers
             
         }
 
-        // GET: posts/List
+        [HttpGet]
         public IActionResult List()
         {
             List<ArtThumbnailViewModel> Arts = new List<ArtThumbnailViewModel>();
@@ -33,24 +33,25 @@ namespace neobooru.Controllers
             a1.CreatedAt = DateTime.Now;
             a1.PreviewFileUrl = "~/img/prototyping/arts/20.png";
 
-            Arts.Add(new ArtThumbnailViewModel(a1));
-            Arts.Add(new ArtThumbnailViewModel(a1));
-            Arts.Add(new ArtThumbnailViewModel(a1));
-            Arts.Add(new ArtThumbnailViewModel(a1));
-            Arts.Add(new ArtThumbnailViewModel(a1));
+            for (int i = 0; i < 20; i++)
+                Arts.Add(new ArtThumbnailViewModel(a1));
+
             return View(Arts);
         }
 
+        [HttpGet]
         public IActionResult Trending()
         {
             return View();
         }
 
+        [HttpGet]
         public IActionResult Upload()
         {
             return View();
         }
 
+        [HttpGet]
         public IActionResult Help()
         {
             return View();

@@ -11,15 +11,15 @@ namespace neobooru.Models
         [Key]
         public Guid id { get; set; }
 
-        public String poolName { get; set; }
+        public String PoolName { get; set; }
 
         // TODO: One to many relation with users
 
         [Required]
-        public DateTime createdAt { get; set; }
+        public DateTime CreatedAt { get; set; }
 
-        public DateTime updatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
 
-        public ICollection<Art> arts { get; set; }
+        public ICollection<Art> Arts { get; set; }
     }
 }

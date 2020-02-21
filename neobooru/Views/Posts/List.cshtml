@@ -22,12 +22,12 @@
     @{ int length = Model.Count; }
     @for (var i = 0; i < length;)
     {
-        <div class="row">
+        <div class="row mt-3">
             @for (var a = 0; a < 5; a++)
             {
                 <div class="col-sm">
                     <div class="card w-20">
-                        <img src="@Model[i].FileUrl" class="card-img-top" />
+                        <img src="@Url.Content(Model[i].FileUrl)" class="card-img-top" />
                         <div class="card-footer">
                             <h5 class="card-title">@Model[i].ArtName</h5>
                             <p class="card-text">Made by @Model[i].ArtistName<br />Uploaded: @Model[i].UploadDate.ToString()</p>

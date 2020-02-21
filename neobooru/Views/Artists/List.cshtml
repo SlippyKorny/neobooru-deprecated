@@ -2,6 +2,7 @@
     ViewData["Section"] = "Artists";
     ViewData["Subsection"] = "List";
 }
+@model List<neobooru.ViewModels.ArtistThumbnailViewModel>
 
 <div id="search-section">
     <form>
@@ -18,196 +19,49 @@
 </div>
 
 <div id="artist-container">
-    <div class="row">
-        <div class="col-sm">
-            <div class="card w-20">
-                <img src="~/img/prototyping/artists/CommieComma.png" class="card-img-top" />
-                <div class="card-footer">
-                    <h5 class="card-title">CommieComma</h5>
-                    <p class="card-text">Registered Arts: 23<br />Registered artist on: 2020-02-05 21:39:26</p>
-                    <div class="row">
-                        <div class="col-sm">
-                            <i class="fas fa-star"></i> 532
-                        </div>
-                        <div class="col-sm">
-                            <i class="fas fa-eye"></i> 3231
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm">
-            <div class="card w-20">
-                <img src="~/img/prototyping/artists/bluethebone.jpg" class="card-img-top" />
-                <div class="card-footer">
-                    <h5 class="card-title">bluethebone</h5>
-                    <p class="card-text">Registered Arts: 42<br />Registered artist on: 2020-02-05 21:38:26</p>
-                    <div class="row">
-                        <div class="col-sm">
-                            <i class="fas fa-star"></i> 239
-                        </div>
-                        <div class="col-sm">
-                            <i class="fas fa-eye"></i> 1200
+     @{ int length = Model.Count; }
+     @for (var i = 0; i < length;)
+     {
+        <div class="row mt-3">
+            @for (var a = 0; a < 5; a++)
+            {
+                <div class="col-sm">
+                    <div class="card w-20">
+                        <img src="@Url.Content(Model[i].PfpUrl)" class="card-img-top" />
+                        <div class="card-footer">
+                            <h5 class="card-title">@Model[i].ArtistName</h5>
+                            <p class="card-text">Registered Arts: 23<br />Registered artist on: @Model[i].RegistrationTime.ToString()</p>
+                            <div class="row">
+                                <div class="col-sm">
+                                    <i class="fas fa-star"></i> @Model[i].Subscriptions
+                                </div>
+                                <div class="col-sm">
+                                    <i class="fas fa-eye"></i> @Model[i].ProfileViews
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+                i++;
+            }
         </div>
-        <div class="col-sm">
-            <div class="card w-20">
-                <img src="~/img/prototyping/artists/ClaCla_HaruHi.jpg" class="card-img-top" />
-                <div class="card-footer">
-                    <h5 class="card-title">ClaCla_HaruHi</h5>
-                    <p class="card-text">Registered Arts: 36<br />Registered artist on: 2020-02-05 20:30:26</p>
-                    <div class="row">
-                        <div class="col-sm">
-                            <i class="fas fa-star"></i> 322
-                        </div>
-                        <div class="col-sm">
-                            <i class="fas fa-eye"></i> 4300
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm">
-            <div class="card w-20">
-                <img src="~/img/prototyping/artists/Dailykrumbs.jpg" class="card-img-top" />
-                <div class="card-footer">
-                    <h5 class="card-title">Dailykrumbs</h5>
-                    <p class="card-text">Registered Arts: 23<br />Registered artist on: 2020-02-05 19:30:26</p>
-                    <div class="row">
-                        <div class="col-sm">
-                            <i class="fas fa-star"></i> 344
-                        </div>
-                        <div class="col-sm">
-                            <i class="fas fa-eye"></i> 3633
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm">
-            <div class="card w-20">
-                <img src="~/img/prototyping/artists/hushabye.jpg" class="card-img-top" />
-                <div class="card-footer">
-                    <h5 class="card-title">hushabye</h5>
-                    <p class="card-text">Registered Arts: 45<br />Registered artist on: 2020-02-03 18:30:26</p>
-                    <div class="row">
-                        <div class="col-sm">
-                            <i class="fas fa-star"></i> 11
-                        </div>
-                        <div class="col-sm">
-                            <i class="fas fa-eye"></i> 238
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row mt-3">
-        <div class="col-sm">
-            <div class="card w-20">
-                <img src="~/img/prototyping/artists/kanozi.png" class="card-img-top" />
-                <div class="card-footer">
-                    <h5 class="card-title">kanozi</h5>
-                    <p class="card-text">Registered Arts: 5<br />Registered artist on: 2020-02-03 17:30:26</p>
-                    <div class="row">
-                        <div class="col-sm">
-                            <i class="fas fa-star"></i> 3
-                        </div>
-                        <div class="col-sm">
-                            <i class="fas fa-eye"></i> 58
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm">
-            <div class="card w-20">
-                <img src="~/img/prototyping/artists/kuuma25_kuma.png" class="card-img-top" />
-                <div class="card-footer">
-                    <h5 class="card-title">kuuma25_kuma</h5>
-                    <p class="card-text">Registered Arts: 45<br />Registered artist on: 2020-02-03 17:30:26</p>
-                    <div class="row">
-                        <div class="col-sm">
-                            <i class="fas fa-star"></i> 69
-                        </div>
-                        <div class="col-sm">
-                            <i class="fas fa-eye"></i> 789
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm">
-            <div class="card w-20">
-                <img src="~/img/prototyping/artists/MakuZoku.jpg" class="card-img-top" />
-                <div class="card-footer">
-                    <h5 class="card-title">MakuZoku</h5>
-                    <p class="card-text">Registered Arts: 32<br />Registered artist on: 2020-02-03 17:30:26</p>
-                    <div class="row">
-                        <div class="col-sm">
-                            <i class="fas fa-star"></i> 56
-                        </div>
-                        <div class="col-sm">
-                            <i class="fas fa-eye"></i> 638
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm">
-            <div class="card w-20">
-                <img src="~/img/prototyping/artists/nanabuluku.jpg" class="card-img-top" />
-                <div class="card-footer">
-                    <h5 class="card-title">nanabuluku</h5>
-                    <p class="card-text">Registered Arts: 13<br />Registered artist on: 2020-02-03 17:30:26</p>
-                    <div class="row">
-                        <div class="col-sm">
-                            <i class="fas fa-star"></i> 68
-                        </div>
-                        <div class="col-sm">
-                            <i class="fas fa-eye"></i> 2382
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm">
-            <div class="card w-20">
-                <img src="~/img/prototyping/artists/qow.jpg" class="card-img-top" />
-                <div class="card-footer">
-                    <h5 class="card-title">qow</h5>
-                    <p class="card-text">Registered Arts: 1<br />Registered artist on: 2020-02-03 13:30:26</p>
-                    <div class="row">
-                        <div class="col-sm">
-                            <i class="fas fa-star"></i> 5
-                        </div>
-                        <div class="col-sm">
-                            <i class="fas fa-eye"></i> 32
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    }
 </div>
 
-<nav class="mt-5">
-    <ul class="pagination justify-content-center">
-        <li class="page-item disabled">
-            <a class="page-link" href="#" tabindex="-1">Previous</a>
-        </li>
-        <li class="page-item">
-            <a class="page-link custom-notactive-page" href="#">1</a>
-        </li>
-        <li class="page-item active">
-            <a class="page-link custom-active-page" href="#">2 <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="page-item"><a class="page-link custom-notactive-page" href="#">3</a></li>
-        <li class="page-item">
-            <a class="page-link custom-notactive-page" href="#">Next</a>
-        </li>
-    </ul>
-</nav>
+        <nav class="mt-5">
+            <ul class="pagination justify-content-center">
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1">Previous</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link custom-notactive-page" href="#">1</a>
+                </li>
+                <li class="page-item active">
+                    <a class="page-link custom-active-page" href="#">2 <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="page-item"><a class="page-link custom-notactive-page" href="#">3</a></li>
+                <li class="page-item">
+                    <a class="page-link custom-notactive-page" href="#">Next</a>
+                </li>
+            </ul>
+        </nav>

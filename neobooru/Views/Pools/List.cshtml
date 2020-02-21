@@ -2,6 +2,7 @@
     ViewData["Section"] = "Pools";
     ViewData["Subsection"] = "List";
 }
+@model List<neobooru.ViewModels.PoolThumbnailViewModel>
 
 <div id="search-section">
     <form>
@@ -18,200 +19,36 @@
 </div>
 
 <div id="art-container">
-    <div class="row">
-        <div class="col-sm">
-            <div class="card w-20" id="card-0">
-                <div class="carousel slide" data-interval="9007199254740" data-ride="false" data-keyboard="false" style="overflow:hidden">
-                    <div class="carousel-item active">
-                        <img src="~/img/prototyping/arts/thumbnails/1-thumbnail.jpg" class="card-img-top" alt="First Slide" />
+    @{ int length = Model.Count; }
+    @for (var i = 0; i < length;)
+    {
+    <div class="row mt-3">
+        @for (int a = 0; a < 5; a++)
+        {
+            <div class="col-sm">
+                <div class="card w-20" id="card-0">
+                    <div class="carousel slide" data-ride="carousel" data-keyboard="false" style="overflow: hidden">
+                        <div class="carousel-item active">
+                            <img src="@Url.Content(Model[i].thumbnails[0])" class="card-img-top" alt="First Slide"/>
+                        </div>
+                        <div class="carousel-item">
+                            <img src="@Url.Content(Model[i].thumbnails[1])" class="card-img-top" alt="Second Slide"/>
+                        </div>
+                        <div class="carousel-item">
+                            <img src="@Url.Content(Model[i].thumbnails[2])" class="card-img-top" alt="Third Slide"/>
+                        </div>
                     </div>
-                    <div class="carousel-item">
-                        <img src="~/img/prototyping/arts/thumbnails/2-thumbnail.jpg" class="card-img-top" alt="Second Slide" />
+                    <div class="card-footer">
+                        <h5 class="card-title">@Model[i].PoolName</h5>
+                        <p class="card-text">Created by @Model[i].UserName <br />Created on: @Model[i].CreationDate<br />Last Updated: @Model[i].LastUpdateDate</p>
                     </div>
-                    <div class="carousel-item">
-                        <img src="~/img/prototyping/arts/thumbnails/3-thumbnail.jpg" class="card-img-top" alt="Third Slide" />
-                    </div>
-                </div>
-                <div class="card-footer">
-                    <h5 class="card-title">Cute girls</h5>
-                    <p class="card-text">Created by idkWho <br />Uploaded: 2020-02-03 13:30:26<br />Last Updated: 2020-02-03 13:30:26</p>
                 </div>
             </div>
-        </div>
-        <div class="col-sm">
-            <div class="card w-20" id="card-1">
-                <div class="carousel slide" data-interval="9007199254740" data-ride="false" data-keyboard="false" style="overflow:hidden">
-                    <div class="carousel-item active">
-                        <img src="~/img/prototyping/arts/thumbnails/1-thumbnail.jpg" class="card-img-top" alt="First Slide" />
-                    </div>
-                    <div class="carousel-item">
-                        <img src="~/img/prototyping/arts/thumbnails/2-thumbnail.jpg" class="card-img-top" alt="Second Slide" />
-                    </div>
-                    <div class="carousel-item">
-                        <img src="~/img/prototyping/arts/thumbnails/3-thumbnail.jpg" class="card-img-top" alt="Third Slide" />
-                    </div>
-                </div>
-                <div class="card-footer">
-                    <h5 class="card-title">Cute girls</h5>
-                    <p class="card-text">Created by idkWho <br />Uploaded: 2020-02-03 13:30:26<br />Last Updated: 2020-02-03 13:30:26</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm">
-            <div class="card w-20" id="card-2">
-                <div class="carousel slide" data-interval="9007199254740" data-ride="false" data-keyboard="false" style="overflow:hidden">
-                    <div class="carousel-item active">
-                        <img src="~/img/prototyping/arts/thumbnails/1-thumbnail.jpg" class="card-img-top" alt="First Slide" />
-                    </div>
-                    <div class="carousel-item">
-                        <img src="~/img/prototyping/arts/thumbnails/2-thumbnail.jpg" class="card-img-top" alt="Second Slide" />
-                    </div>
-                    <div class="carousel-item">
-                        <img src="~/img/prototyping/arts/thumbnails/3-thumbnail.jpg" class="card-img-top" alt="Third Slide" />
-                    </div>
-                </div>
-                <div class="card-footer">
-                    <h5 class="card-title">Cute girls</h5>
-                    <p class="card-text">Created by idkWho <br />Uploaded: 2020-02-03 13:30:26<br />Last Updated: 2020-02-03 13:30:26</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm">
-            <div class="card w-20" id="card-3">
-                <div class="carousel slide" data-interval="9007199254740" data-ride="false" data-keyboard="false" style="overflow:hidden">
-                    <div class="carousel-item active">
-                        <img src="~/img/prototyping/arts/thumbnails/1-thumbnail.jpg" class="card-img-top" alt="First Slide" />
-                    </div>
-                    <div class="carousel-item">
-                        <img src="~/img/prototyping/arts/thumbnails/2-thumbnail.jpg" class="card-img-top" alt="Second Slide" />
-                    </div>
-                    <div class="carousel-item">
-                        <img src="~/img/prototyping/arts/thumbnails/3-thumbnail.jpg" class="card-img-top" alt="Third Slide" />
-                    </div>
-                </div>
-                <div class="card-footer">
-                    <h5 class="card-title">Cute girls</h5>
-                    <p class="card-text">Created by idkWho <br />Uploaded: 2020-02-03 13:30:26<br />Last Updated: 2020-02-03 13:30:26</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm">
-            <div class="card w-20" id="card-4">
-                <div class="carousel slide" data-interval="9007199254740" data-ride="false" data-keyboard="false" style="overflow:hidden">
-                    <div class="carousel-item active">
-                        <img src="~/img/prototyping/arts/thumbnails/1-thumbnail.jpg" class="card-img-top" alt="First Slide" />
-                    </div>
-                    <div class="carousel-item">
-                        <img src="~/img/prototyping/arts/thumbnails/2-thumbnail.jpg" class="card-img-top" alt="Second Slide" />
-                    </div>
-                    <div class="carousel-item">
-                        <img src="~/img/prototyping/arts/thumbnails/3-thumbnail.jpg" class="card-img-top" alt="Third Slide" />
-                    </div>
-                </div>
-                <div class="card-footer">
-                    <h5 class="card-title">Cute girls</h5>
-                    <p class="card-text">Created by idkWho <br />Uploaded: 2020-02-03 13:30:26<br />Last Updated: 2020-02-03 13:30:26</p>
-                </div>
-            </div>
-        </div>
+            i++;
+        }
     </div>
-    @* <div class="row mt-3"> *@
-    @*     <div class="col-sm"> *@
-    @*         <div class="card w-20"> *@
-    @*             <div class="carousel slide" data-keyboard="false" style="overflow:hidden"> *@
-    @*                 <div class="carousel-item active"> *@
-    @*                     <img src="~/img/prototyping/arts/thumbnails/1-thumbnail.jpg" class="card-img-top" alt="First Slide" /> *@
-    @*                 </div> *@
-    @*                 <div class="carousel-item"> *@
-    @*                     <img src="~/img/prototyping/arts/thumbnails/2-thumbnail.jpg" class="card-img-top" alt="Second Slide" /> *@
-    @*                 </div> *@
-    @*                 <div class="carousel-item"> *@
-    @*                     <img src="~/img/prototyping/arts/thumbnails/3-thumbnail.jpg" class="card-img-top" alt="Third Slide" /> *@
-    @*                 </div> *@
-    @*             </div> *@
-    @*             <div class="card-footer"> *@
-    @*                 <h5 class="card-title">Cute girls</h5> *@
-    @*                 <p class="card-text">Created by idkWho <br />Uploaded: 2020-02-03 13:30:26<br />Last Updated: 2020-02-03 13:30:26</p> *@
-    @*             </div> *@
-    @*         </div> *@
-    @*     </div> *@
-    @*     <div class="col-sm"> *@
-    @*         <div class="card w-20"> *@
-    @*             <div class="carousel slide" data-keyboard="false" style="overflow:hidden"> *@
-    @*                 <div class="carousel-item active"> *@
-    @*                     <img src="~/img/prototyping/arts/thumbnails/1-thumbnail.jpg" class="card-img-top" alt="First Slide" /> *@
-    @*                 </div> *@
-    @*                 <div class="carousel-item"> *@
-    @*                     <img src="~/img/prototyping/arts/thumbnails/2-thumbnail.jpg" class="card-img-top" alt="Second Slide" /> *@
-    @*                 </div> *@
-    @*                 <div class="carousel-item"> *@
-    @*                     <img src="~/img/prototyping/arts/thumbnails/3-thumbnail.jpg" class="card-img-top" alt="Third Slide" /> *@
-    @*                 </div> *@
-    @*             </div> *@
-    @*             <div class="card-footer"> *@
-    @*                 <h5 class="card-title">Cute girls</h5> *@
-    @*                 <p class="card-text">Created by idkWho <br />Uploaded: 2020-02-03 13:30:26<br />Last Updated: 2020-02-03 13:30:26</p> *@
-    @*             </div> *@
-    @*         </div> *@
-    @*     </div> *@
-    @*     <div class="col-sm"> *@
-    @*         <div class="card w-20"> *@
-    @*             <div class="carousel slide" data-keyboard="false" style="overflow:hidden"> *@
-    @*                 <div class="carousel-item active"> *@
-    @*                     <img src="~/img/prototyping/arts/thumbnails/1-thumbnail.jpg" class="card-img-top" alt="First Slide" /> *@
-    @*                 </div> *@
-    @*                 <div class="carousel-item"> *@
-    @*                     <img src="~/img/prototyping/arts/thumbnails/2-thumbnail.jpg" class="card-img-top" alt="Second Slide" /> *@
-    @*                 </div> *@
-    @*                 <div class="carousel-item"> *@
-    @*                     <img src="~/img/prototyping/arts/thumbnails/3-thumbnail.jpg" class="card-img-top" alt="Third Slide" /> *@
-    @*                 </div> *@
-    @*             </div> *@
-    @*             <div class="card-footer"> *@
-    @*                 <h5 class="card-title">Cute girls</h5> *@
-    @*                 <p class="card-text">Created by idkWho <br />Uploaded: 2020-02-03 13:30:26<br />Last Updated: 2020-02-03 13:30:26</p> *@
-    @*             </div> *@
-    @*         </div> *@
-    @*     </div> *@
-    @*     <div class="col-sm"> *@
-    @*         <div class="card w-20"> *@
-    @*             <div class="carousel slide" data-keyboard="false" style="overflow:hidden"> *@
-    @*                 <div class="carousel-item active"> *@
-    @*                     <img src="~/img/prototyping/arts/thumbnails/1-thumbnail.jpg" class="card-img-top" alt="First Slide" /> *@
-    @*                 </div> *@
-    @*                 <div class="carousel-item"> *@
-    @*                     <img src="~/img/prototyping/arts/thumbnails/2-thumbnail.jpg" class="card-img-top" alt="Second Slide" /> *@
-    @*                 </div> *@
-    @*                 <div class="carousel-item"> *@
-    @*                     <img src="~/img/prototyping/arts/thumbnails/3-thumbnail.jpg" class="card-img-top" alt="Third Slide" /> *@
-    @*                 </div> *@
-    @*             </div> *@
-    @*             <div class="card-footer"> *@
-    @*                 <h5 class="card-title">Cute girls</h5> *@
-    @*                 <p class="card-text">Created by idkWho <br />Uploaded: 2020-02-03 13:30:26<br />Last Updated: 2020-02-03 13:30:26</p> *@
-    @*             </div> *@
-    @*         </div> *@
-    @*     </div> *@
-    @*     <div class="col-sm"> *@
-    @*         <div class="card w-20"> *@
-    @*             <div class="carousel slide" data-keyboard="false" style="overflow:hidden"> *@
-    @*                 <div class="carousel-item active"> *@
-    @*                     <img src="~/img/prototyping/arts/thumbnails/1-thumbnail.jpg" class="card-img-top" alt="First Slide" /> *@
-    @*                 </div> *@
-    @*                 <div class="carousel-item"> *@
-    @*                     <img src="~/img/prototyping/arts/thumbnails/2-thumbnail.jpg" class="card-img-top" alt="Second Slide" /> *@
-    @*                 </div> *@
-    @*                 <div class="carousel-item"> *@
-    @*                     <img src="~/img/prototyping/arts/thumbnails/3-thumbnail.jpg" class="card-img-top" alt="Third Slide" /> *@
-    @*                 </div> *@
-    @*             </div> *@
-    @*             <div class="card-footer"> *@
-    @*                 <h5 class="card-title">Cute girls</h5> *@
-    @*                 <p class="card-text">Created by idkWho <br />Uploaded: 2020-02-03 13:30:26<br />Last Updated: 2020-02-03 13:30:26</p> *@
-    @*             </div> *@
-    @*         </div> *@
-    @*     </div> *@
-    @* </div> *@
+    }
+            
 </div>
 
 <nav class="mt-5">
@@ -232,26 +69,3 @@
     </ul>
 </nav>
 
-<script>
-    var carousels = document.getElementsByClassName('card');
-    for (var i = 0; i < carousels.length; i++) {
-        var id = "card-" + i;
-
-        carousels[i].onmouseenter = function () {
-            var targObj = document.getElementById(id);
-            var c = targObj.getElementsByClassName("carousel")[0];
-//
-            c.setAttribute("data-interval", "5000");
-            c.setAttribute("data-ride", "carousel");
-            console.log(c);
-        };
-        carousels[i].onmouseleave = function () {
-            var targObj = document.getElementById(id);
-            var c = targObj.getElementsByClassName("carousel")[0];
-
-            c.setAttribute("data-interval", "9007199254740");
-            c.setAttribute("data-ride", "false");
-            console.log(c);
-        };
-    }
-</script>
