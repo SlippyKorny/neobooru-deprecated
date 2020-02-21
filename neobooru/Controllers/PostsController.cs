@@ -12,8 +12,6 @@ namespace neobooru.Controllers
     {
         private readonly ApplicationDbContext _db;
 
-        // public IEnumerable<Art> Arts { get; set; }
-
         private readonly string[] _subsectionPages = {"List", "Trending", "Upload", "Help"};
 
         public PostsController(ApplicationDbContext db)
@@ -46,18 +44,24 @@ namespace neobooru.Controllers
         [HttpGet]
         public IActionResult Trending()
         {
+            ViewBag.SubsectionPages = _subsectionPages;
+            ViewBag.ActiveSubpage = _subsectionPages[1];
             return View();
         }
 
         [HttpGet]
         public IActionResult Upload()
         {
+            ViewBag.SubsectionPages = _subsectionPages;
+            ViewBag.ActiveSubpage = _subsectionPages[2];
             return View();
         }
 
         [HttpGet]
         public IActionResult Help()
         {
+            ViewBag.SubsectionPages = _subsectionPages;
+            ViewBag.ActiveSubpage = _subsectionPages[3];
             return View();
         }
     }

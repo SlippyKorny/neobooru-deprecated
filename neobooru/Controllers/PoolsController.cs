@@ -10,6 +10,8 @@ namespace neobooru.Controllers
 {
     public class PoolsController : Controller
     {
+        private readonly string[] _subsectionPages = { "List", "Create", "Help"};
+
         [HttpGet]
         public IActionResult List()
         {
@@ -32,7 +34,29 @@ namespace neobooru.Controllers
 
             for (int i = 0; i < 20; i++)
                 Arts.Add(new PoolThumbnailViewModel(pool, "TheSlipper"));
+
+            ViewBag.SubsectionPages = _subsectionPages;
+            ViewBag.ActiveSubpage = _subsectionPages[0];
+
             return View(Arts);
+        }
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            ViewBag.SubsectionPages = _subsectionPages;
+            ViewBag.ActiveSubpage = _subsectionPages[1];
+
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult Help()
+        {
+            ViewBag.SubsectionPages = _subsectionPages;
+            ViewBag.ActiveSubpage = _subsectionPages[2];
+
+            return View();
         }
     }
 }

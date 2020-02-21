@@ -10,6 +10,8 @@ namespace neobooru.Controllers
 {
     public class ArtistsController : Controller
     {
+        private readonly string[] _subsectionPages = { "List", "Submit", "Help" };
+
         [HttpGet]
         public IActionResult List()
         {
@@ -24,7 +26,26 @@ namespace neobooru.Controllers
             for (int i = 0; i < 20; i++)
                 Artists.Add(new ArtistThumbnailViewModel(artist, 23, 532));
 
+            ViewBag.SubsectionPages = _subsectionPages;
+            ViewBag.ActiveSubpage = _subsectionPages[0];
+
             return View(Artists);
+        }
+
+        [HttpGet]
+        public IActionResult Submit()
+        {
+            ViewBag.SubsectionPages = _subsectionPages;
+            ViewBag.ActiveSubpage = _subsectionPages[1];
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult Help()
+        {
+            ViewBag.SubsectionPages = _subsectionPages;
+            ViewBag.ActiveSubpage = _subsectionPages[2];
+            return View();
         }
     }
 }
