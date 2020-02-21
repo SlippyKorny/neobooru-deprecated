@@ -19,36 +19,37 @@
 </div>
 
 <div id="art-container">
+    @* TODO: Carousel active only on hover *@
     @{ int length = Model.Count; }
     @for (var i = 0; i < length;)
     {
-    <div class="row mt-3">
-        @for (int a = 0; a < 5; a++)
-        {
-            <div class="col-sm">
-                <div class="card w-20" id="card-0">
-                    <div class="carousel slide" data-ride="carousel" data-keyboard="false" style="overflow: hidden">
-                        <div class="carousel-item active">
-                            <img src="@Url.Content(Model[i].thumbnails[0])" class="card-img-top" alt="First Slide"/>
+        <div class="row mt-3">
+            @for (int a = 0; a < 5; a++)
+            {
+                <div class="col-sm">
+                    <div class="card w-20" id="card-0">
+                        <div class="carousel slide" data-ride="carousel" data-keyboard="false" style="overflow: hidden">
+                            <div class="carousel-item active">
+                                <img src="@Url.Content(Model[i].thumbnails[0])" class="card-img-top" alt="First Slide"/>
+                            </div>
+                            <div class="carousel-item">
+                                <img src="@Url.Content(Model[i].thumbnails[1])" class="card-img-top" alt="Second Slide"/>
+                            </div>
+                            <div class="carousel-item">
+                                <img src="@Url.Content(Model[i].thumbnails[2])" class="card-img-top" alt="Third Slide"/>
+                            </div>
                         </div>
-                        <div class="carousel-item">
-                            <img src="@Url.Content(Model[i].thumbnails[1])" class="card-img-top" alt="Second Slide"/>
+                        <div class="card-footer">
+                            <h5 class="card-title">@Model[i].PoolName</h5>
+                            <p class="card-text">Created by @Model[i].UserName <br/>Created on: @Model[i].CreationDate<br/>Last Updated: @Model[i].LastUpdateDate</p>
                         </div>
-                        <div class="carousel-item">
-                            <img src="@Url.Content(Model[i].thumbnails[2])" class="card-img-top" alt="Third Slide"/>
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <h5 class="card-title">@Model[i].PoolName</h5>
-                        <p class="card-text">Created by @Model[i].UserName <br />Created on: @Model[i].CreationDate<br />Last Updated: @Model[i].LastUpdateDate</p>
                     </div>
                 </div>
-            </div>
-            i++;
-        }
-    </div>
+                i++;
+            }
+        </div>
     }
-            
+
 </div>
 
 <nav class="mt-5">

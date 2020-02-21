@@ -14,6 +14,8 @@ namespace neobooru.Controllers
 
         // public IEnumerable<Art> Arts { get; set; }
 
+        private readonly string[] _subsectionPages = {"List", "Trending", "Upload", "Help"};
+
         public PostsController(ApplicationDbContext db)
         {
             _db = db;
@@ -36,6 +38,8 @@ namespace neobooru.Controllers
             for (int i = 0; i < 20; i++)
                 Arts.Add(new ArtThumbnailViewModel(a1));
 
+            ViewBag.SubsectionPages = _subsectionPages;
+            ViewBag.ActiveSubpage = _subsectionPages[0];
             return View(Arts);
         }
 

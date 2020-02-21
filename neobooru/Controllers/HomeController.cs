@@ -20,6 +20,9 @@ namespace neobooru.Controllers
 
         public IActionResult Index()
         {
+            string[] subsectionPages = {"Home"};
+            ViewBag.SubsectionPages = subsectionPages;
+            ViewBag.ActiveSubpage = subsectionPages[0];
             return View();
         }
 
