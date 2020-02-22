@@ -1,0 +1,97 @@
+﻿@{
+    ViewData["Section"] = "Artists";
+    ViewData["Subsection"] = "List";
+}
+@model neobooru.ViewModels.ArtistViewModel
+
+<div id="artist-profile">
+    <div id="artist-upper-section">
+        <div class="row">
+            <img src="~/img/prototyping/backgrounds/1920x540p placeholder.png" />
+        </div>
+        <div class="row" style="height: 200px; margin-top: -12.5vh;">
+            <div class="col-md-1 h-100">
+                <div style="margin-top: 140px; margin-left: 20px;">
+                    <div><i class="fas fa-star"></i> @Model.Followers</div>
+                    <div><i class="fas fa-eye"></i> @Model.ProfileViews</div>
+                </div>
+            </div>
+            <div class="col-md-10 h-100">
+                <img src="@Url.Content(Model.PfpUrl)" class="rounded float-left" style="border: solid 1px #1dd1a1; max-height:100%; margin-right: 20px;" />
+                <h2 class="float-left" style="margin-top: 120px;  display: block;">@Model.ArtistName</h2>
+                <div id="artist-data float-left" style="margin-top: 170px;">
+                    @if (Model.Country != null)
+                    {
+                        <span><i class="fas fa-location-arrow"></i> @Model.Country </span>
+                    }
+                    @if (Model.TwitterProfileUrl != null)
+                    {
+                        <span><i class="fab fa-twitter"></i> <a href="@Model.TwitterProfileUrl">@Model.TwitterProfileUrl</a> </span>
+                    }
+                    @if (Model.FacebookProfileUrl != null)
+                    {
+                        <span><i class="fab fa-facebook-square"></i> <a href="@Model.FacebookProfileUrl">@Model.FacebookProfileUrl</a> </span>
+                    }
+                    @if (Model.MailAddress != null)
+                    {
+                        <span><i class="fas fa-envelope"></i> @Model.MailAddress </span>
+                    }
+                    @if (Model.BirthDate != null)
+                    {
+                        <span><i class="fas fa-birthday-cake"></i> @Model.BirthDate</span>
+                    }
+                    @if (Model.Gender != null)
+                    {
+                        <span><i class="fas fa-venus-mars"></i> @Model.Gender</span>
+                    }
+                </div>
+            </div>
+            <div class="col-md-1 h-100">
+                <a class="btn btn-primary text-white" style="margin-top: 150px"><i class="fas fa-star"></i> Star</a>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 40px;">
+            <div class="text-secondary px-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</div>
+        </div>
+    </div>
+    <hr/>
+    <div id="artist-lower-section">
+        <div class="row">
+            <h2 style="margin-left: auto; margin-right: auto;">Most Popular Works</h2>
+        </div>
+        @{ int len = Model.ArtThumbnails.Count; }
+        @for(int i = 0; i < len;)
+        {
+            <div class="row">
+                @for (int a = 0; a < 5 && i < len; a++)
+                {
+                    <div class="col-sm">
+                        <div class="card w-20">
+                            <img src="@Url.Content(Model.ArtThumbnails[i].FileUrl)" class="card-img-top" />
+                            <div class="card-footer">
+                                <h5 class="card-title">@Model.ArtThumbnails[i].ArtName</h5>
+                                <p class="card-text">Made by @Model.ArtThumbnails[i].ArtistName<br />Uploaded: @Model.ArtThumbnails[i].UploadDate.ToString()</p>
+                            </div>
+                        </div>
+                    </div>
+                    i++;
+                }
+            </div>
+        }
+    </div>
+</div>
+
+
+@* <div id="profile"> *@
+@*     <hr /> *@
+@*     <div id="profile-info-box" class="float-left ml-2"> *@
+@*         <b>Followers: </b> @Model.Followers <br /> *@
+@*         <b>Registered at:</b> @Model.RegisteredAt<br /> *@
+@*         <b>Views:</b> @Model.ProfileViews<br /> *@
+
+@*          @if (Model.Occupation != null) *@
+@*          { *@
+@*              <b>Occupation: </b> @Model.Occupation<br /> *@
+@*          } *@
+@*     </div> *@
+@* </div> *@

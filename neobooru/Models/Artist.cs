@@ -12,7 +12,7 @@ namespace neobooru.Models
         public Guid Id { get; set; }
 
         [Required]
-        public String ArtistName { get; set; }
+        public string ArtistName { get; set; }
 
         [Required]
         public DateTime RegisteredAt { get; set; }
@@ -21,11 +21,25 @@ namespace neobooru.Models
 
         // TODO: One artist to many users relation - subscriptions
 
-        public String LargePfpUrl { get; set; }
+        public string LargePfpUrl { get; set; }
 
         [Required]
-        public String PfpUrl { get; set; }
+        public string PfpUrl { get; set; }
 
-        public String PreviewPfpUrl { get; set; }
+        public string PreviewPfpUrl { get; set; }
+
+        public string Country { get; set; }
+
+        public string FacebookProfileUrl { get; set; }
+
+        public string TwitterProfileUrl { get; set; }
+
+        public string MailAddress { get; set; }
+
+        public string Gender { get; set; }
+
+        public DateTime BirthDate { get; set; }
+
+        public string Occupation { get; set; }
     }
 }
