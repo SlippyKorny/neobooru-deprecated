@@ -66,13 +66,13 @@
                 @for (int a = 0; a < 5 && i < len; a++)
                 {
                     <div class="col-sm">
-                        <div class="card w-20">
-                            <img src="@Url.Content(Model.ArtThumbnails[i].FileUrl)" class="card-img-top" />
-                            <div class="card-footer">
-                                <h5 class="card-title">@Model.ArtThumbnails[i].ArtName</h5>
-                                <p class="card-text">Made by @Model.ArtThumbnails[i].ArtistName<br />Uploaded: @Model.ArtThumbnails[i].UploadDate.ToString()</p>
+                            <div class="card w-20">
+                                <img src="@Url.Content(Model.ArtThumbnails[i].FileUrl)" class="card-img-top" />
+                                <div class="card-footer">
+                                    <h5 class="card-title">@Model.ArtThumbnails[i].ArtName</h5>
+                                    <p class="card-text">Made by @Model.ArtThumbnails[i].ArtistName<br />Uploaded: @Model.ArtThumbnails[i].UploadDate.ToString()</p>
+                                </div>
                             </div>
-                        </div>
                     </div>
                     i++;
                 }

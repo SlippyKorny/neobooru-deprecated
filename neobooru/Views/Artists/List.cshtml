@@ -25,7 +25,8 @@
         <div class="row mt-3">
             @for (var a = 0; a < 5; a++)
             {
-                <div class="col-sm">
+            <div class="col-sm">
+                <a href="/artists/artist?artistId=f831c02d-ae3b-4196-8fa7-89913ce207a9">
                     <div class="card w-20">
                         <img src="@Url.Content(Model[i].PfpUrl)" class="card-img-top" />
                         <div class="card-footer">
@@ -41,7 +42,8 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </a>
+            </div>
                 i++;
             }
         </div>

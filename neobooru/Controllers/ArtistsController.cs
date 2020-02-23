@@ -47,7 +47,7 @@ namespace neobooru.Controllers
         public IActionResult Artist(Guid artistId)
         {
             List<ArtThumbnailViewModel> list = new List<ArtThumbnailViewModel>();
-            Artist artist = new Artist
+            Artist artist = new Artist 
             {
                 PfpUrl = "~/img/prototyping/artists/CommieComma.png",
                 ArtistName = "CommieComma",
