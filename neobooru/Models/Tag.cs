@@ -24,7 +24,7 @@ namespace neobooru.Models
             Character,
             Series,
             Metadata,
-            Classic
+            General
         }
 
         // [Required]

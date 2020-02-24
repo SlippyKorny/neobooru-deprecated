@@ -87,13 +87,13 @@ namespace neobooru.Controllers
 
             for (int i = 0; i < 8; i++)
             {
-                tag2.Type = Tag.TagType.Classic;
+                tag2.Type = Tag.TagType.General;
                 tag2.TagString = "1 girl";
                 a1.tags.Add(tag2);
-                tag4.Type = Tag.TagType.Classic;
+                tag4.Type = Tag.TagType.General;
                 tag4.TagString = "black hair";
                 a1.tags.Add(tag4);
-                tag5.Type = Tag.TagType.Classic;
+                tag5.Type = Tag.TagType.General;
                 tag5.TagString = "breasts";
                 a1.tags.Add(tag5);
             }
