@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
@@ -24,6 +25,7 @@ namespace neobooru.Models
         public DateTime UpdatedAt { get; set; }
 
         // TODO: Uploader ID or reference to the model
+        public string Uploader;
 
         public string Name { get; set; }
 
@@ -41,8 +43,23 @@ namespace neobooru.Models
 
         public int FileSize { get; set; }
 
+        public ArtRating Rating { get; set; }
+
         public virtual ICollection<Tag> tags { get; set; }
 
         public virtual ICollection<Comment> comments { get; set; }
+
+
+        public enum ArtRating
+        {
+            [Description("Safe For Work")]
+            Safe,
+            [Description("Questionable")]
+            Questionable,
+            [Description("Not Safe For Work")]
+            NotSafe,
+            [Description("Offensive")]
+            Offensive
+        }
     }
 }

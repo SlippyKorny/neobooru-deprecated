@@ -9,13 +9,23 @@ namespace neobooru.Models
     public class Tag
     {
         [Key]
-        public Guid id { get; set; }
+        public Guid Id { get; set; }
 
         [Required]
-        public string tag { get; set; }
+        public string TagString { get; set; }
 
         [Required]
-        public DateTime addedAt { get; set; }
+        public DateTime AddedAt { get; set; }
+
+        public TagType Type { get; set; }
+
+        public enum TagType
+        {
+            Character,
+            Series,
+            Metadata,
+            Classic
+        }
 
         // [Required]
         // public 
