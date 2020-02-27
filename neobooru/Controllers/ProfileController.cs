@@ -46,13 +46,13 @@ namespace neobooru.Controllers
 
             if (ModelState.IsValid)
             {
-                // TODO: Change email -> do not use it as login
-                var user = new IdentityUser {UserName = model.Email, Email = model.Email};
-                var result = await _userManager.CreateAsync(user, model.Password);
+                // TODO: Change email -> do not use it as login/username
+                IdentityUser user = new IdentityUser {UserName = model.Email, Email = model.Email};
+                IdentityResult result = await _userManager.CreateAsync(user, model.Password);
 
                 if (result.Succeeded)
                 {
-                    await _signInManager.SignInAsync(user, isPersistent: true);
+                    await _signInManager.SignInAsync(user, isPersistent: false);
                     return RedirectToAction("index", "Home");
                 }
 
