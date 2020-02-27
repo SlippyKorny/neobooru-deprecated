@@ -12,12 +12,12 @@ namespace neobooru.Models
         [Key]
         public Guid Id { get; set; }
 
-        public String FileUrl { get; set; }
+        public string FileUrl { get; set; }
 
-        public String PreviewFileUrl { get; set; }
+        public string PreviewFileUrl { get; set; }
 
         [Required]
-        public String LargeFileUrl { get; set; }
+        public string LargeFileUrl { get; set; }
 
         [Required]
         public DateTime CreatedAt { get; set; }
@@ -33,9 +33,9 @@ namespace neobooru.Models
 
         public int Stars { get; set; }
 
-        public String Source { get; set; }
+        public string Source { get; set; }
 
-        public String Md5Hash { get; set; }
+        public string Md5Hash { get; set; }
 
         public float Height { get; set; }
 

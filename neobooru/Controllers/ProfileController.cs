@@ -14,6 +14,8 @@ namespace neobooru.Controllers
 
         private SignInManager<IdentityUser> _signInManager;
 
+        private readonly string[] _subsectionPages = { "Profile", "Registration", "Login", "Help" };
+
         public ProfileController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
         {
             _userManager = userManager;
@@ -21,20 +23,27 @@ namespace neobooru.Controllers
         }
 
         [HttpGet]
-        public IActionResult MyProfile()
+        public IActionResult Profile()
         {
+            ViewBag.SubsectionPages = _subsectionPages;
+            ViewBag.ActiveSubpage = _subsectionPages[0];
             return View();
         }
 
         [HttpGet]
-        public IActionResult Register()
+        public IActionResult Registration()
         {
+            ViewBag.SubsectionPages = _subsectionPages;
+            ViewBag.ActiveSubpage = _subsectionPages[1];
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(BasicUserRegistrationViewModel model)
+        public async Task<IActionResult> Registration(BasicUserRegistrationViewModel model)
         {
+            ViewBag.SubsectionPages = _subsectionPages;
+            ViewBag.ActiveSubpage = _subsectionPages[1];
+
             if (ModelState.IsValid)
             {
                 // TODO: Change email -> do not use it as login
@@ -48,9 +57,7 @@ namespace neobooru.Controllers
                 }
 
                 foreach (var error in result.Errors)
-                {
                     ModelState.AddModelError("", error.Description);
-                }
             }
 
             return View(model);

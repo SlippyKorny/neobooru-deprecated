@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using neobooru.Models;
 using neobooru.ViewModels;
 
@@ -54,6 +55,22 @@ namespace neobooru.Controllers
         {
             ViewBag.SubsectionPages = _subsectionPages;
             ViewBag.ActiveSubpage = _subsectionPages[2];
+            return View();
+        }
+
+        // [BindProperty]
+        // public PostUploadViewModel UploadedPostModel { get; set; }
+
+        [HttpPost]
+        public async Task<IActionResult> UploadPostData()
+        {
+            if (ModelState.IsValid)
+            {
+                // await _db.Books.AddAsync(Book);
+                // await _db.SaveChangesAsync();
+                // return RedirectToPage("Index");
+                return RedirectToPage("/posts/upload");
+            }
             return View();
         }
 

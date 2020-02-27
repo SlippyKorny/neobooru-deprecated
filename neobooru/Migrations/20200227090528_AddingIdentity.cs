@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace neobooru.Migrations
 {
@@ -12,17 +11,24 @@ namespace neobooru.Migrations
                 name: "artists",
                 columns: table => new
                 {
-                    id = table.Column<Guid>(nullable: false),
-                    artistName = table.Column<string>(nullable: false),
-                    registeredAt = table.Column<DateTime>(nullable: false),
-                    profileViews = table.Column<int>(nullable: false),
-                    largePfpUrl = table.Column<string>(nullable: true),
-                    pfpUrl = table.Column<string>(nullable: false),
-                    previewPfpUrl = table.Column<string>(nullable: true)
+                    Id = table.Column<Guid>(nullable: false),
+                    ArtistName = table.Column<string>(nullable: false),
+                    RegisteredAt = table.Column<DateTime>(nullable: false),
+                    ProfileViews = table.Column<int>(nullable: false),
+                    LargePfpUrl = table.Column<string>(nullable: true),
+                    PfpUrl = table.Column<string>(nullable: false),
+                    PreviewPfpUrl = table.Column<string>(nullable: true),
+                    Country = table.Column<string>(nullable: true),
+                    FacebookProfileUrl = table.Column<string>(nullable: true),
+                    TwitterProfileUrl = table.Column<string>(nullable: true),
+                    MailAddress = table.Column<string>(nullable: true),
+                    Gender = table.Column<string>(nullable: true),
+                    BirthDate = table.Column<DateTime>(nullable: false),
+                    Occupation = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_artists", x => x.id);
+                    table.PrimaryKey("PK_artists", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -69,9 +75,9 @@ namespace neobooru.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(nullable: false),
-                    poolName = table.Column<string>(nullable: true),
-                    createdAt = table.Column<DateTime>(nullable: false),
-                    updatedAt = table.Column<DateTime>(nullable: false)
+                    PoolName = table.Column<string>(nullable: true),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    UpdatedAt = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -83,7 +89,7 @@ namespace neobooru.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     RoleId = table.Column<string>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
@@ -104,7 +110,7 @@ namespace neobooru.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<string>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
@@ -188,34 +194,36 @@ namespace neobooru.Migrations
                 name: "arts",
                 columns: table => new
                 {
-                    id = table.Column<Guid>(nullable: false),
-                    fileUrl = table.Column<string>(nullable: true),
-                    previewFileUrl = table.Column<string>(nullable: true),
-                    largeFileUrl = table.Column<string>(nullable: false),
-                    createdAt = table.Column<DateTime>(nullable: false),
-                    updatedAt = table.Column<DateTime>(nullable: false),
-                    authorid = table.Column<Guid>(nullable: true),
-                    stars = table.Column<int>(nullable: false),
-                    source = table.Column<string>(nullable: true),
-                    md5Hash = table.Column<string>(nullable: true),
-                    height = table.Column<float>(nullable: false),
-                    width = table.Column<float>(nullable: false),
-                    fileSize = table.Column<int>(nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
+                    FileUrl = table.Column<string>(nullable: true),
+                    PreviewFileUrl = table.Column<string>(nullable: true),
+                    LargeFileUrl = table.Column<string>(nullable: false),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    UpdatedAt = table.Column<DateTime>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    AuthorId = table.Column<Guid>(nullable: true),
+                    Stars = table.Column<int>(nullable: false),
+                    Source = table.Column<string>(nullable: true),
+                    Md5Hash = table.Column<string>(nullable: true),
+                    Height = table.Column<float>(nullable: false),
+                    Width = table.Column<float>(nullable: false),
+                    FileSize = table.Column<int>(nullable: false),
+                    Rating = table.Column<int>(nullable: false),
                     Poolid = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_arts", x => x.id);
+                    table.PrimaryKey("PK_arts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_arts_artists_AuthorId",
+                        column: x => x.AuthorId,
+                        principalTable: "artists",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_arts_pools_Poolid",
                         column: x => x.Poolid,
                         principalTable: "pools",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_arts_artists_authorid",
-                        column: x => x.authorid,
-                        principalTable: "artists",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -230,16 +238,16 @@ namespace neobooru.Migrations
                     editedOn = table.Column<DateTime>(nullable: false),
                     plusVotes = table.Column<int>(nullable: false),
                     minusVotes = table.Column<int>(nullable: false),
-                    commentedArtid = table.Column<Guid>(nullable: true)
+                    commentedArtId = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Comment", x => x.key);
                     table.ForeignKey(
-                        name: "FK_Comment_arts_commentedArtid",
-                        column: x => x.commentedArtid,
+                        name: "FK_Comment_arts_commentedArtId",
+                        column: x => x.commentedArtId,
                         principalTable: "arts",
-                        principalColumn: "id",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -247,31 +255,32 @@ namespace neobooru.Migrations
                 name: "Tag",
                 columns: table => new
                 {
-                    id = table.Column<Guid>(nullable: false),
-                    tag = table.Column<string>(nullable: false),
-                    addedAt = table.Column<DateTime>(nullable: false),
-                    Artid = table.Column<Guid>(nullable: true)
+                    Id = table.Column<Guid>(nullable: false),
+                    TagString = table.Column<string>(nullable: false),
+                    AddedAt = table.Column<DateTime>(nullable: false),
+                    Type = table.Column<int>(nullable: false),
+                    ArtId = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Tag", x => x.id);
+                    table.PrimaryKey("PK_Tag", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Tag_arts_Artid",
-                        column: x => x.Artid,
+                        name: "FK_Tag_arts_ArtId",
+                        column: x => x.ArtId,
                         principalTable: "arts",
-                        principalColumn: "id",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_arts_AuthorId",
+                table: "arts",
+                column: "AuthorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_arts_Poolid",
                 table: "arts",
                 column: "Poolid");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_arts_authorid",
-                table: "arts",
-                column: "authorid");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -282,7 +291,8 @@ namespace neobooru.Migrations
                 name: "RoleNameIndex",
                 table: "AspNetRoles",
                 column: "NormalizedName",
-                unique: true);
+                unique: true,
+                filter: "[NormalizedName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_UserId",
@@ -308,17 +318,18 @@ namespace neobooru.Migrations
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
-                unique: true);
+                unique: true,
+                filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Comment_commentedArtid",
+                name: "IX_Comment_commentedArtId",
                 table: "Comment",
-                column: "commentedArtid");
+                column: "commentedArtId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Tag_Artid",
+                name: "IX_Tag_ArtId",
                 table: "Tag",
-                column: "Artid");
+                column: "ArtId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -354,10 +365,10 @@ namespace neobooru.Migrations
                 name: "arts");
 
             migrationBuilder.DropTable(
-                name: "pools");
+                name: "artists");
 
             migrationBuilder.DropTable(
-                name: "artists");
+                name: "pools");
         }
     }
 }

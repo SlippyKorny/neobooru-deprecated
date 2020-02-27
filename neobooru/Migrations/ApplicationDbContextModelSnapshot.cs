@@ -2,8 +2,8 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using neobooru.Models;
 
 namespace neobooru.Migrations
@@ -15,32 +15,33 @@ namespace neobooru.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
-                .HasAnnotation("ProductVersion", "3.1.1")
-                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+                .HasAnnotation("ProductVersion", "3.1.2")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128)
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("character varying(256)")
+                        .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
                     b.Property<string>("NormalizedName")
-                        .HasColumnType("character varying(256)")
+                        .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasName("RoleNameIndex");
+                        .HasName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
                 });
@@ -49,18 +50,18 @@ namespace neobooru.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ClaimType")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RoleId")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -72,53 +73,53 @@ namespace neobooru.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("AccessFailedCount")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
-                        .HasColumnType("character varying(256)")
+                        .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
                     b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("boolean");
+                        .HasColumnType("bit");
 
                     b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("boolean");
+                        .HasColumnType("bit");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("NormalizedEmail")
-                        .HasColumnType("character varying(256)")
+                        .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
                     b.Property<string>("NormalizedUserName")
-                        .HasColumnType("character varying(256)")
+                        .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
                     b.Property<string>("PasswordHash")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("boolean");
+                        .HasColumnType("bit");
 
                     b.Property<string>("SecurityStamp")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("boolean");
+                        .HasColumnType("bit");
 
                     b.Property<string>("UserName")
-                        .HasColumnType("character varying(256)")
+                        .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
@@ -128,7 +129,8 @@ namespace neobooru.Migrations
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasName("UserNameIndex");
+                        .HasName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
                 });
@@ -137,18 +139,18 @@ namespace neobooru.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ClaimType")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -160,17 +162,17 @@ namespace neobooru.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderDisplayName")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -182,10 +184,10 @@ namespace neobooru.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("RoleId")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -197,16 +199,16 @@ namespace neobooru.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Value")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
@@ -215,86 +217,113 @@ namespace neobooru.Migrations
 
             modelBuilder.Entity("neobooru.Models.Art", b =>
                 {
-                    b.Property<Guid>("id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("AuthorId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("FileSize")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FileUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("Height")
+                        .HasColumnType("real");
+
+                    b.Property<string>("LargeFileUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Md5Hash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("Poolid")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("authorid")
-                        .HasColumnType("uuid");
+                    b.Property<string>("PreviewFileUrl")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("createdAt")
-                        .HasColumnType("timestamp without time zone");
+                    b.Property<int>("Rating")
+                        .HasColumnType("int");
 
-                    b.Property<int>("fileSize")
-                        .HasColumnType("integer");
+                    b.Property<string>("Source")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("fileUrl")
-                        .HasColumnType("text");
+                    b.Property<int>("Stars")
+                        .HasColumnType("int");
 
-                    b.Property<float>("height")
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<float>("Width")
                         .HasColumnType("real");
 
-                    b.Property<string>("largeFileUrl")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.HasKey("Id");
 
-                    b.Property<string>("md5Hash")
-                        .HasColumnType("text");
-
-                    b.Property<string>("previewFileUrl")
-                        .HasColumnType("text");
-
-                    b.Property<string>("source")
-                        .HasColumnType("text");
-
-                    b.Property<int>("stars")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("updatedAt")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<float>("width")
-                        .HasColumnType("real");
-
-                    b.HasKey("id");
+                    b.HasIndex("AuthorId");
 
                     b.HasIndex("Poolid");
-
-                    b.HasIndex("authorid");
 
                     b.ToTable("arts");
                 });
 
             modelBuilder.Entity("neobooru.Models.Artist", b =>
                 {
-                    b.Property<Guid>("id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("artistName")
+                    b.Property<string>("ArtistName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("largePfpUrl")
-                        .HasColumnType("text");
+                    b.Property<DateTime>("BirthDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("pfpUrl")
+                    b.Property<string>("Country")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FacebookProfileUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Gender")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LargePfpUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MailAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Occupation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PfpUrl")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("previewPfpUrl")
-                        .HasColumnType("text");
+                    b.Property<string>("PreviewPfpUrl")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("profileViews")
-                        .HasColumnType("integer");
+                    b.Property<int>("ProfileViews")
+                        .HasColumnType("int");
 
-                    b.Property<DateTime>("registeredAt")
-                        .HasColumnType("timestamp without time zone");
+                    b.Property<DateTime>("RegisteredAt")
+                        .HasColumnType("datetime2");
 
-                    b.HasKey("id");
+                    b.Property<string>("TwitterProfileUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
 
                     b.ToTable("artists");
                 });
@@ -303,30 +332,30 @@ namespace neobooru.Migrations
                 {
                     b.Property<Guid>("key")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("comment")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("commentedArtid")
-                        .HasColumnType("uuid");
+                    b.Property<Guid?>("commentedArtId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("commentedOn")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("editedOn")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("minusVotes")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<int>("plusVotes")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.HasKey("key");
 
-                    b.HasIndex("commentedArtid");
+                    b.HasIndex("commentedArtId");
 
                     b.ToTable("Comment");
                 });
@@ -335,16 +364,16 @@ namespace neobooru.Migrations
                 {
                     b.Property<Guid>("id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("createdAt")
-                        .HasColumnType("timestamp without time zone");
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("poolName")
-                        .HasColumnType("text");
+                    b.Property<string>("PoolName")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("updatedAt")
-                        .HasColumnType("timestamp without time zone");
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("id");
 
@@ -353,23 +382,26 @@ namespace neobooru.Migrations
 
             modelBuilder.Entity("neobooru.Models.Tag", b =>
                 {
-                    b.Property<Guid>("id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("Artid")
-                        .HasColumnType("uuid");
+                    b.Property<DateTime>("AddedAt")
+                        .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("addedAt")
-                        .HasColumnType("timestamp without time zone");
+                    b.Property<Guid?>("ArtId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("tag")
+                    b.Property<string>("TagString")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("id");
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
 
-                    b.HasIndex("Artid");
+                    b.HasKey("Id");
+
+                    b.HasIndex("ArtId");
 
                     b.ToTable("Tag");
                 });
@@ -427,27 +459,27 @@ namespace neobooru.Migrations
 
             modelBuilder.Entity("neobooru.Models.Art", b =>
                 {
-                    b.HasOne("neobooru.Models.Pool", null)
-                        .WithMany("arts")
-                        .HasForeignKey("Poolid");
-
-                    b.HasOne("neobooru.Models.Artist", "author")
+                    b.HasOne("neobooru.Models.Artist", "Author")
                         .WithMany()
-                        .HasForeignKey("authorid");
+                        .HasForeignKey("AuthorId");
+
+                    b.HasOne("neobooru.Models.Pool", null)
+                        .WithMany("Arts")
+                        .HasForeignKey("Poolid");
                 });
 
             modelBuilder.Entity("neobooru.Models.Comment", b =>
                 {
                     b.HasOne("neobooru.Models.Art", "commentedArt")
                         .WithMany("comments")
-                        .HasForeignKey("commentedArtid");
+                        .HasForeignKey("commentedArtId");
                 });
 
             modelBuilder.Entity("neobooru.Models.Tag", b =>
                 {
                     b.HasOne("neobooru.Models.Art", null)
                         .WithMany("tags")
-                        .HasForeignKey("Artid");
+                        .HasForeignKey("ArtId");
                 });
 #pragma warning restore 612, 618
         }
