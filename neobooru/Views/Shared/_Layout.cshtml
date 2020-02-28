@@ -25,7 +25,10 @@
                 <li @(ViewData["Section"].Equals("Posts") ? "class=active" : "")><a href="/posts/list">Posts</a></li>
                 <li @(ViewData["Section"].Equals("Artists") ? "class=active" : "")><a href="/artists/list">Artists</a></li>
                 <li @(ViewData["Section"].Equals("Pools") ? "class=active" : "")><a href="/pools/List">Pools</a></li>
-                <li @(ViewData["Section"].Equals("Profile") ? "class=active" : "")><a asp-controller="Profile" asp-action="Profile">Profile</a></li>
+                @if (signInManager.IsSignedIn(User))
+                {
+                    <li @(ViewData["Section"].Equals("Profile") ? "class=active" : "")><a asp-controller="Profile" asp-action="Profile">Profile</a></li>
+                }
                 <li @(ViewData["Section"].Equals("Forum") ? "class=active" : "")><a href="#">Forum</a></li>
                 <li @(ViewData["Section"].Equals("Store") ? "class=active" : "")><a href="#">Store</a></li>
                 <li @(ViewData["Section"].Equals("Help") ? "class=active" : "")><a href="#">Help</a></li>
@@ -40,10 +43,10 @@
             @if (signInManager.IsSignedIn(User))
             {
                 <div class="sidebar-footer">
-                    <div>Logged in as: Username</div>
+                    <div>Logged in as: @User.Identity.Name</div>
                     <form method="post" asp-action="Logout" asp-controller="Profile">
                         <button type="submit" class="nav-link btn btn-link py-0">
-                            Logout @User.Identity.Name
+                            Logout 
                         </button>
                     </form>
                 </div>
