@@ -9,7 +9,7 @@ namespace neobooru.ViewModels
     public class PostUploadViewModel
     {
         // TODO: < =====================================================================================================================================================================================
-        public readonly String File;
+        public readonly string File;
 
         public readonly string Name;
 
@@ -19,7 +19,8 @@ namespace neobooru.ViewModels
 
         public readonly Art.ArtRating Rating;
 
-        public readonly ICollection<Tag> tags;
+        // public readonly ICollection<Tag> tags;
+        public readonly string TagString;
 
         // private PostUploadViewModel() { }
         // public PostUploadViewModel()

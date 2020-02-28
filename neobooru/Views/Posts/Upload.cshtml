@@ -4,7 +4,23 @@
 }
 @model neobooru.ViewModels.PostUploadViewModel
 
-<div class="card">
+    <div id="guidelines">
+        <h1>Upload Guidelines</h1>
+        <p>Please keep the following guidelines in mind when uploading something. Violating these rules will result in a ban.</p>
+
+        <b>Read</b> <a href="#" style="border-bottom: 1px dotted #10ac84; color: #10ac84">Terms of Service</a> <b>under prohibited content!</b>
+        <ul>
+            <li>Read our terms of service before continuing. This has been updated to reflect recent changes in our policy.</li>
+            <li>Rate images appropriately. If you wouldn't look at it in front of your family, then it is probably not safe.</li>
+            <li>Our site is mainly anime related. Stick to the status quo.</li>
+            <li>Do not upload toons, images with compression artifacts or obnoxious watermarks.</li>
+            <li>Tag your images that you are going to upload with at least 5 tags! Tag correctly or you will be banned.</li>
+        </ul>
+        <p>All accounts have unlimited and unmoderated uploads. This will change in the future if you ignore the above rules.</p>
+        <a href="http://iqdb.org/" style="border-bottom: 1px dotted #10ac84; color: #10ac84">Check your image before you upload.</a> <b>If it exists under Danbooru, it likely exists here!</b>
+</div>
+
+<div class="card mt-4">
     <div class="card-header pt-2 pb-1">
         <h3>Post Upload Form</h3>
     </div>
@@ -39,10 +55,31 @@
                     <select asp-for="Rating" class="form-control">
                         @foreach (Art.ArtRating rating in (Art.ArtRating[])Enum.GetValues(typeof(Art.ArtRating)))
                         {
+                            // TODO: Description of each art
 @*                             @{ string descriptor = (Art.ArtRating)rating.); } *@
                             <option value="@rating">@rating</option>
                         }
                     </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-1">
+                    <label asp-for="TagString">Tags</label>:
+                </div>
+                <div class="col-4">
+                    <textarea asp-for="TagString" class="form-control"></textarea>
+                    <i>Separate tags with spaces. (ex: green_eyes purple green_hair) </i>
+                </div>
+                <div class="col-1">
+                    <label asp-for="File">File</label>:
+                </div>
+                <div class="col-4">
+                    <input asp-for="File" type="file" class="form-control-file">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <button class="btn btn-block" style="background: #1dd1a1; color: #fff;">Upload</button>
                 </div>
             </div>
         </form>
