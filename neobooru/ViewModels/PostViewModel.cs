@@ -54,7 +54,7 @@ namespace neobooru.ViewModels
             foreach (Tag.TagType type in (Tag.TagType[]) Enum.GetValues(typeof(Tag.TagType)))
                 TagStructure.Add(type, new List<string>());
 
-            foreach (Tag tag in art.tags)
+            foreach (Tag tag in art.Tags)
                 TagStructure[tag.Type].Add(tag.TagString);
         }
     }

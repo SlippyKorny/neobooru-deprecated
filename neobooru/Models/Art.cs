@@ -45,9 +45,9 @@ namespace neobooru.Models
 
         public ArtRating Rating { get; set; }
 
-        public virtual ICollection<Tag> tags { get; set; }
+        public virtual ICollection<Tag> Tags { get; set; }
 
-        public virtual ICollection<Comment> comments { get; set; }
+        public virtual ICollection<Comment> Comments { get; set; }
 
 
         public enum ArtRating

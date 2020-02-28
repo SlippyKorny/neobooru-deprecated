@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@inject SignInManager<IdentityUser> signInManager;
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -35,6 +36,25 @@
                     <a href="#" class="download">Support our project!</a>
                 </li>
             </ul>
+
+            @if (signInManager.IsSignedIn(User))
+            {
+                <div class="sidebar-footer">
+                    <div>Logged in as: Username</div>
+                    <form method="post" asp-action="Logout" asp-controller="Profile">
+                        <button type="submit" class="nav-link btn btn-link py-0">
+                            Logout @User.Identity.Name
+                        </button>
+                    </form>
+                </div>
+            }
+            else
+            {
+                <div class="sidebar-footer">
+                    <a asp-action="Registration" asp-controller="Profile" class="nav-link">Register</a>
+                    <a asp-action="Login" asp-controller="Profile" class="nav-link">Login</a>
+                </div>
+            }
         </nav>
 
             <div id="content">

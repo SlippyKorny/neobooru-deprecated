@@ -94,25 +94,25 @@ namespace neobooru.Controllers
             artist.RegisteredAt = DateTime.Now;
             artist.ProfileViews = 3234;
 
-            a1.tags = new List<Tag>();
+            a1.Tags = new List<Tag>();
             tag1.Type = Tag.TagType.Character;
             tag1.TagString = "Ishtar (fate)";
-            a1.tags.Add(tag1);
+            a1.Tags.Add(tag1);
             tag3.Type = Tag.TagType.Series;
             tag3.TagString = "fate/grand order";
-            a1.tags.Add(tag3);
+            a1.Tags.Add(tag3);
 
             for (int i = 0; i < 8; i++)
             {
                 tag2.Type = Tag.TagType.General;
                 tag2.TagString = "1 girl";
-                a1.tags.Add(tag2);
+                a1.Tags.Add(tag2);
                 tag4.Type = Tag.TagType.General;
                 tag4.TagString = "black hair";
-                a1.tags.Add(tag4);
+                a1.Tags.Add(tag4);
                 tag5.Type = Tag.TagType.General;
                 tag5.TagString = "breasts";
-                a1.tags.Add(tag5);
+                a1.Tags.Add(tag5);
             }
 
             a1.Id = Guid.NewGuid();
