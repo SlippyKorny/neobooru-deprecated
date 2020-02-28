@@ -42,23 +42,34 @@
 
             @if (signInManager.IsSignedIn(User))
             {
-                <div class="sidebar-footer">
-                    <div>Logged in as: @User.Identity.Name</div>
-                    <form method="post" asp-action="Logout" asp-controller="Profile">
-                        <button type="submit" class="nav-link btn btn-link py-0">
-                            Logout 
-                        </button>
-                    </form>
+                <div id="sidebar-footer" style="position: fixed; bottom:1%; margin: auto;">
+                    <div class="row ml-2">
+                        <i>Logged in as:</i>
+                    </div>
+                    <div class="row ml-2">
+                        <a asp-controller="Profile" asp-action="Profile" style="border-bottom: 1px dotted white;">@User.Identity.Name</a>
+                    </div>
+                    <div class="row mt-3 ml-2">
+                        <form method="post" asp-action="Logout" asp-controller="Profile">
+                            <button type="submit" class="btn btn-light text-white" style="background-color: #218c74; border: 1px solid #218c74;">
+                                Log Out
+                            </button>
+                        </form>
+                    </div>
                 </div>
             }
             else
             {
-                <div class="sidebar-footer">
-                    <a asp-action="Registration" asp-controller="Profile" class="nav-link">Register</a>
-                    <a asp-action="Login" asp-controller="Profile" class="nav-link">Login</a>
+            <div id="sidebar-footer" class="row" style="position: fixed; bottom: 1%; margin: auto;">
+                <div class="col-sm-6">
+                    <a asp-action="Registration" asp-controller="Profile" class="btn btn-light text-white" style="background-color: #218c74; border: 1px solid #218c74;">Register</a>
                 </div>
+                <div class="col-sm-6">
+                    <a asp-action="Login" asp-controller="Profile" class="btn btn-light text-white px-4" style="background-color: #218c74; border: 1px solid #218c74;">Login</a>
+                </div>
+            </div>
             }
-        </nav>
+</nav>
 
             <div id="content">
                 <nav class="navbar navbar-expand-lg navbar-light bg-light">
