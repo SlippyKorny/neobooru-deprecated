@@ -14,7 +14,7 @@ namespace neobooru.Controllers
 
         private SignInManager<IdentityUser> _signInManager;
 
-        private readonly string[] _subsectionPages = { "Profile Settings", "Help"};
+        private readonly string[] _subsectionPages = { "Profile View", "Settings", "Help"};
 
         public ProfileController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
         {
@@ -33,6 +33,8 @@ namespace neobooru.Controllers
         [HttpGet]
         public IActionResult Registration()
         {
+            if (_signInManager.IsSignedIn(User))
+                return RedirectToAction("Profile", "Profile");
             ViewBag.SubsectionPages = _subsectionPages;
             ViewBag.ActiveSubpage = _subsectionPages[1];
             return View();
@@ -41,9 +43,11 @@ namespace neobooru.Controllers
         [HttpPost]
         public async Task<IActionResult> Registration(BasicUserRegistrationViewModel model)
         {
+            if (_signInManager.IsSignedIn(User))
+                return RedirectToAction("Profile", "Profile");
+
             ViewBag.SubsectionPages = _subsectionPages;
             ViewBag.ActiveSubpage = _subsectionPages[1];
-
             if (ModelState.IsValid)
             {
                 // TODO: Change email -> do not use it as login/username
@@ -66,6 +70,8 @@ namespace neobooru.Controllers
         [HttpGet]
         public IActionResult Login()
         {
+            if (_signInManager.IsSignedIn(User))
+                return RedirectToAction("Profile", "Profile");
             ViewBag.SubsectionPages = _subsectionPages;
             ViewBag.ActiveSubpage = "Login";
             return View();
@@ -74,6 +80,8 @@ namespace neobooru.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
+            if (_signInManager.IsSignedIn(User))
+                return RedirectToAction("Profile", "Profile");
             ViewBag.SubsectionPages = _subsectionPages;
             ViewBag.ActiveSubpage = _subsectionPages[1];
 
@@ -96,7 +104,5 @@ namespace neobooru.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
-
-
     }
 }
