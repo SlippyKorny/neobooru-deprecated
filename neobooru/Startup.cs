@@ -39,7 +39,7 @@ namespace neobooru
 
             services.ConfigureApplicationCookie(options =>
             {
-                options.AccessDeniedPath = "";
+                options.AccessDeniedPath = "/";
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
                 options.LoginPath = "/Profile/Login";
                 options.LogoutPath = "/Profile/Logout";

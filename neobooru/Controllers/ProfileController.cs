@@ -78,10 +78,11 @@ namespace neobooru.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(LoginViewModel model)
+        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl)
         {
             if (_signInManager.IsSignedIn(User))
                 return RedirectToAction("Profile", "Profile");
+
             ViewBag.SubsectionPages = _subsectionPages;
             ViewBag.ActiveSubpage = _subsectionPages[1];
 
@@ -90,7 +91,12 @@ namespace neobooru.Controllers
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
 
                 if (result.Succeeded)
+                {
+                    // TODO: This doesn't redirect to the returnUrl despite populating the string variable
+                    if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                        return Redirect(returnUrl);
                     return RedirectToAction("index", "Home");
+                }
 
                 ModelState.AddModelError(string.Empty, "Invalid Login Attempt");
             }
