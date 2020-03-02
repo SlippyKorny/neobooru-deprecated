@@ -9,18 +9,18 @@ namespace neobooru.ViewModels
     public class PostUploadViewModel
     {
         // TODO: < =====================================================================================================================================================================================
-        public readonly string File;
+        public string File { get; set; }
 
-        public readonly string Name;
+        public string Name { get; set; }
 
-        public readonly string Author;
+        public string Author { get; set; }
 
-        public readonly string Source;
+        public string Source { get; set; }
 
-        public readonly Art.ArtRating Rating;
+        public Art.ArtRating Rating { get; set; }
 
         // public readonly ICollection<Tag> tags;
-        public readonly string TagString;
+        public string TagString { get; set; }
 
         // private PostUploadViewModel() { }
         // public PostUploadViewModel()

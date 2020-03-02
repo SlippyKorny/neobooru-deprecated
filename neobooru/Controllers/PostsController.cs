@@ -57,9 +57,6 @@ namespace neobooru.Controllers
             return View();
         }
 
-        // [BindProperty]
-        // public PostUploadViewModel UploadedPostModel { get; set; }
-
         [HttpPost]
         public async Task<IActionResult> UploadPostData(PostUploadViewModel UploadedPostModel)
         {
@@ -68,9 +65,9 @@ namespace neobooru.Controllers
                 // await _db.Books.AddAsync(Book);
                 // await _db.SaveChangesAsync();
                 // return RedirectToPage("Index");
-                return RedirectToPage("/posts/upload");
+                return Redirect("/posts/upload");
             }
-            return RedirectToPage("/posts/upload");
+            return Redirect("/posts/upload");
         }
 
         [HttpGet]
