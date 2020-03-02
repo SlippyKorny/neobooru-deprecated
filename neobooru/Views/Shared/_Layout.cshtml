@@ -29,6 +29,8 @@
                 {
                     <li @(ViewData["Section"].Equals("Profile") ? "class=active" : "")><a asp-controller="Profile" asp-action="Profile">Profile</a></li>
                 }
+                @* If the user has admin rights: *@
+                <li @(ViewData["Section"].Equals("Administration Panel") ? "class=active" : "")><a asp-controller="AdministrationPanel" asp-action="MainPanel">Administration Panel</a></li>
                 <li @(ViewData["Section"].Equals("Forum") ? "class=active" : "")><a href="#">Forum</a></li>
                 <li @(ViewData["Section"].Equals("Store") ? "class=active" : "")><a href="#">Store</a></li>
                 <li @(ViewData["Section"].Equals("Help") ? "class=active" : "")><a href="#">Help</a></li>
@@ -92,11 +94,13 @@
                                 {
                                     @if (item.Equals(ViewBag.ActiveSubpage))
                                     {
-                                        <li class="active nav-item"><a class="nav-link" asp-controller="@controllerName" asp-action="@item">@item</a></li>
+                                        <li class="active nav-item"><a class="nav-link" asp-controller="@controllerName" 
+                                                                       asp-action="@item.Replace(" ", "")">@item</a></li>
                                     }
                                     else
                                     {
-                                        <li class="nav-item"><a class="nav-link"asp-controller="@controllerName" asp-action="@item">@item</a></li>
+                                        <li class="nav-item"><a class="nav-link"asp-controller="@controllerName" 
+                                                                asp-action="@item.Replace(" ", "")">@item</a></li>
                                     }
                                 }
                             </ul>

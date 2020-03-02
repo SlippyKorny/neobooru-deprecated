@@ -56,7 +56,7 @@
                         @foreach (Art.ArtRating rating in (Art.ArtRating[])Enum.GetValues(typeof(Art.ArtRating)))
                         {
                             // TODO: Description of each art
-@*                             @{ string descriptor = (Art.ArtRating)rating.); } *@
+                            @* @{ string descriptor = (Art.ArtRating)rating.); } *@
                             <option value="@rating">@rating</option>
                         }
                     </select>

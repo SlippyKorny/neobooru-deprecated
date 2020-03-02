@@ -18,7 +18,6 @@ namespace neobooru.Controllers
         public PostsController(ApplicationDbContext db)
         {
             _db = db;
-            
         }
 
         [HttpGet]
@@ -62,7 +61,7 @@ namespace neobooru.Controllers
         // public PostUploadViewModel UploadedPostModel { get; set; }
 
         [HttpPost]
-        public async Task<IActionResult> UploadPostData()
+        public async Task<IActionResult> UploadPostData(PostUploadViewModel UploadedPostModel)
         {
             if (ModelState.IsValid)
             {
@@ -71,7 +70,7 @@ namespace neobooru.Controllers
                 // return RedirectToPage("Index");
                 return RedirectToPage("/posts/upload");
             }
-            return View();
+            return RedirectToPage("/posts/upload");
         }
 
         [HttpGet]
