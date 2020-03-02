@@ -8,11 +8,15 @@
 
     <title>@(ViewData["Section"]) - @(ViewData["Subsection"]) | Neobooru</title>
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
-    <link rel="stylesheet" href="~/css/main-style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
+    @* Bootstrap*@
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    @* Fontawesome *@
     <script defer src="~/lib/fontawesome-free-5.12.1-web/js/all.js"></script>
-    <link href="~/lib/fontawesome-free-5.12.1-web/css/all.css" rel="stylesheet"/>
+    <link href="~/lib/fontawesome-free-5.12.1-web/css/all.css" rel="stylesheet" />
+    @* jQuery mCustomScrollbar *@
+    <link rel="stylesheet" href="~/lib/malihu-custom-scrollbar-plugin-3.1.5/jquery.mCustomScrollbar.css" />
+    @* Neobooru main layout style *@
+    <link rel="stylesheet" href="~/css/main-style.css">
 </head>
 <body>
     <div class="wrapper">
@@ -73,62 +77,71 @@
             }
         </nav>
 
-            <div id="content">
-                <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                    <div class="container-fluid">
+        <div id="content">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="container-fluid">
 
-                        <button type="button" id="sidebarCollapse" class="btn sidebar-btn">
-                            <i class="fas fa-align-left"></i>
-                            <span>Toggle Sidebar</span>
-                        </button>
-                        <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                            <i class="fas fa-align-justify"></i>
-                        </button>
+                    <button type="button" id="sidebarCollapse" class="btn sidebar-btn">
+                        <i class="fas fa-align-left"></i>
+                        <span>Toggle Sidebar</span>
+                    </button>
+                    <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="fas fa-align-justify"></i>
+                    </button>
 
-                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                            <ul class="nav navbar-nav ml-auto">
-                                @{
-                                    var controllerName = this.ViewContext.RouteData.Values["controller"].ToString();
-                                }
-                                @foreach (string item in ViewBag.SubsectionPages)
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="nav navbar-nav ml-auto">
+                            @{
+                                var controllerName = this.ViewContext.RouteData.Values["controller"].ToString();
+                            }
+                            @foreach (string item in ViewBag.SubsectionPages)
+                            {
+                                @if (item.Equals(ViewBag.ActiveSubpage))
                                 {
-                                    @if (item.Equals(ViewBag.ActiveSubpage))
-                                    {
-                                        <li class="active nav-item"><a class="nav-link" asp-controller="@controllerName" 
-                                                                       asp-action="@item.Replace(" ", "")">@item</a></li>
-                                    }
-                                    else
-                                    {
-                                        <li class="nav-item"><a class="nav-link"asp-controller="@controllerName" 
-                                                                asp-action="@item.Replace(" ", "")">@item</a></li>
-                                    }
+                                    <li class="active nav-item">
+                                        <a class="nav-link" asp-controller="@controllerName"
+                                           asp-action="@item.Replace(" ", "")">@item</a>
+                                    </li>
                                 }
-                            </ul>
-                        </div>
+                                else
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-controller="@controllerName"
+                                           asp-action="@item.Replace(" ", "")">@item</a>
+                                    </li>
+                                }
+                            }
+                        </ul>
                     </div>
-                </nav>
+                </div>
+            </nav>
 
-                @RenderBody()
+            @RenderBody()
 
-            </div>
         </div>
+    </div>
 
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
-        <script type="text/javascript">
-            $(document).ready(function () {
-                $("#sidebar").mCustomScrollbar({
-                    theme: "minimal"
-                });
+    @* jQuery *@
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    @* <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script> *@
+<script src="https://unpkg.com/@@popperjs/core@@2"></script>
+    @* Bootstrap *@
+    <script src="lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @* jQuery mCustomScrollbar *@
+    <script src="~/lib/malihu-custom-scrollbar-plugin-3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
 
-                $('#sidebarCollapse').on('click', function () {
-                    $('#sidebar, #content').toggleClass('active');
-                    $('.collapse.in').toggleClass('in');
-                    $('a[aria-expanded=true]').attr('aria-expanded', 'false');
-                });
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#sidebar").mCustomScrollbar({
+                theme: "minimal"
             });
-        </script>
-    </body>
-    </html>
+
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar, #content').toggleClass('active');
+                $('.collapse.in').toggleClass('in');
+                $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+            });
+        });
+    </script>
+</body>
+</html>
