@@ -7,32 +7,26 @@ using Microsoft.AspNetCore.Identity;
 
 namespace neobooru.Models
 {
-    public class Tag
+    public class HelpEntry
     {
         [Key]
         public Guid Id { get; set; }
 
+        public string Title { get; set; }
+
+        public string Content { get; set; }
+
         [Required]
         public IdentityUser Creator { get; set; }
 
-        [Required]
-        public string TagString { get; set; }
+        public IdentityUser Updater { get; set; }
 
         [Required]
-        public DateTime AddedAt { get; set; }
+        public DateTime CreatedOn { get; set; }
 
-        public TagType Type { get; set; }
+        public DateTime UpdatedOn { get; set; }
 
-        public enum TagType
-        {
-            Character,
-            Series,
-            Metadata,
-            General
-        }
-
-        // [Required]
-        // public 
-        // TODO: User reference - who added it
+        [Required]
+        public HelpEntrySection ParentSection { get; set; }
     }
 }

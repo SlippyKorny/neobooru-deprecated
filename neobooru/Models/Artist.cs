@@ -19,8 +19,6 @@ namespace neobooru.Models
 
         public int ProfileViews { get; set; }
 
-        // TODO: One artist to many users relation - subscriptions
-
         public string LargePfpUrl { get; set; }
 
         [Required]

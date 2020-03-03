@@ -9,11 +9,23 @@ namespace neobooru.Models
 {
     public class ApplicationDbContext : IdentityDbContext
     {
-        private DbSet<Art> arts { get; set; }
+        public virtual DbSet<Art> Arts { get; set; }
 
-        private DbSet<Artist> artists { get; set; }
+        public virtual DbSet<Artist> Artists { get; set; }
 
-        private DbSet<Pool> pools { get; set; }
+        public virtual DbSet<ArtistBan> ArtistBans { get; set; }
+
+        public virtual DbSet<ArtistSubscription> ArtistSubscriptions { get; set; }
+
+        public virtual DbSet<ArtLike> ArtLikes { get; set; }
+
+        public virtual DbSet<Comment> Comments { get; set; }
+
+        public virtual DbSet<HelpEntry> HelpEntries { get; set; }
+
+        public virtual DbSet<Pool> Pools { get; set; }
+
+        public virtual DbSet<Tag> Tags { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {

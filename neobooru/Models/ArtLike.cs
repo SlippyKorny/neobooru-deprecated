@@ -3,21 +3,19 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 
 namespace neobooru.Models
 {
-    public class ArtistBan
+    public class ArtLike
     {
         [Key]
-        public Guid id { get; set; }
+        public Guid Id { get; set; }
 
         [Required]
-        public DateTime BanDate { get; set; }
+        public IdentityUser User { get; set; }
 
         [Required]
-        public TimeSpan BanDuration { get; set; }
-
-        [Required] 
-        public Artist BannedArtist { get; set; }
+        public Art LikedArt { get; set; }
     }
 }

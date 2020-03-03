@@ -13,6 +13,10 @@
     <Compile Remove="Migrations\20200218224553_ReaddingIdentity.Designer.cs" />
     <Compile Remove="Migrations\20200227085538_AddingIdentity.cs" />
     <Compile Remove="Migrations\20200227085538_AddingIdentity.Designer.cs" />
+    <Compile Remove="Migrations\20200303160133_AddedSubsAndLikes.cs" />
+    <Compile Remove="Migrations\20200303160133_AddedSubsAndLikes.Designer.cs" />
+    <Compile Remove="Migrations\20200303161241_AddedSubsAndLikes.cs" />
+    <Compile Remove="Migrations\20200303161241_AddedSubsAndLikes.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

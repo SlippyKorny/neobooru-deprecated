@@ -7,22 +7,26 @@ using Microsoft.AspNetCore.Identity;
 
 namespace neobooru.Models
 {
-    public class Pool
+    public class HelpEntrySection
     {
         [Key]
         public Guid Id { get; set; }
 
         [Required]
-        public String PoolName { get; set; }
+        public string SectionName { get; set; }
+
+        public string SectionDescription { get; set; }
+
+        public ICollection<HelpEntry> HelpEntries { get; set; }
 
         [Required]
         public IdentityUser Creator { get; set; }
 
+        public IdentityUser Updater { get; set; }
+
         [Required]
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedOn { get; set; }
 
-        public DateTime UpdatedAt { get; set; }
-
-        public virtual ICollection<Art> Arts { get; set; }
+        public DateTime UpdatedOn { get; set; }
     }
 }
