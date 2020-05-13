@@ -3,12 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace neobooru.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class IntialMigation : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "artists",
+                name: "Artists",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
@@ -28,7 +28,7 @@ namespace neobooru.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_artists", x => x.Id);
+                    table.PrimaryKey("PK_Artists", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -71,17 +71,23 @@ namespace neobooru.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "pools",
+                name: "ArtistBans",
                 columns: table => new
                 {
                     id = table.Column<Guid>(nullable: false),
-                    PoolName = table.Column<string>(nullable: true),
-                    CreatedAt = table.Column<DateTime>(nullable: false),
-                    UpdatedAt = table.Column<DateTime>(nullable: false)
+                    BanDate = table.Column<DateTime>(nullable: false),
+                    BanDuration = table.Column<TimeSpan>(nullable: false),
+                    BannedArtistId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_pools", x => x.id);
+                    table.PrimaryKey("PK_ArtistBans", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_ArtistBans_Artists_BannedArtistId",
+                        column: x => x.BannedArtistId,
+                        principalTable: "Artists",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -101,6 +107,32 @@ namespace neobooru.Migrations
                         name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ArtistSubscriptions",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    SubscriberId = table.Column<string>(nullable: false),
+                    ArtistId = table.Column<Guid>(nullable: false),
+                    SubscribedOn = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ArtistSubscriptions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ArtistSubscriptions_Artists_ArtistId",
+                        column: x => x.ArtistId,
+                        principalTable: "Artists",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ArtistSubscriptions_AspNetUsers_SubscriberId",
+                        column: x => x.SubscriberId,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -191,7 +223,93 @@ namespace neobooru.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "arts",
+                name: "HelpEntrySection",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    SectionName = table.Column<string>(nullable: false),
+                    SectionDescription = table.Column<string>(nullable: true),
+                    CreatorId = table.Column<string>(nullable: false),
+                    UpdaterId = table.Column<string>(nullable: true),
+                    CreatedOn = table.Column<DateTime>(nullable: false),
+                    UpdatedOn = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HelpEntrySection", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_HelpEntrySection_AspNetUsers_CreatorId",
+                        column: x => x.CreatorId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_HelpEntrySection_AspNetUsers_UpdaterId",
+                        column: x => x.UpdaterId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Pools",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    PoolName = table.Column<string>(nullable: false),
+                    CreatorId = table.Column<string>(nullable: false),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    UpdatedAt = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Pools", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Pools_AspNetUsers_CreatorId",
+                        column: x => x.CreatorId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "HelpEntries",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Title = table.Column<string>(nullable: true),
+                    Content = table.Column<string>(nullable: true),
+                    CreatorId = table.Column<string>(nullable: false),
+                    UpdaterId = table.Column<string>(nullable: true),
+                    CreatedOn = table.Column<DateTime>(nullable: false),
+                    UpdatedOn = table.Column<DateTime>(nullable: false),
+                    ParentSectionId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HelpEntries", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_HelpEntries_AspNetUsers_CreatorId",
+                        column: x => x.CreatorId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_HelpEntries_HelpEntrySection_ParentSectionId",
+                        column: x => x.ParentSectionId,
+                        principalTable: "HelpEntrySection",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_HelpEntries_AspNetUsers_UpdaterId",
+                        column: x => x.UpdaterId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Arts",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
@@ -209,53 +327,86 @@ namespace neobooru.Migrations
                     Width = table.Column<float>(nullable: false),
                     FileSize = table.Column<int>(nullable: false),
                     Rating = table.Column<int>(nullable: false),
-                    Poolid = table.Column<Guid>(nullable: true)
+                    PoolId = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_arts", x => x.Id);
+                    table.PrimaryKey("PK_Arts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_arts_artists_AuthorId",
+                        name: "FK_Arts_Artists_AuthorId",
                         column: x => x.AuthorId,
-                        principalTable: "artists",
+                        principalTable: "Artists",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_arts_pools_Poolid",
-                        column: x => x.Poolid,
-                        principalTable: "pools",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Comment",
-                columns: table => new
-                {
-                    key = table.Column<Guid>(nullable: false),
-                    comment = table.Column<string>(nullable: false),
-                    commentedOn = table.Column<DateTime>(nullable: false),
-                    editedOn = table.Column<DateTime>(nullable: false),
-                    plusVotes = table.Column<int>(nullable: false),
-                    minusVotes = table.Column<int>(nullable: false),
-                    commentedArtId = table.Column<Guid>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Comment", x => x.key);
-                    table.ForeignKey(
-                        name: "FK_Comment_arts_commentedArtId",
-                        column: x => x.commentedArtId,
-                        principalTable: "arts",
+                        name: "FK_Arts_Pools_PoolId",
+                        column: x => x.PoolId,
+                        principalTable: "Pools",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Tag",
+                name: "ArtLikes",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
+                    UserId = table.Column<string>(nullable: false),
+                    LikedArtId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ArtLikes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ArtLikes_Arts_LikedArtId",
+                        column: x => x.LikedArtId,
+                        principalTable: "Arts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ArtLikes_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Comments",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    UserId = table.Column<string>(nullable: false),
+                    Content = table.Column<string>(nullable: false),
+                    CommentedOn = table.Column<DateTime>(nullable: false),
+                    EditedOn = table.Column<DateTime>(nullable: false),
+                    PlusVotes = table.Column<int>(nullable: false),
+                    MinusVotes = table.Column<int>(nullable: false),
+                    CommentedArtId = table.Column<Guid>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Comments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Comments_Arts_CommentedArtId",
+                        column: x => x.CommentedArtId,
+                        principalTable: "Arts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Comments_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Tags",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    CreatorId = table.Column<string>(nullable: false),
                     TagString = table.Column<string>(nullable: false),
                     AddedAt = table.Column<DateTime>(nullable: false),
                     Type = table.Column<int>(nullable: false),
@@ -263,24 +414,55 @@ namespace neobooru.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Tag", x => x.Id);
+                    table.PrimaryKey("PK_Tags", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Tag_arts_ArtId",
+                        name: "FK_Tags_Arts_ArtId",
                         column: x => x.ArtId,
-                        principalTable: "arts",
+                        principalTable: "Arts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Tags_AspNetUsers_CreatorId",
+                        column: x => x.CreatorId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_arts_AuthorId",
-                table: "arts",
+                name: "IX_ArtistBans_BannedArtistId",
+                table: "ArtistBans",
+                column: "BannedArtistId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ArtistSubscriptions_ArtistId",
+                table: "ArtistSubscriptions",
+                column: "ArtistId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ArtistSubscriptions_SubscriberId",
+                table: "ArtistSubscriptions",
+                column: "SubscriberId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ArtLikes_LikedArtId",
+                table: "ArtLikes",
+                column: "LikedArtId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ArtLikes_UserId",
+                table: "ArtLikes",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Arts_AuthorId",
+                table: "Arts",
                 column: "AuthorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_arts_Poolid",
-                table: "arts",
-                column: "Poolid");
+                name: "IX_Arts_PoolId",
+                table: "Arts",
+                column: "PoolId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -322,18 +504,67 @@ namespace neobooru.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Comment_commentedArtId",
-                table: "Comment",
-                column: "commentedArtId");
+                name: "IX_Comments_CommentedArtId",
+                table: "Comments",
+                column: "CommentedArtId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Tag_ArtId",
-                table: "Tag",
+                name: "IX_Comments_UserId",
+                table: "Comments",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_HelpEntries_CreatorId",
+                table: "HelpEntries",
+                column: "CreatorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_HelpEntries_ParentSectionId",
+                table: "HelpEntries",
+                column: "ParentSectionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_HelpEntries_UpdaterId",
+                table: "HelpEntries",
+                column: "UpdaterId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_HelpEntrySection_CreatorId",
+                table: "HelpEntrySection",
+                column: "CreatorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_HelpEntrySection_UpdaterId",
+                table: "HelpEntrySection",
+                column: "UpdaterId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Pools_CreatorId",
+                table: "Pools",
+                column: "CreatorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tags_ArtId",
+                table: "Tags",
                 column: "ArtId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tags_CreatorId",
+                table: "Tags",
+                column: "CreatorId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "ArtistBans");
+
+            migrationBuilder.DropTable(
+                name: "ArtistSubscriptions");
+
+            migrationBuilder.DropTable(
+                name: "ArtLikes");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -350,25 +581,31 @@ namespace neobooru.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Comment");
+                name: "Comments");
 
             migrationBuilder.DropTable(
-                name: "Tag");
+                name: "HelpEntries");
+
+            migrationBuilder.DropTable(
+                name: "Tags");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
+                name: "HelpEntrySection");
+
+            migrationBuilder.DropTable(
+                name: "Arts");
+
+            migrationBuilder.DropTable(
+                name: "Artists");
+
+            migrationBuilder.DropTable(
+                name: "Pools");
+
+            migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "arts");
-
-            migrationBuilder.DropTable(
-                name: "artists");
-
-            migrationBuilder.DropTable(
-                name: "pools");
         }
     }
 }

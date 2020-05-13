@@ -110,5 +110,19 @@ namespace neobooru.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
+
+        public IActionResult Settings()
+        {
+            ViewBag.SubsectionPages = _subsectionPages;
+            ViewBag.ActiveSubpage = _subsectionPages[1];
+            return View();
+        }
+
+        public IActionResult Help()
+        {
+            ViewBag.SubsectionPages = _subsectionPages;
+            ViewBag.ActiveSubpage = _subsectionPages[2];
+            return View();
+        }
     }
 }

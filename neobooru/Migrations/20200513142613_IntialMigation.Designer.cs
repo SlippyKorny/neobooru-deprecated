@@ -10,8 +10,8 @@ using neobooru.Models;
 namespace neobooru.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200303161347_AddedSubsAndLikes")]
-    partial class AddedSubsAndLikes
+    [Migration("20200513142613_IntialMigation")]
+    partial class IntialMigation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -453,7 +453,47 @@ namespace neobooru.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<Guid>("ParentSectionId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdaterId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatorId");
+
+                    b.HasIndex("ParentSectionId");
+
+                    b.HasIndex("UpdaterId");
+
+                    b.ToTable("HelpEntries");
+                });
+
+            modelBuilder.Entity("neobooru.Models.HelpEntrySection", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatorId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("SectionDescription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SectionName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UpdatedOn")
@@ -468,7 +508,7 @@ namespace neobooru.Migrations
 
                     b.HasIndex("UpdaterId");
 
-                    b.ToTable("HelpEntries");
+                    b.ToTable("HelpEntrySection");
                 });
 
             modelBuilder.Entity("neobooru.Models.Pool", b =>
@@ -645,6 +685,25 @@ namespace neobooru.Migrations
                 });
 
             modelBuilder.Entity("neobooru.Models.HelpEntry", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Creator")
+                        .WithMany()
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("neobooru.Models.HelpEntrySection", "ParentSection")
+                        .WithMany("HelpEntries")
+                        .HasForeignKey("ParentSectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Updater")
+                        .WithMany()
+                        .HasForeignKey("UpdaterId");
+                });
+
+            modelBuilder.Entity("neobooru.Models.HelpEntrySection", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Creator")
                         .WithMany()

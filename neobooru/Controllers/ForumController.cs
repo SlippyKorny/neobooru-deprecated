@@ -8,8 +8,12 @@ namespace neobooru.Controllers
 {
     public class ForumController : Controller
     {
-        public IActionResult List()
+        private readonly string[] _subsectionPages = { "Index" };
+
+        public IActionResult Index()
         {
+            ViewBag.SubsectionPages = _subsectionPages;
+            ViewBag.ActiveSubpage = _subsectionPages[0];
             return View();
         }
     }

@@ -28,16 +28,16 @@
             <ul class="list-unstyled components">
                 <li @(ViewData["Section"].Equals("Posts") ? "class=active" : "")><a href="/posts/list">Posts</a></li>
                 <li @(ViewData["Section"].Equals("Artists") ? "class=active" : "")><a href="/artists/list">Artists</a></li>
-                <li @(ViewData["Section"].Equals("Pools") ? "class=active" : "")><a href="/pools/List">Pools</a></li>
+                <li @(ViewData["Section"].Equals("Pools") ? "class=active" : "")><a href="/pools/list">Pools</a></li>
                 @if (signInManager.IsSignedIn(User))
                 {
                     <li @(ViewData["Section"].Equals("Profile") ? "class=active" : "")><a asp-controller="Profile" asp-action="Profile">Profile</a></li>
                 }
                 @* If the user has admin rights: *@
                 <li @(ViewData["Section"].Equals("Administration Panel") ? "class=active" : "")><a asp-controller="AdministrationPanel" asp-action="MainPanel">Administration Panel</a></li>
-                <li @(ViewData["Section"].Equals("Forum") ? "class=active" : "")><a href="#">Forum</a></li>
-                <li @(ViewData["Section"].Equals("Store") ? "class=active" : "")><a href="#">Store</a></li>
-                <li @(ViewData["Section"].Equals("Help") ? "class=active" : "")><a href="#">Help</a></li>
+                <li @(ViewData["Section"].Equals("Forum") ? "class=active" : "")><a href="/forum/index">Forum</a></li>
+                <li @(ViewData["Section"].Equals("Store") ? "class=active" : "")><a href="/store/index">Store</a></li>
+                <li @(ViewData["Section"].Equals("Help") ? "class=active" : "")><a href="/help/index">Help</a></li>
             </ul>
 
             <ul class="list-unstyled CTAs">

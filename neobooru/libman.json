@@ -24,9 +24,9 @@
       "destination": "wwwroot/lib/malihu-custom-scrollbar-plugin/"
     }
   ,
-{
-  "library": "popper.js@1.16.1",
-  "destination": "wwwroot/lib/popper.js/"
-}
+  {
+    "library": "popper.js@1.16.1",
+    "destination": "wwwroot/lib/popper.js/"
+  }
 ]
 }
