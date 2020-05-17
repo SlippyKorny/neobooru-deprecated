@@ -4,19 +4,20 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using neobooru.Models;
 using neobooru.ViewModels.Forms;
 
 namespace neobooru.Controllers
 {
     public class ProfileController : Controller
     {
-        private UserManager<IdentityUser> _userManager;
+        private UserManager<NeobooruUser> _userManager;
 
-        private SignInManager<IdentityUser> _signInManager;
+        private SignInManager<NeobooruUser> _signInManager;
 
-        private readonly string[] _subsectionPages = { "Profile View", "Settings", "Help"};
+        private readonly string[] _subsectionPages = { "Profile", "Settings", "Help"};
 
-        public ProfileController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+        public ProfileController(UserManager<NeobooruUser> userManager, SignInManager<NeobooruUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -51,7 +52,7 @@ namespace neobooru.Controllers
             if (ModelState.IsValid)
             {
                 // TODO: Change email -> do not use it as login/username
-                IdentityUser user = new IdentityUser {UserName = model.Email, Email = model.Email};
+                NeobooruUser user = new NeobooruUser { UserName = model.Email, Email = model.Email};
                 IdentityResult result = await _userManager.CreateAsync(user, model.Password);
 
                 if (result.Succeeded)

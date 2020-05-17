@@ -82,6 +82,10 @@ namespace neobooru.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
@@ -133,6 +137,8 @@ namespace neobooru.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -264,6 +270,10 @@ namespace neobooru.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("UploaderId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<float>("Width")
                         .HasColumnType("real");
 
@@ -273,7 +283,47 @@ namespace neobooru.Migrations
 
                     b.HasIndex("PoolId");
 
+                    b.HasIndex("UploaderId");
+
                     b.ToTable("Arts");
+                });
+
+            modelBuilder.Entity("neobooru.Models.ArtComment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CommentedArtId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CommentedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("EditedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("MinusVotes")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PlusVotes")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CommentedArtId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ArtComments");
                 });
 
             modelBuilder.Entity("neobooru.Models.ArtLike", b =>
@@ -397,44 +447,6 @@ namespace neobooru.Migrations
                     b.ToTable("ArtistSubscriptions");
                 });
 
-            modelBuilder.Entity("neobooru.Models.Comment", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("CommentedArtId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CommentedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("EditedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("MinusVotes")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PlusVotes")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CommentedArtId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Comments");
-                });
-
             modelBuilder.Entity("neobooru.Models.HelpEntry", b =>
                 {
                     b.Property<Guid>("Id")
@@ -457,19 +469,11 @@ namespace neobooru.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("UpdatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UpdaterId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CreatorId");
 
                     b.HasIndex("ParentSectionId");
-
-                    b.HasIndex("UpdaterId");
 
                     b.ToTable("HelpEntries");
                 });
@@ -494,19 +498,11 @@ namespace neobooru.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("UpdatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UpdaterId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CreatorId");
 
-                    b.HasIndex("UpdaterId");
-
-                    b.ToTable("HelpEntrySection");
+                    b.ToTable("HelpEntrySections");
                 });
 
             modelBuilder.Entity("neobooru.Models.Pool", b =>
@@ -568,6 +564,22 @@ namespace neobooru.Migrations
                     b.ToTable("Tags");
                 });
 
+            modelBuilder.Entity("neobooru.Models.NeobooruUser", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
+
+                    b.Property<string>("PfpThumbnailUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PfpUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProfileDescription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasDiscriminator().HasValue("NeobooruUser");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -623,11 +635,33 @@ namespace neobooru.Migrations
                 {
                     b.HasOne("neobooru.Models.Artist", "Author")
                         .WithMany()
-                        .HasForeignKey("AuthorId");
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("neobooru.Models.Pool", null)
                         .WithMany("Arts")
-                        .HasForeignKey("PoolId");
+                        .HasForeignKey("PoolId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("neobooru.Models.NeobooruUser", "Uploader")
+                        .WithMany("UploadedArts")
+                        .HasForeignKey("UploaderId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("neobooru.Models.ArtComment", b =>
+                {
+                    b.HasOne("neobooru.Models.Art", "CommentedArt")
+                        .WithMany("Comments")
+                        .HasForeignKey("CommentedArtId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("neobooru.Models.NeobooruUser", "User")
+                        .WithMany("ArtComments")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("neobooru.Models.ArtLike", b =>
@@ -635,13 +669,13 @@ namespace neobooru.Migrations
                     b.HasOne("neobooru.Models.Art", "LikedArt")
                         .WithMany()
                         .HasForeignKey("LikedArtId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
-                        .WithMany()
+                    b.HasOne("neobooru.Models.NeobooruUser", "User")
+                        .WithMany("ArtLikes")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 
@@ -650,7 +684,7 @@ namespace neobooru.Migrations
                     b.HasOne("neobooru.Models.Artist", "BannedArtist")
                         .WithMany()
                         .HasForeignKey("BannedArtistId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 
@@ -659,67 +693,46 @@ namespace neobooru.Migrations
                     b.HasOne("neobooru.Models.Artist", "Artist")
                         .WithMany()
                         .HasForeignKey("ArtistId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Subscriber")
-                        .WithMany()
+                    b.HasOne("neobooru.Models.NeobooruUser", "Subscriber")
+                        .WithMany("Subscriptions")
                         .HasForeignKey("SubscriberId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("neobooru.Models.Comment", b =>
-                {
-                    b.HasOne("neobooru.Models.Art", "CommentedArt")
-                        .WithMany("Comments")
-                        .HasForeignKey("CommentedArtId");
-
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("neobooru.Models.HelpEntry", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Creator")
-                        .WithMany()
+                    b.HasOne("neobooru.Models.NeobooruUser", "Creator")
+                        .WithMany("CreatedHelpEntries")
                         .HasForeignKey("CreatorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("neobooru.Models.HelpEntrySection", "ParentSection")
                         .WithMany("HelpEntries")
                         .HasForeignKey("ParentSectionId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
-
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Updater")
-                        .WithMany()
-                        .HasForeignKey("UpdaterId");
                 });
 
             modelBuilder.Entity("neobooru.Models.HelpEntrySection", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Creator")
-                        .WithMany()
+                    b.HasOne("neobooru.Models.NeobooruUser", "Creator")
+                        .WithMany("CreatedHelpEntrySections")
                         .HasForeignKey("CreatorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
-
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Updater")
-                        .WithMany()
-                        .HasForeignKey("UpdaterId");
                 });
 
             modelBuilder.Entity("neobooru.Models.Pool", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Creator")
-                        .WithMany()
+                    b.HasOne("neobooru.Models.NeobooruUser", "Creator")
+                        .WithMany("Pools")
                         .HasForeignKey("CreatorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 
@@ -727,12 +740,13 @@ namespace neobooru.Migrations
                 {
                     b.HasOne("neobooru.Models.Art", null)
                         .WithMany("Tags")
-                        .HasForeignKey("ArtId");
+                        .HasForeignKey("ArtId")
+                        .OnDelete(DeleteBehavior.NoAction);
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Creator")
-                        .WithMany()
+                    b.HasOne("neobooru.Models.NeobooruUser", "Creator")
+                        .WithMany("CreatedTags")
                         .HasForeignKey("CreatorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

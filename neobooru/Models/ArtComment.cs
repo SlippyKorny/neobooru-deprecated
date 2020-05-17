@@ -7,14 +7,13 @@ using Microsoft.AspNetCore.Identity;
 
 namespace neobooru.Models
 {
-    public class Comment
+    public class ArtComment
     {
         [Key]
         public Guid Id { get; set; }
 
-        // TODO: Reference to user
         [Required]
-        public IdentityUser User { get; set; }
+        public NeobooruUser User { get; set; }
 
         [Required]
         public string Content { get; set; }

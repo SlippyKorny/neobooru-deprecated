@@ -13,7 +13,7 @@ namespace neobooru.Models
         public Guid Id { get; set; }
 
         [Required]
-        public IdentityUser User { get; set; }
+        public NeobooruUser User { get; set; }
 
         [Required]
         public Art LikedArt { get; set; }

@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
 
 namespace neobooru.Models
 {
@@ -13,7 +9,7 @@ namespace neobooru.Models
         public Guid Id { get; set; }
 
         [Required]
-        public IdentityUser Creator { get; set; }
+        public NeobooruUser Creator { get; set; }
 
         [Required]
         public string TagString { get; set; }
@@ -30,9 +26,5 @@ namespace neobooru.Models
             Metadata,
             General
         }
-
-        // [Required]
-        // public 
-        // TODO: User reference - who added it
     }
 }

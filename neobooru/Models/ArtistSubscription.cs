@@ -14,7 +14,7 @@ namespace neobooru.Models
         public Guid Id { get; set; }
 
         [Required]
-        public IdentityUser Subscriber { get; set; }
+        public NeobooruUser Subscriber { get; set; }
 
         [Required]
         public Artist Artist { get; set; }

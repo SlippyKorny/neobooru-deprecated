@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace neobooru.Models
@@ -24,8 +25,8 @@ namespace neobooru.Models
 
         public DateTime UpdatedAt { get; set; }
 
-        // TODO: Uploader ID or reference to the model
-        public string Uploader;
+        [Required]
+        public NeobooruUser Uploader { get; set; }
 
         public string Name { get; set; }
 
@@ -47,8 +48,7 @@ namespace neobooru.Models
 
         public virtual ICollection<Tag> Tags { get; set; }
 
-        public virtual ICollection<Comment> Comments { get; set; }
-
+        public virtual ICollection<ArtComment> Comments { get; set; }
 
         public enum ArtRating
         {

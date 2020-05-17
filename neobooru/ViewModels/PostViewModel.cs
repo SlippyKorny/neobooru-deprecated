@@ -44,7 +44,7 @@ namespace neobooru.ViewModels
             FileUrl = art.FileUrl;
             LargeFileUrl = art.LargeFileUrl;
             UploadedAt = art.CreatedAt;
-            UploaderName = art.Uploader;
+            UploaderName = art.Uploader.UserName;
             Size = art.Width + "x" + art.Height;
             Source = art.Source;
             Rating = art.Rating;

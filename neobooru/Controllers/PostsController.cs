@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using neobooru.Models;
 using neobooru.ViewModels;
 
@@ -119,7 +117,7 @@ namespace neobooru.Controllers
             a1.PreviewFileUrl = "~/img/prototyping/arts/26.jpg";
             a1.FileUrl = a1.PreviewFileUrl;
             a1.LargeFileUrl = a1.FileUrl;
-            a1.Uploader = "TheSlipper";
+            a1.Uploader = new NeobooruUser();
             a1.Width = 845;
             a1.Height = 1200;
 
