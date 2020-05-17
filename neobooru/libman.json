@@ -28,5 +28,10 @@
     "library": "popper.js@1.16.1",
     "destination": "wwwroot/lib/popper.js/"
   }
+,
+{
+  "library": "jquery-validation-unobtrusive@3.2.11",
+  "destination": "wwwroot/lib/jquery-validation-unobtrusive/"
+}
 ]
 }
