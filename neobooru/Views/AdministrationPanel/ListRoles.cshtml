@@ -2,5 +2,51 @@
     ViewData["Section"] = "Administration Panel";
     ViewData["Subsection"] = "List Roles";
 }
+@model IEnumerable<IdentityRole>
 
-<h1>Hello List Roles!</h1>
+@if (Model.Any())
+{
+    <div class="row">
+        <div class="col-12">
+            <h1>Role Listing</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <table class="table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Role Name</th>
+                        <th scope="col">Role Description</th>
+                        <th scope="col">Role Permissions</th>
+                        <th scope="col">Edit</th>
+                        <th scope="col">Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var role in Model)
+                    {
+                        <tr>
+                            <td>@role.Id</td>
+                            <td>@role.Name</td>
+                            <td></td>
+                            <td></td>
+                            <td><a type="button" class="btn btn-warning" asp-action="EditRole" asp-controller="AdministrationPanel" asp-route-id="@role.Id">Edit</a></td>
+                            <td><a type="button" class="btn btn-danger">Delete</a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+else
+{
+    <div class="row">
+        <div class="col-12">
+            <h1>No roles have been created!</h1>
+            <p>You can create a new role <a asp-controller="AdministrationPanel" asp-action="CreateRole">here</a>!</p>
+        </div>
+    </div>
+}

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.Differencing;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using neobooru.ViewModels.Forms;
 
@@ -52,7 +53,9 @@ namespace neobooru.Controllers
         {
             ViewBag.SubsectionPages = _subsectionPages;
             ViewBag.ActiveSubpage = _subsectionPages[2];
-            return View();
+            var roles = _roleManager.Roles;
+
+            return View(roles);
         }
 
         [HttpGet]
@@ -75,21 +78,69 @@ namespace neobooru.Controllers
 
                 IdentityResult result = await _roleManager.CreateAsync(identityRole);
                 if (result.Succeeded)
-                    return RedirectToAction("MainPanel", "AdministrationPanel");
+                    return RedirectToAction("ListRoles", "AdministrationPanel");
                 foreach (IdentityError error in result.Errors)
                     ModelState.AddModelError("", error.Description);
             }
 
-
+            ViewBag.SubsectionPages = _subsectionPages;
+            ViewBag.ActiveSubpage = _subsectionPages[3];
             return View(createRoleViewModel);
         }
 
         [HttpGet]
-        public IActionResult EditRole()
+        public async Task<IActionResult> EditRole(string id)
         {
             ViewBag.SubsectionPages = _subsectionPages;
             ViewBag.ActiveSubpage = "Edit Role";
-            return View();
+
+            var role = await _roleManager.FindByIdAsync(id);
+            if (role == null)
+            {
+                ViewBag.ErrorMessage = $"Role with Id = {id} can not be found!";
+                return View("NotFound");
+            }
+
+            EditRoleViewModel ervmModel = new EditRoleViewModel
+            {
+                Id = role.Id,
+                RoleName = role.Name
+            };
+
+            // https://youtu.be/7ikyZk5fGzk
+            // foreach(var user in userManager.Users)
+            // {
+            //      if (await userManager.IsInRoleAsync(user, role.Name))
+            //      {
+            //          model.Users.Add(user.UserName);
+            //      }
+
+            return View(ervmModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditRole(EditRoleViewModel ervmModel)
+        {
+            ViewBag.SubsectionPages = _subsectionPages;
+            ViewBag.ActiveSubpage = "Edit Role";
+
+            var role = await _roleManager.FindByIdAsync(ervmModel.Id);
+            if (role == null)
+            {
+                ViewBag.ErrorMessage = $"Role with Id = {ervmModel.Id} can not be found!";
+                return View("NotFound");
+            }
+            else
+            {
+                role.Name = ervmModel.RoleName;
+                var result = await _roleManager.UpdateAsync(role);
+                if (result.Succeeded)
+                    return RedirectToAction("ListRoles");
+                foreach(var err in result.Errors)
+                    ModelState.AddModelError("", err.Description);
+            }
+
+            return View(ervmModel);
         }
 
         [HttpGet]

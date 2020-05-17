@@ -12,6 +12,7 @@ namespace neobooru.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private string[] _subsectionPages = { "Home" };
 
         public HomeController(ILogger<HomeController> logger)
         {
@@ -20,9 +21,9 @@ namespace neobooru.Controllers
 
         public IActionResult Index()
         {
-            string[] subsectionPages = {"Home"};
-            ViewBag.SubsectionPages = subsectionPages;
-            ViewBag.ActiveSubpage = subsectionPages[0];
+
+            ViewBag.SubsectionPages = _subsectionPages;
+            ViewBag.ActiveSubpage = _subsectionPages[0];
             return View();
         }
 
@@ -31,5 +32,6 @@ namespace neobooru.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
     }
 }
