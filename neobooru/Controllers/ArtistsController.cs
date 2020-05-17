@@ -10,7 +10,7 @@ namespace neobooru.Controllers
 {
     public class ArtistsController : Controller
     {
-        private readonly string[] _subsectionPages = { "List", "Submit", "Help" };
+        private readonly string[] _subsectionPages = { "List", "Register", "Help" };
 
         [HttpGet]
         public IActionResult List()
@@ -36,7 +36,7 @@ namespace neobooru.Controllers
         }
 
         [HttpGet]
-        public IActionResult Submit()
+        public IActionResult Register()
         {
             ViewBag.SubsectionPages = _subsectionPages;
             ViewBag.ActiveSubpage = _subsectionPages[1];
@@ -58,7 +58,6 @@ namespace neobooru.Controllers
                 MailAddress = "commieComma@gmail.com",
                 Gender = "Male",
                 BirthDate = DateTime.Now,
-                Occupation = "University Student"
             };
 
             Art art = new Art();

@@ -10,8 +10,8 @@ using neobooru.Models;
 namespace neobooru.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200513142613_IntialMigation")]
-    partial class IntialMigation
+    [Migration("20200517102032_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -310,6 +310,9 @@ namespace neobooru.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("BackgroundImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime2");
 
@@ -326,9 +329,6 @@ namespace neobooru.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("MailAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Occupation")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PfpUrl")

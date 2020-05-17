@@ -1,0 +1,73 @@
+﻿@{
+    ViewData["Section"] = "Artists";
+    ViewData["Subsection"] = "Submit";
+}
+@model neobooru.ViewModels.Forms.ArtistRegistrationViewModel
+
+<div class="row">
+    <div class="col-md-12">
+        <div id="guidelines">
+            <h1>Artist Registration Guidelines</h1>
+            <p>Please keep the following guidelines in mind when uploading something. Violating these rules will result in a ban.</p>
+
+            <b>Read</b> <a href="#" style="border-bottom: 1px dotted #10ac84; color: #10ac84">Terms of Service</a> <b>under prohibited content!</b>
+            <ul>
+                <li>Read our terms of service before continuing. This has been updated to reflect recent changes in our policy.</li>
+                <li>Our site is mainly anime related. Stick to the status quo.</li>
+                <li>Respect the privacy of the registered artists - DO NOT register them or share information about them without their consent.</li>
+                <li>If possible use the profile image from the website in which the artist posts most of their art for the profile picture on neobooru.</li>
+            </ul>
+            <p>All accounts have unlimited and unmoderated uploads. This will change in the future if you ignore the above rules.</p>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header pb-1">
+                <h3>Artist Registration Form</h3>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="form-group row">
+                        <div class="col-1"><label asp-for="Name"></label></div>
+                        <div class="col-2"><input asp-for="Name" class="form-control" /></div>
+
+                        <div class="col-2"><label asp-for="Pfp"></label></div>
+                        <div class="col-2"><input asp-for="Pfp" class="form-control-file" /></div>
+
+                        <div class="col-2"><label asp-for="BackgroundImage"></label></div>
+                        <div class="col-2"><input asp-for="BackgroundImage" class="form-control-file" /></div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-1"><label asp-for="Country"></label></div>
+                        <div class="col-2"><input asp-for="Country" class="form-control" /></div>
+
+                        <div class="col-2"><label asp-for="FacebookProfileUrl"></label></div>
+                        <div class="col-2"><input asp-for="FacebookProfileUrl" class="form-control" /></div>
+
+                        <div class="col-2"><label asp-for="TwitterProfileUrl"></label></div>
+                        <div class="col-2"><input asp-for="TwitterProfileUrl" class="form-control" /></div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-1"><label asp-for="MailAddress"></label></div>
+                        <div class="col-2"><input asp-for="MailAddress" type="email" class="form-control" /></div>
+
+                        <div class="col-2"><label asp-for="Gender"></label></div>
+                        <div class="col-2"><input asp-for="Gender" class="form-control" /></div>
+
+                        <div class="col-2"><label asp-for="BirthDate"></label></div>
+                        <div class="col-2"><input asp-for="BirthDate" type="date" class="form-control" /></div>
+                    </div>
+                    <div class="row">
+                        <buttton type="submit" class="col-12 btn btn-block" style="background: #1dd1a1; color: #fff;">
+                            Register
+                        </buttton>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -308,6 +308,9 @@ namespace neobooru.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("BackgroundImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime2");
 
@@ -324,9 +327,6 @@ namespace neobooru.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("MailAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Occupation")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PfpUrl")

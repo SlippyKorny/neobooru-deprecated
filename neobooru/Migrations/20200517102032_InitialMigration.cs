@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace neobooru.Migrations
 {
-    public partial class IntialMigation : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -15,6 +15,7 @@ namespace neobooru.Migrations
                     ArtistName = table.Column<string>(nullable: false),
                     RegisteredAt = table.Column<DateTime>(nullable: false),
                     ProfileViews = table.Column<int>(nullable: false),
+                    BackgroundImageUrl = table.Column<string>(nullable: true),
                     LargePfpUrl = table.Column<string>(nullable: true),
                     PfpUrl = table.Column<string>(nullable: false),
                     PreviewPfpUrl = table.Column<string>(nullable: true),
@@ -23,8 +24,7 @@ namespace neobooru.Migrations
                     TwitterProfileUrl = table.Column<string>(nullable: true),
                     MailAddress = table.Column<string>(nullable: true),
                     Gender = table.Column<string>(nullable: true),
-                    BirthDate = table.Column<DateTime>(nullable: false),
-                    Occupation = table.Column<string>(nullable: true)
+                    BirthDate = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {

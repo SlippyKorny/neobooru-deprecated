@@ -19,6 +19,8 @@ namespace neobooru.Models
 
         public int ProfileViews { get; set; }
 
+        public string BackgroundImageUrl { get; set; }
+
         public string LargePfpUrl { get; set; }
 
         [Required]
@@ -37,7 +39,5 @@ namespace neobooru.Models
         public string Gender { get; set; }
 
         public DateTime BirthDate { get; set; }
-
-        public string Occupation { get; set; }
     }
 }

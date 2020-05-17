@@ -31,8 +31,6 @@ namespace neobooru.ViewModels
 
         public readonly DateTime BirthDate;
 
-        public readonly string Occupation;
-
         public readonly List<ArtThumbnailViewModel> ArtThumbnails;
 
         private ArtistViewModel() { }
@@ -50,7 +48,6 @@ namespace neobooru.ViewModels
             MailAddress = artist.MailAddress;
             Gender = artist.Gender;
             BirthDate = artist.BirthDate;
-            Occupation = artist.Occupation;
             ArtThumbnails = artThumbnails;
         }
     }
