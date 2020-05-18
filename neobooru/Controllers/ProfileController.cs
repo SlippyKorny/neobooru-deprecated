@@ -52,7 +52,11 @@ namespace neobooru.Controllers
             if (ModelState.IsValid)
             {
                 // TODO: Change email -> do not use it as login/username
-                NeobooruUser user = new NeobooruUser { UserName = model.Email, Email = model.Email};
+                NeobooruUser user = new NeobooruUser { 
+                    UserName = model.Email, 
+                    Email = model.Email, 
+                    RegisteredOn = DateTime.Now
+                };
                 IdentityResult result = await _userManager.CreateAsync(user, model.Password);
 
                 if (result.Succeeded)

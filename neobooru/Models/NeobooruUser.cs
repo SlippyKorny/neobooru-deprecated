@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 
 namespace neobooru.Models
 {
     public class NeobooruUser : IdentityUser
     {
+        public DateTime RegisteredOn { get; set; }
+
         public string PfpUrl { get; set; }
         
         public string PfpThumbnailUrl { get; set; }

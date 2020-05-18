@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Differencing;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.Extensions.DependencyInjection;
+using neobooru.Models;
+using neobooru.ViewModels;
 using neobooru.ViewModels.Forms;
 
 namespace neobooru.Controllers
@@ -17,10 +21,14 @@ namespace neobooru.Controllers
     {
         
         private readonly string[] _subsectionPages = { "Main Panel", "List Users", "List Roles", "Create Role", "Help" };
+
+        private readonly UserManager<NeobooruUser> _userManager;
+        
         private readonly RoleManager<IdentityRole> _roleManager;
 
-        public AdministrationPanelController(RoleManager<IdentityRole> roleManager)
+        public AdministrationPanelController(UserManager<NeobooruUser> userManager, RoleManager<IdentityRole> roleManager)
         {
+            _userManager = userManager;
             _roleManager = roleManager;
         }
 
@@ -33,11 +41,31 @@ namespace neobooru.Controllers
         }
 
         [HttpGet]
-        public IActionResult ListUsers()
+        public async Task<IActionResult> ListUsers()
         {
             ViewBag.SubsectionPages = _subsectionPages;
             ViewBag.ActiveSubpage = _subsectionPages[1];
-            return View();
+
+            IQueryable<NeobooruUser> users = _userManager.Users;
+            List<UserListingView> dto = new List<UserListingView>();
+
+            foreach (var usr in users)
+            {
+                var roles = await _userManager.GetRolesAsync(usr);
+                StringBuilder sb = new StringBuilder();
+                if (roles.Count > 0)
+                {
+                    sb.Append(roles[0]);
+                    for (int i = 1; i < roles.Count; i++)
+                    {
+                        sb.Append(", ");
+                        sb.Append(roles[i]);
+                    }
+                }
+                dto.Add(new UserListingView(usr.Id, usr.UserName, usr.Email, usr.RegisteredOn, sb.ToString()));
+            }
+
+            return View(dto);
         }
 
         [HttpGet]

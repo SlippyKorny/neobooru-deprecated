@@ -1,0 +1,58 @@
+﻿@{
+    ViewData["Section"] = "Administration Panel";
+    ViewData["Subsection"] = "List Roles";
+}
+@model List<neobooru.ViewModels.UserListingView>
+
+@if (Model.Any())
+{
+    <div class="row">
+        <div class="col-12">
+            <h1>User Listing</h1>
+            <h3>TODO: User search form</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <table class="table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Username</th>
+                        <th scope="col">E-mail</th>
+                        <th scope="col">Registered on</th>
+                        <th scope="col">Role</th>
+                        <th scope="col">Profile</th>
+                        <th scope="col">Change Role</th>
+                        <th scope="col">Ban</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var usr in Model)
+                    {
+                        <tr>
+                            <td>@usr.Id</td>
+                            <td>@usr.Username</td>
+                            <td>@usr.Email</td>
+                            <td>@usr.RegisteredOn</td>
+                            <td>@usr.Role</td>
+                            <td><a class="btn btn-success" href="#">Profile</a></td>
+                            <td><a class="btn btn-warning">Change Role</a></td>
+                            <td><a class="btn btn-danger">Ban</a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+else
+{
+    <div class="row">
+        <div class="col-12">
+            <h1>No users have been created!</h1>
+            <p>(⊙_⊙) How are you even seeing this!? You need to be registered and have an administrator role to get here!</p>
+        </div>
+    </div>
+}
+
