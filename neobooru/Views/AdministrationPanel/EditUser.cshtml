@@ -2,5 +2,53 @@
     ViewData["Section"] = "Administration Panel";
     ViewData["Subsection"] = "Edit User";
 }
+@model neobooru.ViewModels.Forms.EditUserViewModel
 
-<h1>Hello Edit user!</h1>
+<div class="row">
+    <h1>Edit User's Roles</h1>
+</div>
+<div class="row">
+    <form method="post" class="col-12">
+        <div class="form-group row">
+            <label asp-for="Id" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="Id" disabled class="form-control">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label asp-for="Username" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="Username" disabled class="form-control">
+                <span asp-validation-for="Username" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label asp-for="RegisteredOn" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="RegisteredOn" disabled type="date" class="form-control">
+                <span asp-validation-for="RegisteredOn" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label asp-for="AvailableRoles" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                @for (var i = 0; i < Model.AvailableRoles.Count; i++)
+                {
+                <div class="form-check">
+                    <input type="checkbox" asp-for="@Model.AvailableRoles[i].IsChecked" class="form-check-input">
+                    <label class="form-check-label" asp-for="@Model.AvailableRoles[i]">@Model.AvailableRoles[i].RoleName</label>
+                </div>
+                }
+                <span asp-validation-for="AvailableRoles" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="form-group row">
+            <div class="col-sm-10">
+                <button type="submit" class="btn btn-success">Update</button>
+                <a asp-action="ListRoles" class="btn btn-danger">Cancel</a>
+            </div>
+        </div>
+    </form>
+</div>

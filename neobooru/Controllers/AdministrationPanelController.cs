@@ -69,11 +69,26 @@ namespace neobooru.Controllers
         }
 
         [HttpGet]
-        public IActionResult EditUser()
+        public async Task<IActionResult> EditUser(string id)
         {
             ViewBag.SubsectionPages = _subsectionPages;
             ViewBag.ActiveSubpage = "Edit User";
-            return View();
+
+            NeobooruUser usr = await _userManager.FindByIdAsync(id);
+            var usrRoles = await _userManager.GetRolesAsync(usr);
+            string[] arr = new string[usrRoles.Count];
+            usrRoles.CopyTo(arr, 0);
+
+            IQueryable<IdentityRole> roles = _roleManager.Roles;
+
+            return View(new EditUserViewModel(usr, arr, roles));
+        }
+
+        [HttpPost]
+        public IActionResult EditUser(EditUserViewModel viewModel)
+        {
+            return RedirectToAction("ListUsers", "AdministrationPanel");
+            return View(viewModel);
         }
 
         [HttpGet]
@@ -170,6 +185,7 @@ namespace neobooru.Controllers
 
             return View(ervmModel);
         }
+
 
         [HttpGet]
         public IActionResult Help()
