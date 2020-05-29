@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using ImageManipulation;
+using ImageManipulation.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using neobooru.Models;
 using neobooru.ViewModels;
@@ -59,34 +60,53 @@ namespace neobooru.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UploadPostData(PostUploadViewModel model)
+        public async Task<IActionResult> Upload(PostUploadViewModel model)
         {
+            ViewBag.SubsectionPages = _subsectionPages;
+            ViewBag.ActiveSubpage = _subsectionPages[2];
             if (ModelState.IsValid)
             {
-                // Save the files and manage get the necessary data
-                string large, normal, thumbnail;
-                using (ImageFileManager ifm = new ImageFileManager("wwwroot/img/posts/", model.File.OpenReadStream(),
-                    ImageUtils.ImgExtensionFromContentType(model.File.ContentType)))
+                if (model.File == null)
                 {
-                    large = await ifm.SaveLarge();
-                    normal = await ifm.Save();
-                    thumbnail = await ifm.SaveThumbnail(0, 0);
+                    ModelState.AddModelError(string.Empty, "No image was chosen!");
+                    return Redirect("/posts/upload");
                 }
-                string hash = ImageUtils.HashFromFile(large);
-                var dims = ImageUtils.DimensionsOfImage(large);
-                long size = model.File.Length;
+
+                // Save the files and manage get the necessary data
+                string large, normal, thumbnail, hash;
+                (int,int) dims;
+                long size;
+                try
+                {
+                    using (ImageFileManager ifm = new ImageFileManager("wwwroot/img/posts/", model.File.OpenReadStream(),
+    ImageUtils.ImgExtensionFromContentType(model.File.ContentType)))
+                    {
+                        large = await ifm.SaveLarge();
+                        normal = await ifm.Save();
+                        thumbnail = await ifm.SaveThumbnail(0, 0);
+                    }
+                    hash = ImageUtils.HashFromFile(large);
+                    dims = ImageUtils.DimensionsOfImage(large);
+                    size = model.File.Length;
+                }
+                catch (InvalidArtDimensionsException exception)
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid art size - the art should be at least 300 x 300px");
+                    return View();
+                }
+
 
                 // Put the data in the model and save it to the database
                 // TODO: Get the nulls
-                //Art art = new Art(model, null, null, null, large, normal, thumbnail, hash, dims.Height, dims.Width,
+
+                //Art art = new Art(model, null, null, null, large, normal, thumbnail, hash, dims.Item2, dims.Item1,
                 //    (int)size);
-                Art art = new Art(model, null, null, null, large, normal, thumbnail, hash, dims.Item2, dims.Item1,
-                    (int)size);
-                await _db.Arts.AddAsync(art);
-                await _db.SaveChangesAsync();
-                return Redirect("/posts/upload");
+                //await _db.Arts.AddAsync(art);
+                //await _db.SaveChangesAsync();
+
+                return Redirect("/Posts/List");
             }
-            return Redirect("/posts/upload");
+            return View();
         }
 
         [HttpGet]

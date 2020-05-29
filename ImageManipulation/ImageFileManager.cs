@@ -1,9 +1,8 @@
-﻿using SixLabors.ImageSharp;
+﻿using ImageManipulation.Exceptions;
+using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ImageManipulation
@@ -44,6 +43,9 @@ namespace ImageManipulation
             _fileGuid = Guid.NewGuid();
             _extension = extension;
             _imgStream = imgStream;
+            Image img = Image.Load(_imgStream);
+            if (img.Height <= 300 || img.Width <= 300)
+                throw new InvalidArtDimensionsException();
         }
 
 
@@ -54,6 +56,7 @@ namespace ImageManipulation
         public async Task<string> SaveLarge()
         {
             string filePath = _folder + _fileGuid.ToString() + "_large." + _extension;
+            _imgStream.Position = 0; 
             Image img = Image.Load(_imgStream);
             img.Save(filePath);
             return filePath;
