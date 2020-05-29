@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using neobooru.Models;
 using neobooru.ViewModels;
+using neobooru.ViewModels.Forms;
 
 namespace neobooru.Controllers
 {
@@ -35,6 +36,8 @@ namespace neobooru.Controllers
             return View(Artists);
         }
 
+        #region ArtistRegistration
+
         [HttpGet]
         public IActionResult Register()
         {
@@ -42,6 +45,17 @@ namespace neobooru.Controllers
             ViewBag.ActiveSubpage = _subsectionPages[1];
             return View();
         }
+
+        [HttpPost]
+        public IActionResult Register(ArtistRegistrationViewModel model)
+        {
+            ViewBag.SubsectionPages = _subsectionPages;
+            ViewBag.ActiveSubpage = _subsectionPages[1];
+            Console.WriteLine("Hello :3");
+            return View();
+        }
+
+        #endregion
 
         [HttpGet]
         public IActionResult Artist(Guid artistId)

@@ -17,14 +17,14 @@ namespace neobooru.Models
         [Required]
         public DateTime AddedAt { get; set; }
 
-        public TagType Type { get; set; }
-
-        public enum TagType
-        {
-            Character,
-            Series,
-            Metadata,
-            General
-        }
+        // TODO: If there is enough time then do this
+        //public TagType Type { get; set; }
+        //public enum TagType
+        //{
+        //    Character,
+        //    Series,
+        //    Metadata,
+        //    General
+        //}
     }
 }

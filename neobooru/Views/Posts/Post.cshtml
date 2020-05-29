@@ -25,19 +25,12 @@
                         <h4>Tags</h4>
                     </div>
                     <div class="card-body">
-                        @foreach (KeyValuePair<Tag.TagType, List<string>> tagPair in Model.TagStructure)
-                        {
-                            @if (tagPair.Value.Count > 0)
+                        <div>
+                            @foreach (string tagString in Model.Tags)
                             {
-                                <div>
-                                    <b>@tagPair.Key:&nbsp;</b>
-                                    @foreach (string tag in tagPair.Value)
-                                    {
-                                        <a href="#" class="text-muted">#@tag&nbsp;</a>
-                                    }
-                                </div>
+                                <a href="#" class="text-muted">@tagString&nbsp;</a>
                             }
-                        }
+                        </div>
                     </div>
                 </div>
 

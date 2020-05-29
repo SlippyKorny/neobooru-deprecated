@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using ImageManipulation;
 using ImageManipulation.Exceptions;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Razor.Runtime.TagHelpers;
 using neobooru.Models;
 using neobooru.ViewModels;
-using SixLabors.ImageSharp;
 
 namespace neobooru.Controllers
 {
@@ -15,11 +17,17 @@ namespace neobooru.Controllers
     {
         private readonly ApplicationDbContext _db;
 
+        private readonly UserManager<NeobooruUser> _userManager;
+
+        private readonly SignInManager<NeobooruUser> _signInManager;
+
         private readonly string[] _subsectionPages = {"List", "Trending", "Upload", "Help"};
 
-        public PostsController(ApplicationDbContext db)
+        public PostsController(ApplicationDbContext db, UserManager<NeobooruUser> userManager, SignInManager<NeobooruUser> signInManager)
         {
             _db = db;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         [HttpGet]
@@ -71,6 +79,11 @@ namespace neobooru.Controllers
                     ModelState.AddModelError(string.Empty, "No image was chosen!");
                     return Redirect("/posts/upload");
                 }
+                else if (!_signInManager.IsSignedIn(User)) // TODO: Check if this works
+                {
+                    ModelState.AddModelError(string.Empty, "You have to be logged in to upload an art!");
+                    return Redirect("/posts/upload");
+                }
 
                 // Save the files and manage get the necessary data
                 string large, normal, thumbnail, hash;
@@ -95,14 +108,29 @@ namespace neobooru.Controllers
                     return View();
                 }
 
+                // Get the user data and extract the tag data (and create tags if are the given ones are new)
+                var usr = await _userManager.GetUserAsync(User);
+                List<string> rawTags = model.TagString.Split(' ').ToList();
+                List<Tag> tags = new List<Tag>();
+                foreach (string rawTag in rawTags)
+                {
+                    var dataSet = _db.Tags.Where(t => t.TagString.Equals(rawTag));
+                    if (dataSet.Count() == 0)
+                    {
+                        Tag newTag = new Tag {Id = Guid.NewGuid(), Creator = usr, TagString = rawTag, AddedAt = DateTime.Now };
+                        await _db.Tags.AddAsync(newTag);
+                        tags.Add(newTag);
+                    }
+                    else
+                        tags.Add(dataSet.First());
+                }
+                await _db.SaveChangesAsync();
 
                 // Put the data in the model and save it to the database
-                // TODO: Get the nulls
-
-                //Art art = new Art(model, null, null, null, large, normal, thumbnail, hash, dims.Item2, dims.Item1,
-                //    (int)size);
-                //await _db.Arts.AddAsync(art);
-                //await _db.SaveChangesAsync();
+                // TODO: Get the artist
+                Art art = new Art(model, usr, null, tags, large, normal, thumbnail, hash, dims.Item2, dims.Item1, (int)size);
+                await _db.Arts.AddAsync(art);
+                await _db.SaveChangesAsync();
 
                 return Redirect("/Posts/List");
             }
@@ -130,22 +158,17 @@ namespace neobooru.Controllers
             artist.ProfileViews = 3234;
 
             a1.Tags = new List<Tag>();
-            tag1.Type = Tag.TagType.Character;
             tag1.TagString = "Ishtar (fate)";
             a1.Tags.Add(tag1);
-            tag3.Type = Tag.TagType.Series;
             tag3.TagString = "fate/grand order";
             a1.Tags.Add(tag3);
 
             for (int i = 0; i < 8; i++)
             {
-                tag2.Type = Tag.TagType.General;
                 tag2.TagString = "1 girl";
                 a1.Tags.Add(tag2);
-                tag4.Type = Tag.TagType.General;
                 tag4.TagString = "black hair";
                 a1.Tags.Add(tag4);
-                tag5.Type = Tag.TagType.General;
                 tag5.TagString = "breasts";
                 a1.Tags.Add(tag5);
             }

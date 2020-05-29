@@ -29,7 +29,7 @@ namespace neobooru.ViewModels
 
         public readonly string ArtistName;
 
-        public readonly Dictionary<Tag.TagType, List<string>> TagStructure;
+        public readonly List<string> Tags;
 
         public readonly ArtistThumbnailViewModel ArtistThumbnail;
 
@@ -49,13 +49,10 @@ namespace neobooru.ViewModels
             Source = art.Source;
             Rating = art.Rating;
             ArtistName = art.Author.ArtistName;
-            TagStructure = new Dictionary<Tag.TagType, List<string>>();
-
-            foreach (Tag.TagType type in (Tag.TagType[]) Enum.GetValues(typeof(Tag.TagType)))
-                TagStructure.Add(type, new List<string>());
+            Tags = new List<string>();
 
             foreach (Tag tag in art.Tags)
-                TagStructure[tag.Type].Add(tag.TagString);
+                Tags.Add(tag.TagString);
         }
     }
 }
