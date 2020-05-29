@@ -69,7 +69,7 @@ namespace neobooru.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> EditUser(string id)
+        public async Task<IActionResult> EditUsersRoles(string id)
         {
             ViewBag.SubsectionPages = _subsectionPages;
             ViewBag.ActiveSubpage = "Edit User";
@@ -78,17 +78,26 @@ namespace neobooru.Controllers
             var usrRoles = await _userManager.GetRolesAsync(usr);
             string[] arr = new string[usrRoles.Count];
             usrRoles.CopyTo(arr, 0);
-
             IQueryable<IdentityRole> roles = _roleManager.Roles;
+            List<RoleCheckboxViewModel> viewModel = new List<RoleCheckboxViewModel>();
+            foreach (var role in roles)
+            {
+                RoleCheckboxViewModel vm = new RoleCheckboxViewModel();
+                vm.Role = role.Name;
+                if (arr.Contains(role.Name))
+                    vm.Selected = true;
+                else
+                    vm.Selected = false;
+                viewModel.Add(vm);
+            }
 
-            return View(new EditUserViewModel(usr, arr, roles));
+            return View(viewModel);
         }
 
         [HttpPost]
-        public IActionResult EditUser(EditUserViewModel viewModel)
+        public IActionResult EditUsersRoles(List<RoleCheckboxViewModel> viewModel)
         {
             return RedirectToAction("ListUsers", "AdministrationPanel");
-            return View(viewModel);
         }
 
         [HttpGet]

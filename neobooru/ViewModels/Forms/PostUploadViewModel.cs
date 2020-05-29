@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Http;
 using neobooru.Models;
+using neobooru.Utilities.Attributes;
 
 namespace neobooru.ViewModels
 {
     public class PostUploadViewModel
     {
-        public string File { get; set; }
+        // [ValidImage(allowedExtensions: new string[] { "png", "jpg" })]
+        public IFormFile File { get; set; }
 
         public string Name { get; set; }
 

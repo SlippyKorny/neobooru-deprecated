@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.29709.97
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "neobooru", "neobooru\neobooru.csproj", "{5353B68C-8AE4-4DC9-9301-D21C7F91A511}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageManipulation", "ImageManipulation\ImageManipulation.csproj", "{0EFF3C68-1781-4B1D-8F1F-17A4A70CD77A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{5353B68C-8AE4-4DC9-9301-D21C7F91A511}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5353B68C-8AE4-4DC9-9301-D21C7F91A511}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5353B68C-8AE4-4DC9-9301-D21C7F91A511}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0EFF3C68-1781-4B1D-8F1F-17A4A70CD77A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EFF3C68-1781-4B1D-8F1F-17A4A70CD77A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0EFF3C68-1781-4B1D-8F1F-17A4A70CD77A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EFF3C68-1781-4B1D-8F1F-17A4A70CD77A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

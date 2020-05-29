@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
+using ImageManipulation;
 using Microsoft.AspNetCore.Mvc;
 using neobooru.Models;
 using neobooru.ViewModels;
+using SixLabors.ImageSharp;
 
 namespace neobooru.Controllers
 {
@@ -56,13 +59,31 @@ namespace neobooru.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UploadPostData(PostUploadViewModel UploadedPostModel)
+        public async Task<IActionResult> UploadPostData(PostUploadViewModel model)
         {
             if (ModelState.IsValid)
             {
-                // await _db.Books.AddAsync(Book);
-                // await _db.SaveChangesAsync();
-                // return RedirectToPage("Index");
+                // Save the files and manage get the necessary data
+                string large, normal, thumbnail;
+                using (ImageFileManager ifm = new ImageFileManager("wwwroot/img/posts/", model.File.OpenReadStream(),
+                    ImageUtils.ImgExtensionFromContentType(model.File.ContentType)))
+                {
+                    large = await ifm.SaveLarge();
+                    normal = await ifm.Save();
+                    thumbnail = await ifm.SaveThumbnail(0, 0);
+                }
+                string hash = ImageUtils.HashFromFile(large);
+                var dims = ImageUtils.DimensionsOfImage(large);
+                long size = model.File.Length;
+
+                // Put the data in the model and save it to the database
+                // TODO: Get the nulls
+                //Art art = new Art(model, null, null, null, large, normal, thumbnail, hash, dims.Height, dims.Width,
+                //    (int)size);
+                Art art = new Art(model, null, null, null, large, normal, thumbnail, hash, dims.Item2, dims.Item1,
+                    (int)size);
+                await _db.Arts.AddAsync(art);
+                await _db.SaveChangesAsync();
                 return Redirect("/posts/upload");
             }
             return Redirect("/posts/upload");
