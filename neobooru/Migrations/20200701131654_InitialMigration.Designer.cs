@@ -9,9 +9,9 @@ using neobooru.Models;
 
 namespace neobooru.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200518122902_AddedRegisteredOn")]
-    partial class AddedRegisteredOn
+    [DbContext(typeof(NeobooruDataContext))]
+    [Migration("20200701131654_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -241,8 +241,8 @@ namespace neobooru.Migrations
                     b.Property<string>("FileUrl")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float>("Height")
-                        .HasColumnType("real");
+                    b.Property<int>("Height")
+                        .HasColumnType("int");
 
                     b.Property<string>("LargeFileUrl")
                         .IsRequired()
@@ -276,8 +276,8 @@ namespace neobooru.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<float>("Width")
-                        .HasColumnType("real");
+                    b.Property<int>("Width")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -553,9 +553,6 @@ namespace neobooru.Migrations
                     b.Property<string>("TagString")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

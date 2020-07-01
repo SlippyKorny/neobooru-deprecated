@@ -15,7 +15,7 @@ namespace neobooru.Controllers
 {
     public class PostsController : Controller
     {
-        private readonly ApplicationDbContext _db;
+        private readonly NeobooruDataContext _db;
 
         private readonly UserManager<NeobooruUser> _userManager;
 
@@ -23,7 +23,7 @@ namespace neobooru.Controllers
 
         private readonly string[] _subsectionPages = {"List", "Trending", "Upload", "Help"};
 
-        public PostsController(ApplicationDbContext db, UserManager<NeobooruUser> userManager, SignInManager<NeobooruUser> signInManager)
+        public PostsController(NeobooruDataContext db, UserManager<NeobooruUser> userManager, SignInManager<NeobooruUser> signInManager)
         {
             _db = db;
             _userManager = userManager;

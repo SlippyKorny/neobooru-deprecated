@@ -30,12 +30,12 @@ namespace neobooru
             services.AddRazorPages().AddRazorRuntimeCompilation();
 
             // Add database context (MSSQL)
-            services.AddDbContext<ApplicationDbContext>(options =>
+            services.AddDbContext<NeobooruDataContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddControllersWithViews();
 
-            services.AddIdentity<NeobooruUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddIdentity<NeobooruUser, IdentityRole>().AddEntityFrameworkStores<NeobooruDataContext>();
 
             services.ConfigureApplicationCookie(options =>
             {

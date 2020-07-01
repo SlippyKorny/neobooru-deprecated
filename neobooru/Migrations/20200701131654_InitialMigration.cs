@@ -65,6 +65,7 @@ namespace neobooru.Migrations
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
                     Discriminator = table.Column<string>(nullable: false),
+                    RegisteredOn = table.Column<DateTime>(nullable: true),
                     PfpUrl = table.Column<string>(nullable: true),
                     PfpThumbnailUrl = table.Column<string>(nullable: true),
                     ProfileDescription = table.Column<string>(nullable: true)
@@ -305,8 +306,8 @@ namespace neobooru.Migrations
                     Stars = table.Column<int>(nullable: false),
                     Source = table.Column<string>(nullable: true),
                     Md5Hash = table.Column<string>(nullable: true),
-                    Height = table.Column<float>(nullable: false),
-                    Width = table.Column<float>(nullable: false),
+                    Height = table.Column<int>(nullable: false),
+                    Width = table.Column<int>(nullable: false),
                     FileSize = table.Column<int>(nullable: false),
                     Rating = table.Column<int>(nullable: false),
                     PoolId = table.Column<Guid>(nullable: true)
@@ -390,7 +391,6 @@ namespace neobooru.Migrations
                     CreatorId = table.Column<string>(nullable: false),
                     TagString = table.Column<string>(nullable: false),
                     AddedAt = table.Column<DateTime>(nullable: false),
-                    Type = table.Column<int>(nullable: false),
                     ArtId = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>

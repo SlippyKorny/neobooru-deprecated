@@ -3,17 +3,15 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using neobooru.Models;
 
 namespace neobooru.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200517142342_InitialMigration")]
-    partial class InitialMigration
+    [DbContext(typeof(NeobooruDataContext))]
+    partial class NeobooruDataContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -241,8 +239,8 @@ namespace neobooru.Migrations
                     b.Property<string>("FileUrl")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float>("Height")
-                        .HasColumnType("real");
+                    b.Property<int>("Height")
+                        .HasColumnType("int");
 
                     b.Property<string>("LargeFileUrl")
                         .IsRequired()
@@ -276,8 +274,8 @@ namespace neobooru.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<float>("Width")
-                        .HasColumnType("real");
+                    b.Property<int>("Width")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -554,9 +552,6 @@ namespace neobooru.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ArtId");
@@ -578,6 +573,9 @@ namespace neobooru.Migrations
 
                     b.Property<string>("ProfileDescription")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("RegisteredOn")
+                        .HasColumnType("datetime2");
 
                     b.HasDiscriminator().HasValue("NeobooruUser");
                 });

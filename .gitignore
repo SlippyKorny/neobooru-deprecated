@@ -354,3 +354,8 @@ MigrationBackup/
 
 # Libraries
 neobooru/wwwroot/lib/*
+
+# Ide stuff
+.vs/
+.idea/
+neobooru/wwwroot/img/posts/*

@@ -47,11 +47,16 @@ namespace neobooru.Controllers
         }
 
         [HttpPost]
-        public IActionResult Register(ArtistRegistrationViewModel model)
+        public async Task<IActionResult> Register(ArtistRegistrationViewModel model)
         {
             ViewBag.SubsectionPages = _subsectionPages;
             ViewBag.ActiveSubpage = _subsectionPages[1];
-            Console.WriteLine("Hello :3");
+
+            if (ModelState.IsValid)
+            {
+                return Redirect("/artists/list");
+            }
+
             return View();
         }
 

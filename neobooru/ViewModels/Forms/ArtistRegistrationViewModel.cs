@@ -21,7 +21,6 @@ namespace neobooru.ViewModels.Forms
         public IFormFile BackgroundImage { get; set; }
 
         [Display(Name = "Country:")]
-
         public string Country { get; set; }
 
         [DataType(DataType.Url)]
