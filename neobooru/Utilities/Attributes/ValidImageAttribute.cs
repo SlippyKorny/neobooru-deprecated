@@ -9,11 +9,11 @@ namespace neobooru.Utilities.Attributes
 {
     public class ValidImageAttribute : ValidationAttribute
     {
-        private readonly string[] allowedExtensions;
+        private readonly string[] _allowedContentTypes;
 
-        public ValidImageAttribute(string[] allowedExtensions)
+        public ValidImageAttribute(string[] allowedContentTypes)
         {
-            this.allowedExtensions = allowedExtensions;
+            this._allowedContentTypes = allowedContentTypes;
             ErrorMessage = "Invalid Image Format Used";
         }
 
@@ -23,7 +23,20 @@ namespace neobooru.Utilities.Attributes
                 return false;
             IFormFile formFile = (IFormFile) value;
             Console.WriteLine(formFile.ContentType);
-            return formFile.ContentType.Equals("image/jpg");
+            bool typeCorrect = false;
+            foreach (var type in _allowedContentTypes)
+            {
+                typeCorrect = formFile.ContentType.Equals("image/" + type);
+                if (typeCorrect)
+                    break;
+            }
+            
+            // bool typeCorrect = formFile.ContentType.Equals("image/jpg") ||
+                               // formFile.ContentType.Equals("image/png") ||
+                               // formFile.ContentType.Equals("image/jpeg") ||
+                               // formFile.ContentType.Equals("image/pjpeg") ||
+                               // formFile.ContentType.Equals("image/x-png");
+            return typeCorrect;
         }
     }
 }

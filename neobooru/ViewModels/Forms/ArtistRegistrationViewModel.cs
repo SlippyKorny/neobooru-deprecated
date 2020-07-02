@@ -12,7 +12,7 @@ namespace neobooru.ViewModels.Forms
         public string Name { get; set; }
 
         [Required]
-        // [ValidImage(allowedExtensions: new string[] { "png", "jpg", "jpeg", "gif" })]
+        [ValidImage(allowedContentTypes: new string[] { "jpg", "jpeg", "pjpeg", "png", "x-png" })]
         [Display(Name = "Profile picture:")]
         public IFormFile Pfp { get; set; }
 

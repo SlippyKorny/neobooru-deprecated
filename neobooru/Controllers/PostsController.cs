@@ -74,12 +74,13 @@ namespace neobooru.Controllers
             ViewBag.ActiveSubpage = _subsectionPages[2];
             if (ModelState.IsValid)
             {
-                if (model.File == null)
-                {
-                    ModelState.AddModelError(string.Empty, "No image was chosen!");
-                    return Redirect("/posts/upload");
-                }
-                else if (!_signInManager.IsSignedIn(User)) // TODO: Check if this works
+                // if (model.File == null)
+                // {
+                    // ModelState.AddModelError(string.Empty, "No image was chosen!");
+                    // return Redirect("/posts/upload");
+                // }
+                
+                if (!_signInManager.IsSignedIn(User)) // TODO: Check if this works
                 {
                     ModelState.AddModelError(string.Empty, "You have to be logged in to upload an art!");
                     return Redirect("/posts/upload");
