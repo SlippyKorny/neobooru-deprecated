@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using neobooru.Models;
 using neobooru.ViewModels;
@@ -11,7 +12,21 @@ namespace neobooru.Controllers
 {
     public class ArtistsController : Controller
     {
-        private readonly string[] _subsectionPages = { "List", "Register", "Help" };
+        private readonly NeobooruDataContext _db;
+
+        private readonly UserManager<NeobooruUser> _userManager;
+
+        private readonly SignInManager<NeobooruUser> _signInManager;
+
+        public ArtistsController(NeobooruDataContext db, UserManager<NeobooruUser> userManager,
+            SignInManager<NeobooruUser> signInManager)
+        {
+            _db = db;
+            _userManager = userManager;
+            _signInManager = signInManager;
+        }
+
+        private readonly string[] _subsectionPages = {"List", "Register", "Help"};
 
         [HttpGet]
         public IActionResult List()
@@ -52,12 +67,19 @@ namespace neobooru.Controllers
             ViewBag.SubsectionPages = _subsectionPages;
             ViewBag.ActiveSubpage = _subsectionPages[1];
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
+                return View();
+
+            if (!_signInManager.IsSignedIn(User))
             {
-                return Redirect("/artists/list");
+                ModelState.AddModelError(string.Empty,
+                    "You have to be logged in to register an artist!");
+                return Redirect("/Artist/Register");
             }
 
-            return View();
+            
+
+            return Redirect("/Artists/List");
         }
 
         #endregion
@@ -66,7 +88,7 @@ namespace neobooru.Controllers
         public IActionResult Artist(Guid artistId)
         {
             List<ArtThumbnailViewModel> list = new List<ArtThumbnailViewModel>();
-            Artist artist = new Artist 
+            Artist artist = new Artist
             {
                 PfpUrl = "~/img/prototyping/artists/CommieComma.png",
                 ArtistName = "CommieComma",

@@ -62,31 +62,5 @@ namespace neobooru.Models
             [Description("Offensive")]
             Offensive
         }
-
-        public Art()
-        {
-        }
-
-        public Art(PostUploadViewModel model, NeobooruUser uploader, Artist author,
-            ICollection<Tag> tags, string largeFileUrl, string fileUrl, string previewFileUrl,
-            string md5hash, int height, int width, int fileSize)
-        {
-            Id = Guid.NewGuid();
-            LargeFileUrl = largeFileUrl;
-            FileUrl = fileUrl;
-            PreviewFileUrl = previewFileUrl;
-            CreatedAt = DateTime.Now;
-            Uploader = uploader;
-            Name = model.Name;
-            Author = author;
-            Stars = 0;
-            Source = model.Source;
-            Md5Hash = md5hash;
-            Height = height;
-            Width = width;
-            FileSize = fileSize;
-            Rating = model.Rating;
-            Tags = tags;
-        }
     }
 }

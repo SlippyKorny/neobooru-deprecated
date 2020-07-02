@@ -128,7 +128,26 @@ namespace neobooru.Controllers
 
                 // Put the data in the model and save it to the database
                 // TODO: Get the artist
-                Art art = new Art(model, usr, null, tags, large, normal, thumbnail, hash, dims.Item2, dims.Item1, (int)size);
+                // Art art = new Art(model, usr, null, tags, large, normal, thumbnail, hash, dims.Item2, dims.Item1, (int)size);
+                Art art = new Art()
+                {
+                    Id = Guid.NewGuid(),
+                    Uploader = usr,
+                    Name = model.Name,
+                    Source = model.Source,
+                    Rating = model.Rating,
+                    Author = null,
+                    Tags = tags,
+                    LargeFileUrl = large,
+                    FileUrl = normal,
+                    PreviewFileUrl = thumbnail,
+                    Md5Hash = hash,
+                    Height = dims.Item2,
+                    Width = dims.Item1,
+                    FileSize = (int) size,
+                    Stars = 0,
+                    CreatedAt = DateTime.Now
+                };
                 await _db.Arts.AddAsync(art);
                 await _db.SaveChangesAsync();
 
