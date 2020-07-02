@@ -20,20 +20,13 @@ namespace neobooru.ViewModels
 
         private PoolThumbnailViewModel() { }
 
-        // TODO: Change the constructor after u add User reference to the model
         public PoolThumbnailViewModel(Pool pool, string creator)
         {
             PoolName = pool.PoolName;
             UserName = creator;
             CreationDate = pool.CreatedAt;
             LastUpdateDate = pool.UpdatedAt;
-            var artEnumerator = pool.Arts.GetEnumerator();
-            artEnumerator.MoveNext();
-            thumbnails[0] = artEnumerator.Current.PreviewFileUrl;
-            artEnumerator.MoveNext();
-            thumbnails[1] = artEnumerator.Current.PreviewFileUrl;
-            artEnumerator.MoveNext();
-            thumbnails[2] = artEnumerator.Current.PreviewFileUrl;
+            thumbnails = pool.Arts.Select(e => e.PreviewFileUrl).ToArray();
         }
     }
 }

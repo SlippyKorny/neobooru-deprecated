@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using neobooru.Models;
@@ -24,7 +25,7 @@ namespace neobooru.ViewModels
 
         public readonly string TwitterProfileUrl;
 
-        // TODO: Perhaps some kind of verification for e-mail addresses (ASP.NET Core probably has something built in for that)
+        [EmailAddress]
         public readonly string MailAddress;
 
         public readonly string Gender;

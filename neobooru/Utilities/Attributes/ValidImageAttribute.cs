@@ -22,7 +22,6 @@ namespace neobooru.Utilities.Attributes
             if (!(value is IFormFile))
                 return false;
             IFormFile formFile = (IFormFile) value;
-            Console.WriteLine(formFile.ContentType);
             bool typeCorrect = false;
             foreach (var type in _allowedContentTypes)
             {
@@ -31,11 +30,6 @@ namespace neobooru.Utilities.Attributes
                     break;
             }
             
-            // bool typeCorrect = formFile.ContentType.Equals("image/jpg") ||
-                               // formFile.ContentType.Equals("image/png") ||
-                               // formFile.ContentType.Equals("image/jpeg") ||
-                               // formFile.ContentType.Equals("image/pjpeg") ||
-                               // formFile.ContentType.Equals("image/x-png");
             return typeCorrect;
         }
     }
