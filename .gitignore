@@ -359,3 +359,4 @@ neobooru/wwwroot/lib/*
 .vs/
 .idea/
 neobooru/wwwroot/img/posts/*
+neobooru/wwwroot/img/profiles/

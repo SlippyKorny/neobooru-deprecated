@@ -16,17 +16,16 @@ namespace neobooru.Models
 
         [Required]
         public DateTime RegisteredAt { get; set; }
+        
+        [Required]
+        public NeobooruUser RegisteredBy { get; set; }
 
         public int ProfileViews { get; set; }
 
         public string BackgroundImageUrl { get; set; }
 
-        public string LargePfpUrl { get; set; }
-
         [Required]
         public string PfpUrl { get; set; }
-
-        public string PreviewPfpUrl { get; set; }
 
         public string Country { get; set; }
 

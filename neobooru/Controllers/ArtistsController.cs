@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ImageManipulation;
+using ImageManipulation.Exceptions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using neobooru.Models;
@@ -38,7 +40,7 @@ namespace neobooru.Controllers
                 ArtistName = "CommieComma",
                 RegisteredAt = DateTime.Now,
                 ProfileViews = 3231,
-                PreviewPfpUrl = "/img/prototyping/artists/CommieComma.png"
+                PfpUrl = "/img/prototyping/artists/CommieComma.png"
             };
 
 
@@ -77,8 +79,50 @@ namespace neobooru.Controllers
                 return Redirect("/Artist/Register");
             }
 
-            
+            Guid id = Guid.NewGuid();
 
+            ImageFileManager ifmPfp = null, ifmBg = null;
+            try
+            {
+                ifmPfp = new ImageFileManager("wwwroot/img/profiles/pfps/", model.Pfp.OpenReadStream(),
+                    ImageUtils.ImgExtensionFromContentType(model.Pfp.ContentType));
+                if (model.BackgroundImage != null)
+                    ifmBg = new ImageFileManager("wwwroot/img/profiles/bgs/",
+                        model.BackgroundImage.OpenReadStream(), 
+                        ImageUtils.ImgExtensionFromContentType(model.BackgroundImage.ContentType));
+            }
+            catch (InvalidArtDimensionsException e)
+            {
+                ModelState.AddModelError(string.Empty, "Invalid profile picture or background size! " +
+                                                       "Profile picture must be at least 400px by 400px and background" +
+                                                       "must be at least 1590px by 540px");
+                return View();
+            }
+            string pfp, bg = null;
+            pfp = await ifmPfp.SavePfp(id);
+            if (ifmBg != null)
+                bg = await ifmBg.SaveBg(id);
+            
+            Artist artist = new Artist()
+            {
+                Id = id,
+                ArtistName = model.Name,
+                RegisteredAt = DateTime.Now,
+                RegisteredBy = await _userManager.GetUserAsync(User),
+                ProfileViews = 0,
+                BackgroundImageUrl = bg,
+                PfpUrl = pfp,
+                Country = model.Country,
+                FacebookProfileUrl = model.FacebookProfileUrl,
+                TwitterProfileUrl = model.TwitterProfileUrl,
+                MailAddress = model.MailAddress,
+                Gender = model.Gender,
+                BirthDate = model.BirthDate
+            };
+
+            await _db.Artists.AddAsync(artist);
+            await _db.SaveChangesAsync();
+            
             return Redirect("/Artists/List");
         }
 

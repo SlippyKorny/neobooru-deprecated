@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using neobooru.Models;
 
 namespace neobooru.Migrations
 {
     [DbContext(typeof(NeobooruDataContext))]
-    partial class NeobooruDataContextModelSnapshot : ModelSnapshot
+    [Migration("20200702131006_ArtistRegisteredBy")]
+    partial class ArtistRegisteredBy
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -373,11 +375,17 @@ namespace neobooru.Migrations
                     b.Property<string>("Gender")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("LargePfpUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("MailAddress")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PfpUrl")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PreviewPfpUrl")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ProfileViews")

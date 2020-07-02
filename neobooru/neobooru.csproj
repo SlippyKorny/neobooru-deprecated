@@ -37,6 +37,8 @@
   <ItemGroup>
     <Folder Include="Migrations" />
     <Folder Include="wwwroot\img\posts\" />
+    <Folder Include="wwwroot\img\profiles\bgs" />
+    <Folder Include="wwwroot\img\profiles\pfps" />
     <Folder Include="wwwroot\img\prototyping\artists\" />
     <Folder Include="wwwroot\lib\" />
   </ItemGroup>

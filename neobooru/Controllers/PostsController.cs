@@ -90,7 +90,7 @@ namespace neobooru.Controllers
     ImageUtils.ImgExtensionFromContentType(model.File.ContentType)))
                     {
                         large = await ifm.SaveLarge();
-                        normal = await ifm.Save();
+                        normal = await ifm.SaveNormal();
                         thumbnail = await ifm.SaveThumbnail(0, 0);
                     }
                     hash = ImageUtils.HashFromFile(large);
@@ -167,7 +167,7 @@ namespace neobooru.Controllers
             Art a1 = new Art();
 
             artist.ArtistName = "yano mitsuki";
-            artist.PreviewPfpUrl = "~/img/prototyping/artists/yanoMitsuki.jpg";
+            // artist.PreviewPfpUrl = "~/img/prototyping/artists/yanoMitsuki.jpg";
             artist.RegisteredAt = DateTime.Now;
             artist.ProfileViews = 3234;
 

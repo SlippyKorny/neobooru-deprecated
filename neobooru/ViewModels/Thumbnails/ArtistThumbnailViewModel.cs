@@ -26,7 +26,7 @@ namespace neobooru.ViewModels
         public ArtistThumbnailViewModel(Artist artist, int numOfArts, int numOfSubs)
         {
             ArtistName = artist.ArtistName;
-            PfpUrl = artist.PreviewPfpUrl;
+            PfpUrl = artist.PfpUrl;
             NumberOfArts = numOfArts;
             RegistrationTime = artist.RegisteredAt;
             Subscriptions = numOfSubs;

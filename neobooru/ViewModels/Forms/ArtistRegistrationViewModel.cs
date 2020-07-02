@@ -16,7 +16,7 @@ namespace neobooru.ViewModels.Forms
         [Display(Name = "Profile picture:")]
         public IFormFile Pfp { get; set; }
 
-        // [ValidImage(allowedExtensions: new string[] { "png", "jpg", "jpeg" })]
+        [ValidImage(allowedContentTypes: new string[] { "jpg", "jpeg", "pjpeg", "png", "x-png" })]
         [Display(Name = "Background image:")]
         public IFormFile BackgroundImage { get; set; }
 

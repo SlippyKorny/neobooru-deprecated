@@ -66,7 +66,7 @@ namespace ImageManipulation
         /// Saves the minimized image to file.
         /// </summary>
         /// <returns>Path to the minimized image file.</returns>
-        public async Task<string> Save()
+        public async Task<string> SaveNormal()
         {
             string filePath = _folder + _fileGuid.ToString() + ".jpeg";
             _imgStream.Position = 0;
@@ -95,9 +95,58 @@ namespace ImageManipulation
             int height = img.Height, width = img.Width;
             img.Mutate(i => i.Crop(new Rectangle(x, y, 300, 300)));
             using (Stream file = File.Create(filePath))
-            {
                 img.SaveAsJpeg(file);
-            }
+            return filePath;
+        }
+
+        /// <summary>
+        /// Edits the image to be suitable for a profile picture.
+        /// </summary>
+        /// <returns>profile id</returns>
+        /// <exception cref="InvalidArtDimensionsException">When an image width to height ratio is not equal 1</exception>
+        public async Task<string> SavePfp(Guid guid)
+        {
+            string filePath = _folder + guid.ToString() + "_pfp." + _extension;
+            _imgStream.Position = 0;
+            Image img = Image.Load(_imgStream);
+            if (img.Height / img.Width != 1 || img.Height < 400 )
+                throw new InvalidArtDimensionsException();
+            img.Mutate(i => i.Resize(400, 400));
+            using (Stream file = File.Create(filePath))
+                img.SaveAsJpeg(file);
+            return filePath;
+        }
+
+        /// <summary>
+        /// Edits the image to be suitable for a background.
+        /// </summary>
+        /// <param name="guid">profile id</param>
+        /// <returns></returns>
+        /// <exception cref="InvalidArtDimensionsException"></exception>
+        public async Task<string> SaveBg(Guid guid)
+        {
+            string filePath = _folder + guid.ToString() + "_bg." + _extension;
+            _imgStream.Position = 0;
+            Image img = Image.Load(_imgStream);
+            if (img.Height < 540 || img.Width < 1590)
+                throw new InvalidArtDimensionsException();
+            img.Mutate(i => i.Crop(1590, 540));
+            using (Stream file = File.Create(filePath))
+                img.SaveAsJpeg(file);
+            return filePath;
+        }
+
+        /// <summary>
+        /// Saves without any editions in the png format
+        /// </summary>
+        /// <returns></returns>
+        public async Task<string> Save(Guid guid)
+        {
+            string filePath = _folder + guid.ToString() + _extension;
+            _imgStream.Position = 0;
+            Image img = Image.Load(_imgStream);
+            using (Stream file = File.Create(filePath))
+                img.SaveAsJpeg(file);
             return filePath;
         }
 
