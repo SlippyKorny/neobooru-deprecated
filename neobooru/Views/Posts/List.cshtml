@@ -20,23 +20,26 @@
 
 <div id="art-container">
     @{ int length = Model.Count; }
+    @{ int left = length; }
     @for (var i = 0; i < length;)
     {
         <div class="row mt-3">
-            @for (var a = 0; a < 5; a++)
+            @{ int bound = left > 5 ? 5 : left; }
+            @for (var a = 0; a < bound; a++)
             {
-            <div class="col-sm">
-                <a href="/posts/post/fd246dbf-1df0-439c-b7bb-5dfd854fdf47">
-                    <div class="card">
-                        <img src="@Url.Content(Model[i].FileUrl)" class="card-img-top" />
-                        <div class="card-footer">
-                            <h5 class="card-title">@Model[i].ArtName</h5>
-                            <p class="card-text">Made by @Model[i].ArtistName<br />Uploaded: @Model[i].UploadDate.ToString()</p>
+                <div class="col-sm">
+                    <a href="/posts/post/fd246dbf-1df0-439c-b7bb-5dfd854fdf47">
+                        <div class="card">
+                            <img src="@Url.Content(Model[i].FileUrl)" class="card-img-top"/>
+                            <div class="card-footer">
+                                <h5 class="card-title">@Model[i].ArtName</h5>
+                                <p class="card-text">Made by @Model[i].ArtistName<br/>Uploaded: @Model[i].UploadDate.ToString()</p>
+                            </div>
                         </div>
-                    </div>
-                </a>
-            </div>
+                    </a>
+                </div>
                 i++;
+                left--;
             }
         </div>
     }

@@ -22,7 +22,7 @@ namespace neobooru.ViewModels
         {
             FileUrl = art.PreviewFileUrl;
             ArtName = art.Name;
-            ArtistName = art.Author.ArtistName;
+            ArtistName = art.Author == null ? "Unkown" : art.Author.ArtistName;
             UploadDate = art.CreatedAt;
         }
     }

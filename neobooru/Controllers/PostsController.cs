@@ -32,24 +32,16 @@ namespace neobooru.Controllers
         }
 
         [HttpGet]
-        public IActionResult List()
+        public async Task<IActionResult> List()
         {
-            List<ArtThumbnailViewModel> Arts = new List<ArtThumbnailViewModel>();
-
-            Artist artist = new Artist();
-            artist.ArtistName = "TheSlipper";
-            Art a1 = new Art();
-            a1.Name = "Test art!";
-            a1.Author = artist;
-            a1.CreatedAt = DateTime.Now;
-            a1.PreviewFileUrl = "~/img/prototyping/arts/20.png";
-
-            for (int i = 0; i < 20; i++)
-                Arts.Add(new ArtThumbnailViewModel(a1));
-
             ViewBag.SubsectionPages = _subsectionPages;
             ViewBag.ActiveSubpage = _subsectionPages[0];
-            return View(Arts);
+            
+            List<ArtThumbnailViewModel> arts = new List<ArtThumbnailViewModel>();
+            await _db.Arts.OrderByDescending(a => a.CreatedAt).Take(20).ForEachAsync(a => 
+                arts.Add(new ArtThumbnailViewModel(a)));
+            
+            return View(arts);
         }
 
         [HttpGet]
@@ -111,6 +103,10 @@ namespace neobooru.Controllers
                     hash = ImageUtils.HashFromFile(large);
                     dims = ImageUtils.DimensionsOfImage(large);
                     size = model.File.Length;
+                    
+                    large = large.Remove(0, 7);
+                    normal = normal.Remove(0, 7);
+                    thumbnail = thumbnail.Remove(0, 7);
                 }
                 catch (InvalidArtDimensionsException exception)
                 {

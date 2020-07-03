@@ -24,10 +24,12 @@
 
 <div id="artist-container">
     @{ int length = Model.Count; }
+    @{ int left = length; }
     @for (var i = 0; i < length;)
     {
         <div class="row mt-3">
-            @for (var a = 0; a < 5 && a < length; a++)
+            @{ int bound = left > 5 ? 5 : left; }
+            @for (var a = 0; a < bound; a++)
             {
                 <div class="col-sm">
                     <a asp-action="Artist" asp-controller="Artists" asp-route-id="@Model[i].Id">
@@ -49,6 +51,7 @@
                     </a>
                 </div>
                 i++;
+                left--;
             }
         </div>
     }
