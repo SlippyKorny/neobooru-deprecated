@@ -7,7 +7,14 @@
 <div id="artist-profile">
     <div id="artist-upper-section">
         <div class="row">
-            <img src="~/img/prototyping/backgrounds/1590x540p Background Placeholder Image.png" />
+            @if (Model.BackgroundUrl == null)
+            {
+                <img src="~/img/prototyping/backgrounds/1590x540p Background Placeholder Image.png"/>
+            }
+            else
+            {
+                <img src="@Url.Content(Model.BackgroundUrl)"/>
+            }
         </div>
         <div class="row" style="height: 200px; margin-top: -12.5vh;">
             <div class="col-md-1 h-100">

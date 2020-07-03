@@ -17,6 +17,8 @@ namespace neobooru.ViewModels
 
         public readonly String PfpUrl;
 
+        public readonly String BackgroundUrl;
+
         public readonly int Followers;
 
         public readonly string Country;
@@ -42,6 +44,7 @@ namespace neobooru.ViewModels
             RegisteredAt = artist.RegisteredAt;
             ProfileViews = artist.ProfileViews;
             PfpUrl = artist.PfpUrl;
+            BackgroundUrl = artist.BackgroundImageUrl;
             Followers = followers;
             Country = artist.Country;
             FacebookProfileUrl = artist.FacebookProfileUrl;

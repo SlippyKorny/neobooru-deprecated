@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -45,27 +46,29 @@ namespace neobooru.Models
                 relationship.DeleteBehavior = DeleteBehavior.NoAction;
 
             base.OnModelCreating(builder);
+
+            removeOld();
+            insertNew();
         }
 
-//         public NeobooruDataContext(DbContextOptions<NeobooruDataContext> options)
-//             : base(options)
-//         {
-//         }
-//
-//         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-//         {
-//             if (!optionsBuilder.IsConfigured)
-//             {
-// #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-//                 optionsBuilder.UseSqlServer("Server=localhost;Database=neobooru;user=sa;password=#Password12;Trusted_Connection=False;MultipleActiveResultSets=True;ConnectRetryCount=0");
-//             }
-//         }
-//
-//         protected override void OnModelCreating(ModelBuilder modelBuilder)
-//         {
-//             OnModelCreatingPartial(modelBuilder);
-//         }
-//
-//         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+        /// <summary>
+        /// Removes the old entries in the database.
+        /// </summary>
+        private void removeOld()
+        {
+            // Art
+            // Art[] arts = Arts.AsEnumerable().ToArray();
+            // foreach (var art in arts)
+                // Arts.Remove(art);
+            // 
+        }
+
+        /// <summary>
+        /// Inserts new entries for testing
+        /// </summary>
+        private void insertNew()
+        {
+            
+        }
     }
 }

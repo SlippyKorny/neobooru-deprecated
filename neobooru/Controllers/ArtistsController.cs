@@ -6,6 +6,8 @@ using ImageManipulation;
 using ImageManipulation.Exceptions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using neobooru.Models;
 using neobooru.ViewModels;
 using neobooru.ViewModels.Forms;
@@ -129,45 +131,23 @@ namespace neobooru.Controllers
         #endregion
 
         [HttpGet]
-        public IActionResult Artist(Guid artistId)
+        public async Task<IActionResult> Artist(Guid artistId)
         {
             List<ArtThumbnailViewModel> list = new List<ArtThumbnailViewModel>();
-            Artist artist = new Artist
+
+            Artist artist = await _db.Artists.FirstOrDefaultAsync(a => a.Id.Equals(artistId));
+            if (artist == null)
             {
-                PfpUrl = "~/img/prototyping/artists/CommieComma.png",
-                ArtistName = "CommieComma",
-                ProfileViews = 3452,
-                RegisteredAt = DateTime.Now,
-                Country = "Spain",
-                TwitterProfileUrl = "https://twitter.com/CommieComma",
-                MailAddress = "commieComma@gmail.com",
-                Gender = "Male",
-                BirthDate = DateTime.Now,
-            };
+                return Redirect("/Artists/List");
+            }
 
-            Art art = new Art();
-            art.PreviewFileUrl = "~/img/prototyping/arts/25.png";
-            art.Name = "Cute Uraraka";
-            art.Author = artist;
-            art.CreatedAt = DateTime.Now;
+            await _db.Arts.Where(a => a.Author.Id.Equals(artistId)).OrderByDescending(a => a.Stars).Take(5)
+                .ForEachAsync(a => list.Add(new ArtThumbnailViewModel(a)));
 
-            art.PreviewFileUrl = "~/img/prototyping/arts/24.jpg";
-            art.Name = "Cool Camie";
-            list.Add(new ArtThumbnailViewModel(art));
+            IQueryable<ArtistSubscription> follows = _db.ArtistSubscriptions
+                .Where(a => a.Artist.Id.Equals(artist.Id));
 
-            art.PreviewFileUrl = "~/img/prototyping/arts/23.png";
-            art.Name = "Cute little sketch of Mina";
-            list.Add(new ArtThumbnailViewModel(art));
-
-            art.PreviewFileUrl = "~/img/prototyping/arts/22.png";
-            art.Name = "Nejire";
-            list.Add(new ArtThumbnailViewModel(art));
-
-            art.PreviewFileUrl = "~/img/prototyping/arts/21.jpg";
-            art.Name = "Nejire with ponytail";
-            list.Add(new ArtThumbnailViewModel(art));
-
-            ArtistViewModel avm = new ArtistViewModel(artist, list, 345);
+            ArtistViewModel avm = new ArtistViewModel(artist, list, follows.Count());
 
 
             ViewBag.SubsectionPages = _subsectionPages;
