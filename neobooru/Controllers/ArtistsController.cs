@@ -32,28 +32,26 @@ namespace neobooru.Controllers
 
         private readonly string[] _subsectionPages = {"List", "Register", "Help"};
 
+        #region list
+
         [HttpGet]
-        public IActionResult List()
+        public async Task<IActionResult> List(int page)
         {
-            List<ArtistThumbnailViewModel> Artists = new List<ArtistThumbnailViewModel>();
-
-            Artist artist = new Artist()
-            {
-                ArtistName = "CommieComma",
-                RegisteredAt = DateTime.Now,
-                ProfileViews = 3231,
-                PfpUrl = "/img/prototyping/artists/CommieComma.png"
-            };
-
-
-            for (int i = 0; i < 20; i++)
-                Artists.Add(new ArtistThumbnailViewModel(artist, 23, 532));
-
             ViewBag.SubsectionPages = _subsectionPages;
             ViewBag.ActiveSubpage = _subsectionPages[0];
+            
+            List<ArtistThumbnailViewModel> artists = new List<ArtistThumbnailViewModel>();
+            await _db.Artists.OrderByDescending(a => a.RegisteredAt).Take(20).ForEachAsync(a =>
+            {
+                int artCount = _db.Arts.Count(b => b.Author.Id.Equals(a.Id));
+                int subCount = _db.ArtistSubscriptions.Count(b => b.Artist.Id.Equals(a.Id));
+                artists.Add(new ArtistThumbnailViewModel(a, artCount, subCount));
+            });
 
-            return View(Artists);
+            return View(artists);
         }
+        
+        #endregion
 
         #region ArtistRegistration
 
@@ -102,9 +100,13 @@ namespace neobooru.Controllers
             }
             string pfp, bg = null;
             pfp = await ifmPfp.SavePfp(id);
+            pfp = pfp.Remove(0, 7);
             if (ifmBg != null)
+            {
                 bg = await ifmBg.SaveBg(id);
-            
+                bg = bg.Remove(0, 7);
+            }
+
             Artist artist = new Artist()
             {
                 Id = id,
@@ -119,7 +121,6 @@ namespace neobooru.Controllers
                 TwitterProfileUrl = model.TwitterProfileUrl,
                 MailAddress = model.MailAddress,
                 Gender = model.Gender,
-                BirthDate = model.BirthDate
             };
 
             await _db.Artists.AddAsync(artist);
@@ -137,9 +138,7 @@ namespace neobooru.Controllers
 
             Artist artist = await _db.Artists.FirstOrDefaultAsync(a => a.Id.Equals(artistId));
             if (artist == null)
-            {
                 return Redirect("/Artists/List");
-            }
 
             await _db.Arts.Where(a => a.Author.Id.Equals(artistId)).OrderByDescending(a => a.Stars).Take(5)
                 .ForEachAsync(a => list.Add(new ArtThumbnailViewModel(a)));

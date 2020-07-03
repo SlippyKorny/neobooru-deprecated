@@ -8,7 +8,11 @@
     <form>
         <div class="input-group mb-3">
             <div class="input-group-prepend">
-                <button class="btn" style="background: #1dd1a1; color: white;"><svg class="svg-inline--fa fa-align-left fa-w-14" aria-hidden="true" data-prefix="fas" data-icon="align-left" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M288 44v40c0 8.837-7.163 16-16 16H16c-8.837 0-16-7.163-16-16V44c0-8.837 7.163-16 16-16h256c8.837 0 16 7.163 16 16zM0 172v40c0 8.837 7.163 16 16 16h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16zm16 312h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm256-200H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16h256c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16z"></path></svg> Toggle Search Options</button>
+                <button class="btn" style="background: #1dd1a1; color: white;">
+                    <svg class="svg-inline--fa fa-align-left fa-w-14" aria-hidden="true" data-prefix="fas" data-icon="align-left" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg="">
+                        <path fill="currentColor" d="M288 44v40c0 8.837-7.163 16-16 16H16c-8.837 0-16-7.163-16-16V44c0-8.837 7.163-16 16-16h256c8.837 0 16 7.163 16 16zM0 172v40c0 8.837 7.163 16 16 16h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16zm16 312h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm256-200H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16h256c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16z"></path>
+                    </svg> Toggle Search Options
+                </button>
             </div>
             <input type="text" class="form-control" placeholder="Ex: CommieComma">
             <div class="input-group-append">
@@ -19,51 +23,53 @@
 </div>
 
 <div id="artist-container">
-     @{ int length = Model.Count; }
-     @for (var i = 0; i < length;)
-     {
+    @{ int length = Model.Count; }
+    @for (var i = 0; i < length;)
+    {
         <div class="row mt-3">
-            @for (var a = 0; a < 5; a++)
+            @for (var a = 0; a < 5 && a < length; a++)
             {
-            <div class="col-sm">
-                <a href="/artists/artist?artistId=f831c02d-ae3b-4196-8fa7-89913ce207a9">
-                    <div class="card w-20">
-                        <img src="@Url.Content(Model[i].PfpUrl)" class="card-img-top" />
-                        <div class="card-footer">
-                            <h5 class="card-title">@Model[i].ArtistName</h5>
-                            <p class="card-text">Registered Arts: 23<br />Registered artist on: @Model[i].RegistrationTime.ToString()</p>
-                            <div class="row">
-                                <div class="col-sm">
-                                    <i class="fas fa-star"></i> @Model[i].Subscriptions
-                                </div>
-                                <div class="col-sm">
-                                    <i class="fas fa-eye"></i> @Model[i].ProfileViews
+                <div class="col-sm">
+                    <a asp-action="Artist" asp-controller="Artists" asp-route-id="@Model[i].Id">
+                        <div class="card w-20">
+                            <img src="@Url.Content(Model[i].PfpUrl)" class="card-img-top"/>
+                            <div class="card-footer">
+                                <h5 class="card-title">@Model[i].ArtistName</h5>
+                                <p class="card-text">Registered Arts: @Model[i].NumberOfArts <br/>Registered artist on: @Model[i].RegistrationTime.ToString()</p>
+                                <div class="row">
+                                    <div class="col-sm">
+                                        <i class="fas fa-star"></i> @Model[i].Subscriptions
+                                    </div>
+                                    <div class="col-sm">
+                                        <i class="fas fa-eye"></i> @Model[i].ProfileViews
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </a>
-            </div>
+                    </a>
+                </div>
                 i++;
             }
         </div>
     }
 </div>
 
-        <nav class="mt-5">
-            <ul class="pagination justify-content-center">
-                <li class="page-item disabled">
-                    <a class="page-link" href="#" tabindex="-1">Previous</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link custom-notactive-page" href="#">1</a>
-                </li>
-                <li class="page-item active">
-                    <a class="page-link custom-active-page" href="#">2 <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="page-item"><a class="page-link custom-notactive-page" href="#">3</a></li>
-                <li class="page-item">
-                    <a class="page-link custom-notactive-page" href="#">Next</a>
-                </li>
-            </ul>
-        </nav>
+<nav class="mt-5">
+    <ul class="pagination justify-content-center">
+        <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1">Previous</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link custom-notactive-page" href="#">1</a>
+        </li>
+        <li class="page-item active">
+            <a class="page-link custom-active-page" href="#">2 <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="page-item">
+            <a class="page-link custom-notactive-page" href="#">3</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link custom-notactive-page" href="#">Next</a>
+        </li>
+    </ul>
+</nav>

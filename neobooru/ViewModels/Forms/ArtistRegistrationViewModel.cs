@@ -37,8 +37,5 @@ namespace neobooru.ViewModels.Forms
 
         [Display(Name = "Gender:")]
         public string Gender { get; set; }
-        
-        [Display(Name = "Date of birth:")]
-        public DateTime BirthDate { get; set; }
     }
 }

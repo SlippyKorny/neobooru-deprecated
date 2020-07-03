@@ -32,8 +32,6 @@ namespace neobooru.ViewModels
 
         public readonly string Gender;
 
-        public readonly DateTime BirthDate;
-
         public readonly List<ArtThumbnailViewModel> ArtThumbnails;
 
         private ArtistViewModel() { }
@@ -51,7 +49,6 @@ namespace neobooru.ViewModels
             TwitterProfileUrl = artist.TwitterProfileUrl;
             MailAddress = artist.MailAddress;
             Gender = artist.Gender;
-            BirthDate = artist.BirthDate;
             ArtThumbnails = artThumbnails;
         }
     }

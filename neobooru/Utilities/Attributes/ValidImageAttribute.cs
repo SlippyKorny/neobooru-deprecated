@@ -19,6 +19,8 @@ namespace neobooru.Utilities.Attributes
 
         public override bool IsValid(object value)
         {
+            if (value == null) // Used for optional images
+                return true;
             if (!(value is IFormFile))
                 return false;
             IFormFile formFile = (IFormFile) value;
@@ -27,9 +29,9 @@ namespace neobooru.Utilities.Attributes
             {
                 typeCorrect = formFile.ContentType.Equals("image/" + type);
                 if (typeCorrect)
-                    break;
+                    return true;
             }
-            
+
             return typeCorrect;
         }
     }

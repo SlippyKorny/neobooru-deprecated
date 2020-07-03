@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -31,7 +32,7 @@ namespace neobooru.Models
         public virtual DbSet<Pool> Pools { get; set; }
 
         public virtual DbSet<Tag> Tags { get; set; }
-        
+
         public NeobooruDataContext()
         {
         }
@@ -46,29 +47,6 @@ namespace neobooru.Models
                 relationship.DeleteBehavior = DeleteBehavior.NoAction;
 
             base.OnModelCreating(builder);
-
-            removeOld();
-            insertNew();
-        }
-
-        /// <summary>
-        /// Removes the old entries in the database.
-        /// </summary>
-        private void removeOld()
-        {
-            // Art
-            // Art[] arts = Arts.AsEnumerable().ToArray();
-            // foreach (var art in arts)
-                // Arts.Remove(art);
-            // 
-        }
-
-        /// <summary>
-        /// Inserts new entries for testing
-        /// </summary>
-        private void insertNew()
-        {
-            
         }
     }
 }
