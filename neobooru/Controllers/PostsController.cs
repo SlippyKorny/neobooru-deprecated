@@ -8,6 +8,7 @@ using ImageManipulation.Exceptions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Razor.Runtime.TagHelpers;
+using Microsoft.EntityFrameworkCore;
 using neobooru.Models;
 using neobooru.ViewModels;
 
@@ -79,6 +80,20 @@ namespace neobooru.Controllers
                     ModelState.AddModelError(string.Empty, "You have to be logged in to upload an art!");
                     return Redirect("/posts/upload");
                 }
+                
+                // Check if the artist exists
+                Artist artist = null;
+                if (model.Author != null)
+                {
+                    artist = await _db.Artists.FirstOrDefaultAsync(a => a.ArtistName.Equals(model.Author));
+                    if (artist == null)
+                    {
+                        // TODO: Ask if u can make a link to the artist registration form in here
+                        ModelState.AddModelError(string.Empty, $"Could not find artist named {model.Author}." +
+                                                               " Please consider adding a new artist <a href=\"#\">here</a>");
+                        return View();
+                    }
+                }
 
                 // Save the files and manage get the necessary data
                 string large, normal, thumbnail, hash;
@@ -121,8 +136,6 @@ namespace neobooru.Controllers
                 }
                 await _db.SaveChangesAsync();
 
-                // Put the data in the model and save it to the database
-                // TODO: Get the artist
                 // Art art = new Art(model, usr, null, tags, large, normal, thumbnail, hash, dims.Item2, dims.Item1, (int)size);
                 Art art = new Art()
                 {
