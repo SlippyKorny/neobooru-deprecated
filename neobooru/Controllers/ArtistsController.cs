@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml;
 using ImageManipulation;
 using ImageManipulation.Exceptions;
 using Microsoft.AspNetCore.Identity;
@@ -132,16 +133,21 @@ namespace neobooru.Controllers
         #endregion
 
         [HttpGet]
-        public async Task<IActionResult> Artist(Guid artistId)
+        public async Task<IActionResult> Artist(string artistId)
         {
             List<ArtThumbnailViewModel> list = new List<ArtThumbnailViewModel>();
 
-            Artist artist = await _db.Artists.FirstOrDefaultAsync(a => a.Id.Equals(artistId));
+            Artist artist = await _db.Artists.FirstOrDefaultAsync(a => a.Id.ToString().Equals(artistId));
             if (artist == null)
                 return Redirect("/Artists/List");
 
-            await _db.Arts.Where(a => a.Author.Id.Equals(artistId)).OrderByDescending(a => a.Stars).Take(5)
-                .ForEachAsync(a => list.Add(new ArtThumbnailViewModel(a)));
+            var exp = new Action<Art>(a => list.Add(new ArtThumbnailViewModel(a)));
+            var arts = _db.Arts
+                .Where(a => a.Author.Id.ToString().Equals(artistId)).OrderByDescending(a => a.Stars);
+            if (arts.Count() > 5)
+                await arts.Take(5).ForEachAsync(exp);
+            else
+                await arts.ForEachAsync(exp);
 
             IQueryable<ArtistSubscription> follows = _db.ArtistSubscriptions
                 .Where(a => a.Artist.Id.Equals(artist.Id));

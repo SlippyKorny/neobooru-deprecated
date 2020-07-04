@@ -8,6 +8,8 @@ namespace neobooru.ViewModels
 {
     public class ArtThumbnailViewModel
     {
+        public readonly string ArtId;
+        
         public readonly string FileUrl;
 
         public readonly string ArtName;
@@ -20,6 +22,7 @@ namespace neobooru.ViewModels
 
         public ArtThumbnailViewModel(Art art)
         {
+            ArtId = art.Id.ToString();
             FileUrl = art.PreviewFileUrl;
             ArtName = art.Name;
             ArtistName = art.Author != null ? art.Author.ArtistName : "Unkown";

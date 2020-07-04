@@ -28,7 +28,8 @@
             @for (var a = 0; a < bound; a++)
             {
                 <div class="col-sm">
-                    <a href="/posts/post/fd246dbf-1df0-439c-b7bb-5dfd854fdf47">
+                    @* <a href="/posts/post/fd246dbf-1df0-439c-b7bb-5dfd854fdf47"> *@
+                    <a href="@Url.Content("/posts/post?postId=" + Model[i].ArtId)">
                         <div class="card">
                             <img src="@Url.Content(Model[i].FileUrl)" class="card-img-top"/>
                             <div class="card-footer">

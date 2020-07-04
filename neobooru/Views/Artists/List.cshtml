@@ -32,7 +32,7 @@
             @for (var a = 0; a < bound; a++)
             {
                 <div class="col-sm">
-                    <a asp-action="Artist" asp-controller="Artists" asp-route-id="@Model[i].Id">
+                    <a href="@Url.Content("/artists/artist?artistId=" + Model[i].Id)">
                         <div class="card w-20">
                             <img src="@Url.Content(Model[i].PfpUrl)" class="card-img-top"/>
                             <div class="card-footer">
