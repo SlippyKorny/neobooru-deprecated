@@ -191,50 +191,24 @@ namespace neobooru.Controllers
         }
 
         [HttpGet]
-        public IActionResult Post(Guid postId)
+        public IActionResult Post(string postId)
         {
-            Tag tag1 = new Tag(), tag2 = new Tag(), tag3 = new Tag(), tag4 = new Tag(), tag5 = new Tag();
-            Artist artist = new Artist();
-            Art a1 = new Art();
-
-            artist.ArtistName = "yano mitsuki";
-            // artist.PreviewPfpUrl = "~/img/prototyping/artists/yanoMitsuki.jpg";
-            artist.RegisteredAt = DateTime.Now;
-            artist.ProfileViews = 3234;
-
-            // TODO:
-            // a1.Tags = new List<Tag>();
-            // tag1.TagString = "Ishtar (fate)";
-            // a1.Tags.Add(tag1);
-            // tag3.TagString = "fate/grand order";
-            // a1.Tags.Add(tag3);
-            //
-            // for (int i = 0; i < 8; i++)
-            // {
-            //     tag2.TagString = "1 girl";
-            //     a1.Tags.Add(tag2);
-            //     tag4.TagString = "black hair";
-            //     a1.Tags.Add(tag4);
-            //     tag5.TagString = "breasts";
-            //     a1.Tags.Add(tag5);
-            // }
-
-            a1.Id = Guid.NewGuid();
-            a1.Source = "https://twitter.com/mituk1/status/1231496990896189441";
-            a1.Name = "Test art!";
-            a1.Author = artist;
-            a1.CreatedAt = DateTime.Now;
-            a1.PreviewFileUrl = "~/img/prototyping/arts/26.jpg";
-            a1.FileUrl = a1.PreviewFileUrl;
-            a1.LargeFileUrl = a1.FileUrl;
-            a1.Uploader = new NeobooruUser();
-            a1.Width = 845;
-            a1.Height = 1200;
-
             ViewBag.SubsectionPages = _subsectionPages;
             ViewBag.ActiveSubpage = "Artist";
 
-            return View(new PostViewModel(a1, artist, 78, 224));
+            Art art = _db.Arts.Include(a => a.Author).Include(a => a.Uploader)
+                .Include(a => a.Tags).FirstOrDefault(a => a.Id.ToString().Equals(postId));
+            if (art == null)
+                return Redirect("/posts/list");
+
+            var artist = _db.Artists.First(a => a.Id.ToString().Equals(art.Author.Id.ToString()));
+            int artCount = artist.Arts?.Count() ?? 0;
+            int subs = artist.Subscriptions?.Count() ?? 0;
+            List<string> tags = new List<string>();
+            foreach (var tag in art.Tags)
+                tags.Add(_db.Tags.First(t => t.Id.ToString().Equals(tag.TagId.ToString())).TagString);
+            
+            return View(new PostViewModel(art, artCount, subs, tags));
         }
     }
 }

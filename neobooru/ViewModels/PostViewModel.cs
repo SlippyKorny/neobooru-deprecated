@@ -35,9 +35,9 @@ namespace neobooru.ViewModels
 
         private PostViewModel() { }
 
-        public PostViewModel(Art art, Artist artist, int numOfArts, int numOfSubs)
+        public PostViewModel(Art art, int numOfArts, int numOfSubs, List<string> tags)
         {
-            ArtistThumbnail = new ArtistThumbnailViewModel(artist, numOfArts, numOfSubs);
+            ArtistThumbnail = new ArtistThumbnailViewModel(art.Author, numOfArts, numOfSubs);
 
             PostId = art.Id;
             PostName = art.Name;
@@ -49,11 +49,11 @@ namespace neobooru.ViewModels
             Source = art.Source;
             Rating = art.Rating;
             ArtistName = art.Author.ArtistName;
-            Tags = new List<string>();
+            Tags = tags;
 
             // foreach (Tag tag in art.Tags)
-            foreach (Tag tag in art.Tags.Select(to => to.Tag))
-                Tags.Add(tag.TagString);
+            // foreach (Tag tag in art.Tags.Select(to => to.Tag))
+                // Tags.Add(tag.TagString);
         }
     }
 }

@@ -63,7 +63,7 @@
             </div>
 
             <div class="col-sm-6 border-left">
-                <a href="/artists/artist?artistId=f831c02d-ae3b-4196-8fa7-89913ce207a9">
+                <a href="@Url.Content("/artists/artist?artistId=" + Model.ArtistThumbnail.Id)">
                     <div class="card mt-2">
                         <div class="card-header pb-0">
                             <h4>Artist</h4>
@@ -72,7 +72,7 @@
                             <img src="@Url.Content(Model.ArtistThumbnail.PfpUrl)" class="img-thumbnail float-left" style="max-width: 200px;" />
                             <div id="artist-info" class="float-left ml-4 mt-5">
                                 <h5 class="card-title">@Model.ArtistThumbnail.ArtistName</h5>
-                                <p class="">Registered Arts: 23<br />Registered artist on: @Model.ArtistThumbnail.RegistrationTime.ToString()</p>
+                                <p class="">Registered Arts: @Model.ArtistThumbnail.NumberOfArts<br />Registered artist on: @Model.ArtistThumbnail.RegistrationTime.ToString()</p>
                                 <div class="row">
                                     <div class="col-sm">
                                         <i class="fas fa-star"></i> @Model.ArtistThumbnail.Subscriptions
