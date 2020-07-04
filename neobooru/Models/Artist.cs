@@ -19,6 +19,10 @@ namespace neobooru.Models
         
         [Required]
         public NeobooruUser RegisteredBy { get; set; }
+        
+        public ICollection<Art> Arts { get; set; }
+        
+        public ICollection<ArtistSubscription> Subscriptions { get; set; }
 
         public int ProfileViews { get; set; }
 

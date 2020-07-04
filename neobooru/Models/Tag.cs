@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace neobooru.Models
@@ -16,8 +17,9 @@ namespace neobooru.Models
 
         [Required]
         public DateTime AddedAt { get; set; }
+        
+        public ICollection<TagOccurrence> Occurrences { get; set; }
 
-        // TODO: If there is enough time then do this
         //public TagType Type { get; set; }
         //public enum TagType
         //{

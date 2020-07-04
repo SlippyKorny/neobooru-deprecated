@@ -538,9 +538,6 @@ namespace neobooru.Migrations
                     b.Property<DateTime>("AddedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("ArtId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("CreatorId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -551,11 +548,24 @@ namespace neobooru.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ArtId");
-
                     b.HasIndex("CreatorId");
 
                     b.ToTable("Tags");
+                });
+
+            modelBuilder.Entity("neobooru.Models.TagOccurrence", b =>
+                {
+                    b.Property<Guid>("ArtId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TagId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("ArtId", "TagId");
+
+                    b.HasIndex("TagId");
+
+                    b.ToTable("TagOccurrence");
                 });
 
             modelBuilder.Entity("neobooru.Models.NeobooruUser", b =>
@@ -631,7 +641,7 @@ namespace neobooru.Migrations
             modelBuilder.Entity("neobooru.Models.Art", b =>
                 {
                     b.HasOne("neobooru.Models.Artist", "Author")
-                        .WithMany()
+                        .WithMany("Arts")
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.NoAction);
 
@@ -664,7 +674,7 @@ namespace neobooru.Migrations
             modelBuilder.Entity("neobooru.Models.ArtLike", b =>
                 {
                     b.HasOne("neobooru.Models.Art", "LikedArt")
-                        .WithMany()
+                        .WithMany("Likes")
                         .HasForeignKey("LikedArtId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
@@ -697,7 +707,7 @@ namespace neobooru.Migrations
             modelBuilder.Entity("neobooru.Models.ArtistSubscription", b =>
                 {
                     b.HasOne("neobooru.Models.Artist", "Artist")
-                        .WithMany()
+                        .WithMany("Subscriptions")
                         .HasForeignKey("ArtistId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
@@ -744,14 +754,24 @@ namespace neobooru.Migrations
 
             modelBuilder.Entity("neobooru.Models.Tag", b =>
                 {
-                    b.HasOne("neobooru.Models.Art", null)
-                        .WithMany("Tags")
-                        .HasForeignKey("ArtId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
                     b.HasOne("neobooru.Models.NeobooruUser", "Creator")
                         .WithMany("CreatedTags")
                         .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("neobooru.Models.TagOccurrence", b =>
+                {
+                    b.HasOne("neobooru.Models.Art", "Art")
+                        .WithMany("Tags")
+                        .HasForeignKey("ArtId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("neobooru.Models.Tag", "Tag")
+                        .WithMany("Occurrences")
+                        .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });

@@ -3,9 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 
 namespace neobooru.Models
 {
@@ -47,9 +44,11 @@ namespace neobooru.Models
 
         public ArtRating Rating { get; set; }
 
-        public virtual ICollection<Tag> Tags { get; set; }
+        public ICollection<TagOccurrence> Tags { get; set; }
 
-        public virtual ICollection<ArtComment> Comments { get; set; }
+        public ICollection<ArtComment> Comments { get; set; }
+        
+        public ICollection<ArtLike> Likes { get; set; }
 
         public enum ArtRating
         {

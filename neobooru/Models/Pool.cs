@@ -20,6 +20,6 @@ namespace neobooru.Models
 
         public DateTime UpdatedAt { get; set; }
 
-        public virtual ICollection<Art> Arts { get; set; }
+        public ICollection<Art> Arts { get; set; }
     }
 }

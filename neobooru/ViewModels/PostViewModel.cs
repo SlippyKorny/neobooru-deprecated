@@ -51,7 +51,8 @@ namespace neobooru.ViewModels
             ArtistName = art.Author.ArtistName;
             Tags = new List<string>();
 
-            foreach (Tag tag in art.Tags)
+            // foreach (Tag tag in art.Tags)
+            foreach (Tag tag in art.Tags.Select(to => to.Tag))
                 Tags.Add(tag.TagString);
         }
     }

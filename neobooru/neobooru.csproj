@@ -39,7 +39,9 @@
     <Folder Include="wwwroot\img\posts\" />
     <Folder Include="wwwroot\img\profiles\bgs" />
     <Folder Include="wwwroot\img\profiles\pfps" />
+    <Folder Include="wwwroot\img\prototyping\artists" />
     <Folder Include="wwwroot\img\prototyping\artists\" />
+    <Folder Include="wwwroot\img\prototyping\arts\thumbnails" />
     <Folder Include="wwwroot\lib\" />
   </ItemGroup>
 

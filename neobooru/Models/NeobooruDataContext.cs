@@ -43,6 +43,20 @@ namespace neobooru.Models
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            // >>> Relations configuration <<<
+            // Arts -> TagOccurrence <- Tags
+            builder.Entity<TagOccurrence>().HasKey(to => new {to.ArtId, to.TagId});
+            builder.Entity<TagOccurrence>().HasOne(to => to.Art)
+                .WithMany(a => a.Tags).HasForeignKey(to => to.ArtId)
+                .OnDelete(DeleteBehavior.SetNull);
+            builder.Entity<TagOccurrence>().HasOne(to => to.Tag)
+                .WithMany(t => t.Occurrences).HasForeignKey(to => to.TagId)
+                .OnDelete(DeleteBehavior.SetNull);
+            // Art <-(many)- Artist 
+            // builder.Entity<Art>().HasOne(ar => ar.Author)
+            //     .WithMany(au => au.Arts);
+            
+
             foreach (var relationship in builder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
                 relationship.DeleteBehavior = DeleteBehavior.NoAction;
 

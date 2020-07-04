@@ -76,7 +76,7 @@ namespace neobooru.Controllers
             {
                 ModelState.AddModelError(string.Empty,
                     "You have to be logged in to register an artist!");
-                return Redirect("/Artist/Register");
+                return View();
             }
 
             Guid id = Guid.NewGuid();
