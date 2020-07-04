@@ -30,15 +30,19 @@ namespace neobooru.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> List()
+        public async Task<IActionResult> List(int page)
         {
             ViewBag.SubsectionPages = _subsectionPages;
             ViewBag.ActiveSubpage = _subsectionPages[0];
             
             List<ArtThumbnailViewModel> arts = new List<ArtThumbnailViewModel>();
             await _db.Arts.Include(a => a.Author)
-                .OrderByDescending(a => a.CreatedAt).Take(20)
+                .OrderByDescending(a => a.CreatedAt).Skip(page * 20).Take(20)
                 .ForEachAsync(a => arts.Add(new ArtThumbnailViewModel(a)));
+
+            ViewBag.PreviousPage = page == 0 ? "" : page.ToString();
+            ViewBag.Page = page + 1;
+            ViewBag.NextPage = _db.Arts.Count() > (page+1) * 20 ? (page + 2).ToString() : "";
             
             return View(arts);
         }

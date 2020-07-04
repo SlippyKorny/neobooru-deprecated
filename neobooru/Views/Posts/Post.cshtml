@@ -14,7 +14,9 @@
     <div id="art-data" style="margin-top: 10px;">
         <div class="row">
             <h2 class="float-left">@Model.PostName</h2>
-            <div class="float-left ml-3 mt-2 text-muted">by <a href="#">@Model.ArtistName</a></div>
+            <div class="float-left ml-3 mt-2 text-muted">by 
+                <a href="@Url.Content("/artists/artist?artistId=" + Model.ArtistThumbnail.Id)">@Model.ArtistName</a>
+            </div>
         </div>
         <hr/>
 

@@ -42,12 +42,16 @@ namespace neobooru.Controllers
             ViewBag.ActiveSubpage = _subsectionPages[0];
             
             List<ArtistThumbnailViewModel> artists = new List<ArtistThumbnailViewModel>();
-            await _db.Artists.OrderByDescending(a => a.RegisteredAt).Take(20).ForEachAsync(a =>
+            await _db.Artists.OrderByDescending(a => a.RegisteredAt).Skip(page*20).Take(20).ForEachAsync(a =>
             {
                 int artCount = _db.Arts.Count(b => b.Author.Id.Equals(a.Id));
                 int subCount = _db.ArtistSubscriptions.Count(b => b.Artist.Id.Equals(a.Id));
                 artists.Add(new ArtistThumbnailViewModel(a, artCount, subCount));
             });
+            
+            ViewBag.PreviousPage = page == 0 ? "" : page.ToString();
+            ViewBag.Page = page + 1;
+            ViewBag.NextPage = _db.Arts.Count() > (page+1) * 20 ? (page + 2).ToString() : "";
 
             return View(artists);
         }
