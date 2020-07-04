@@ -2,21 +2,60 @@
     ViewData["Section"] = "Profile";
     ViewData["Subsection"] = "My Profile";
 }
+@model neobooru.ViewModels.ProfileViewModel
 
-<div class="card">
-    <div class="card-header">
-        My Profile
-    </div>
-    <div class="card-body">
+@* <div class="card"> *@
+@*     <div class="card-header"> *@
+@*         My Profile *@
+@*     </div> *@
+@*     <div class="card-body"> *@
+@*         <div class="row"> *@
+@*             <div class="column w-5"> *@
+@*                 <img src="~/img/prototyping/avatar.png" class="rounded"/> *@
+@*             </div> *@
+@*             <div class="col-sm"> *@
+@*                 <b>Nickname:</b> Slipper *@
+@*             </div> *@
+@*         </div> *@
+@*     </div> *@
+@*     $1$ <div class="card-footer"> #1# *@
+@*     $1$ </div> #1#  *@
+@* </div> *@
+
+<div id="artist-profile">
+    <div id="artist-upper-section">
         <div class="row">
-            <div class="column w-5">
-                <img src="~/img/prototyping/avatar.png" class="rounded"/>
+            @if (Model.BackgroundUrl == null)
+            {
+                <img src="~/img/prototyping/backgrounds/1590x540p Background Placeholder Image.png"/>
+            }
+            else
+            {
+                <img src="@Url.Content(Model.BackgroundUrl)"/>
+            }
+        </div>
+        <div class="row" style="height: 200px; margin-top: -12.5vh;">
+            <div class="col-md-1 h-100">
+                <div style="margin-top: 140px; margin-left: 20px;"></div>
+                @* <div style="margin-top: 140px; margin-left: 20px;"> *@
+                @*     <div><i class="fas fa-star"></i> @Model.Followers</div> *@
+                @*     <div><i class="fas fa-eye"></i> @Model.ProfileViews</div> *@
+                @* </div> *@
             </div>
-            <div class="col-sm">
-                <b>Nickname:</b> Slipper
+            <div class="col-md-10 h-100">
+                <img src="@Url.Content(Model.PfpUrl)" class="rounded float-left" style="border: solid 1px #1dd1a1; max-height:100%; margin-right: 20px;" />
+                <h2 class="float-left" style="margin-top: 140px;  display: block;">@Model.Username</h2>
+                <div id="artist-data float-left" style="margin-top: 170px;">
+                </div>
+            </div>
+            <div class="col-md-1 h-100">
+                <a class="btn btn-primary text-white" style="margin-top: 150px"><i class="fas fa-star"></i> Star</a>
             </div>
         </div>
+        <div class="row" style="margin-top: 40px;">
+            <div class="text-secondary px-4">@Model.Descritpion</div>
+            @* TODO: Recent uploads, Recent Favourites, Recent subscriptions *@
+        </div>
     </div>
-    @* <div class="card-footer"> *@
-    @* </div> *@ 
+    <hr/>
 </div>

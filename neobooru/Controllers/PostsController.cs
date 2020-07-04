@@ -48,6 +48,7 @@ namespace neobooru.Controllers
         {
             ViewBag.SubsectionPages = _subsectionPages;
             ViewBag.ActiveSubpage = _subsectionPages[1];
+
             return View();
         }
 
@@ -76,7 +77,8 @@ namespace neobooru.Controllers
                 Artist artist = null;
                 if (model.Author != null)
                 {
-                    artist = await _db.Artists.FirstOrDefaultAsync(a => a.ArtistName.Equals(model.Author));
+                    artist = await _db.Artists
+                        .FirstOrDefaultAsync(a => a.ArtistName.Equals(model.Author));
                     if (artist == null)
                     {
                         // TODO: Ask if u can make a link to the artist registration form in here

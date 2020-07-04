@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using neobooru.Models;
+using neobooru.ViewModels;
 using neobooru.ViewModels.Forms;
 
 namespace neobooru.Controllers
@@ -15,20 +17,40 @@ namespace neobooru.Controllers
 
         private SignInManager<NeobooruUser> _signInManager;
 
+        private readonly NeobooruDataContext _db;
+        
         private readonly string[] _subsectionPages = { "Profile", "Settings", "Help"};
 
-        public ProfileController(UserManager<NeobooruUser> userManager, SignInManager<NeobooruUser> signInManager)
+        public ProfileController(NeobooruDataContext db, UserManager<NeobooruUser> userManager,
+            SignInManager<NeobooruUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _db = db;
         }
 
         [HttpGet]
-        public IActionResult Profile()
+        public IActionResult Profile(string profileId)
         {
             ViewBag.SubsectionPages = _subsectionPages;
             ViewBag.ActiveSubpage = _subsectionPages[0];
-            return View();
+
+            if (profileId == null && _signInManager.IsSignedIn(User))
+                profileId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            else
+                Redirect("/");
+
+            NeobooruUser user = null;
+            foreach (var usr in _db.NeobooruUsers.ToArray())
+            {
+                if (usr.Id.Equals(profileId))
+                    user = usr;
+            }
+
+            if (user == null)
+                Redirect("/");
+            
+            return View(new ProfileViewModel(user));
         }
 
         [HttpGet]

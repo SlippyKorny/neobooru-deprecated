@@ -13,6 +13,10 @@ namespace neobooru.Models
         public string PfpThumbnailUrl { get; set; }
 
         public string ProfileDescription { get; set; }
+        
+        public string Gender { get; set; }
+        
+        public int Views { get; set; }
 
         public ICollection<Art> UploadedArts { get; set; }
 
