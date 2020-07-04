@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using neobooru.Models;
 using neobooru.ViewModels;
 using neobooru.ViewModels.Forms;
@@ -49,8 +50,13 @@ namespace neobooru.Controllers
 
             if (user == null)
                 Redirect("/");
-            
-            return View(new ProfileViewModel(user));
+
+            List<ArtThumbnailViewModel> recentlyUploaded = _db.Arts.Where(a => a.Uploader.Id.Equals(profileId))
+                .OrderByDescending(a => a.CreatedAt).Take(5).Select(a => new ArtThumbnailViewModel(a)).ToList();
+            // TODO: Like date
+
+
+            return View(new ProfileViewModel(user, recentlyUploaded));
         }
 
         [HttpGet]

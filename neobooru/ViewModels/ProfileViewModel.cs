@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using neobooru.Models;
 
 namespace neobooru.ViewModels
@@ -19,7 +21,9 @@ namespace neobooru.ViewModels
 
         public readonly string Descritpion;
 
-        public ProfileViewModel(NeobooruUser user)
+        public readonly List<ArtThumbnailViewModel> RecentlyUploaded;
+
+        public ProfileViewModel(NeobooruUser user, List<ArtThumbnailViewModel> uploaded)
         {
             Username = user.UserName;
             RegisteredAt = user.RegisteredOn;
@@ -28,6 +32,7 @@ namespace neobooru.ViewModels
             BackgroundUrl = "/img/prototyping/backgrounds/1590x540p Background Placeholder Image.png";
             Gender = user.Gender ?? "Unknown";
             Descritpion = user.ProfileDescription ?? "";
+            RecentlyUploaded = uploaded;
         }
     }
 }
