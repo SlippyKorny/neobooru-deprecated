@@ -62,27 +62,27 @@
         <div class="row">
             <h2 style="margin-left: auto; margin-right: auto;">Most Popular Works</h2>
         </div>
-        @{ int len = Model.ArtThumbnails.Count; }
-        @for(int i = 0; i < len;)
-        {
-            <div class="row">
-                @for (int a = 0; a < 5 && i < len; a++)
-                {
-                    <div class="col-sm">
-                        <a href="@Url.Content("/posts/post?postId=" + Model.ArtThumbnails[i].ArtId)">
-                            <div class="card w-20">
-                                <img src="@Url.Content(Model.ArtThumbnails[i].FileUrl)" class="card-img-top"/>
-                                <div class="card-footer">
-                                    <h5 class="card-title">@Model.ArtThumbnails[i].ArtName</h5>
-                                    <p class="card-text">Made by @Model.ArtThumbnails[i].ArtistName<br/>Uploaded: @Model.ArtThumbnails[i].UploadDate.ToString()</p>
-                                </div>
+        <div class="row">
+            @{ int a = 0;}
+            @for (; a < Model.ArtThumbnails.Count; a++)
+            {
+                <div class="col-sm">
+                    <a href="@Url.Content("/posts/post?postId=" + Model.ArtThumbnails[a].ArtId)">
+                        <div class="card w-20">
+                            <img src="@Url.Content(Model.ArtThumbnails[a].FileUrl)" class="card-img-top"/>
+                            <div class="card-footer">
+                                <h5 class="card-title">@Model.ArtThumbnails[a].ArtName</h5>
+                                <p class="card-text">Made by @Model.ArtThumbnails[a].ArtistName<br/>Uploaded: @Model.ArtThumbnails[a].UploadDate.ToString()</p>
                             </div>
-                        </a>
-                    </div>
-                    i++;
-                }
-            </div>
-        }
+                        </div>
+                    </a>
+                </div>
+            }
+            @for (; a < 5; a++)
+            {
+                <div class="col-sm"></div>
+            }
+        </div>
     </div>
 </div>
 

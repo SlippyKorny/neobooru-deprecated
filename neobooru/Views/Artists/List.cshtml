@@ -52,6 +52,13 @@
                 </div>
                 i++;
                 left--;
+                @if (left == 0 && a < 4)
+                {
+                    @for (var b = 0; b + a < 5; b++)
+                    {
+                        <div class="col-sm"></div>
+                    }
+                }
             }
         </div>
     }
