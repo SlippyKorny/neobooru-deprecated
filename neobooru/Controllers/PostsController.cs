@@ -208,7 +208,8 @@ namespace neobooru.Controllers
                 return Redirect("/posts/list");
 
             var artist = _db.Artists.First(a => a.Id.ToString().Equals(art.Author.Id.ToString()));
-            int artCount = artist.Arts?.Count() ?? 0;
+            int artCount = _db.Arts.Include(a => a.Author).Count(a => a.Author.
+                Id.ToString().Equals(artist.Id.ToString()));
             int subs = artist.Subscriptions?.Count() ?? 0;
             List<string> tags = new List<string>();
             foreach (var tag in art.Tags)
