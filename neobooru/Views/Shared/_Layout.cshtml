@@ -42,9 +42,12 @@
                 </li>
             }
             @* If the user has admin rights: *@
-            <li @(ViewData["Section"].Equals("Administration Panel") ? "class=active" : "")>
-                <a asp-controller="AdministrationPanel" asp-action="MainPanel">Administration Panel</a>
-            </li>
+            @if (signInManager.IsSignedIn(User) && User.IsInRole("root"))
+            {
+                <li @(ViewData["Section"].Equals("Administration Panel") ? "class=active" : "")>
+                    <a asp-controller="AdministrationPanel" asp-action="MainPanel">Administration Panel</a>
+                </li>
+            }
             <li @(ViewData["Section"].Equals("Forum") ? "class=active" : "")>
                 <a href="/forum/index">Forum</a>
             </li>

@@ -16,7 +16,7 @@ using neobooru.ViewModels.Forms;
 namespace neobooru.Controllers
 {
     // remember that u can override this with [AllowAnonymous]
-    // [Authorize]
+    // [Authorize(Roles = "root")]
     public class AdministrationPanelController : Controller
     {
         
