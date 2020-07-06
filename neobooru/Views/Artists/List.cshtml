@@ -68,8 +68,9 @@
         <ul class="pagination justify-content-center">
             @if (!ViewBag.PreviousPage.Equals(""))
             {
+                int prevPageLinkNum = Int32.Parse(ViewBag.PreviousPage) - 1;
                 <li class="page-item">
-                    <a class="page-link" href="@Url.Content("/artists/list?page=" + ViewBag.PreviousPage)" tabindex="-1">Previous</a>
+                    <a class="page-link" href="@Url.Content("/artists/list?page=" + prevPageLinkNum)" tabindex="-1">Previous</a>
                 </li>
                 <li class="page-item">
                     <a class="page-link custom-notactive-page" href="@Url.Content("/artists/list?page=" + ViewBag.PreviousPage)">@ViewBag.PreviousPage</a>
@@ -86,12 +87,13 @@
             </li>
             @if (!ViewBag.NextPage.Equals(""))
             {
+                int nextPageLinkNum = Int32.Parse(ViewBag.NextPage) - 1;
                 <li class="page-item">
                     <a class="page-link custom-notactive-page"
-                       href="@Url.Content("/artists/list?page=" + ViewBag.NextPage)">@ViewBag.NextPage</a></li>
+                       href="@Url.Content("/artists/list?page=" + nextPageLinkNum)">@ViewBag.NextPage</a></li>
                 <li class="page-item">
                     <a class="page-link custom-notactive-page"
-                       href="@Url.Content("/artists/list?page=" + ViewBag.NextPage)">Next</a>
+                       href="@Url.Content("/artists/list?page=" + nextPageLinkNum)">Next</a>
                 </li>
             }
             else
