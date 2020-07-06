@@ -62,8 +62,8 @@ namespace neobooru.Controllers
             // author
             IEnumerable<string> artistTags = rawTags.Where(t => t.ToLower().Contains("artist:")).Select(a => a = a.Remove(0, 7));
             if (artistTags.Any())
-                arts = _db.Arts.Include(a => a.Author).Include(a => a.Tags).ThenInclude(t => t.Tag.TagString)
-                    .Include(a => a.Comments).Where(a => artistTags.Contains(a.Author.ArtistName));
+                arts = _db.Arts.Include(a => a.Author).Include(a => a.Tags)
+                    .ThenInclude(t => t.Tag).Include(a => a.Comments).Where(a => artistTags.Contains(a.Author.ArtistName));
             
             
             // include the ones with tags
