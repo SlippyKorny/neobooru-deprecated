@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using ImageManipulation;
 using ImageManipulation.Exceptions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using neobooru.Models;
 using neobooru.ViewModels;
 
@@ -22,29 +24,109 @@ namespace neobooru.Controllers
 
         private readonly string[] _subsectionPages = {"List", "Trending", "Upload", "Help"};
 
-        public PostsController(NeobooruDataContext db, UserManager<NeobooruUser> userManager, SignInManager<NeobooruUser> signInManager)
+        public PostsController(NeobooruDataContext db, UserManager<NeobooruUser> userManager,
+            SignInManager<NeobooruUser> signInManager)
         {
             _db = db;
             _userManager = userManager;
             _signInManager = signInManager;
         }
-
+        
         [HttpGet]
-        public async Task<IActionResult> List(int page)
+        public async Task<IActionResult> List(string tagString, int page)
         {
             ViewBag.SubsectionPages = _subsectionPages;
             ViewBag.ActiveSubpage = _subsectionPages[0];
-            
-            List<ArtThumbnailViewModel> arts = new List<ArtThumbnailViewModel>();
-            await _db.Arts.Include(a => a.Author)
-                .OrderByDescending(a => a.CreatedAt).Skip(page * 20).Take(20)
-                .ForEachAsync(a => arts.Add(new ArtThumbnailViewModel(a)));
 
+            List<ArtThumbnailViewModel> thumbnails;
+            if (tagString == null)
+            {
+                thumbnails = new List<ArtThumbnailViewModel>();
+                await _db.Arts.Include(a => a.Author)
+                    .OrderByDescending(a => a.CreatedAt).Skip(page * 20).Take(20)
+                    .ForEachAsync(a => thumbnails.Add(new ArtThumbnailViewModel(a)));
+
+                ViewBag.PreviousPage = page == 0 ? "" : page.ToString();
+                ViewBag.Page = page + 1;
+                ViewBag.NextPage = _db.Arts.Count() > (page+1) * 20 ? (page + 2).ToString() : "";
+            
+                return View(thumbnails);
+            }
+            
+            List<string> rawTags = tagString.Split(" ").ToList();
+            IEnumerable<Art> arts = null;
+            
+            
+            // >>> Sorting filters <<<
+            
+            // author
+            IEnumerable<string> artistTags = rawTags.Where(t => t.ToLower().Contains("artist:")).Select(a => a = a.Remove(0, 7));
+            if (artistTags.Any())
+                arts = _db.Arts.Include(a => a.Author).Include(a => a.Tags).ThenInclude(t => t.Tag.TagString)
+                    .Include(a => a.Comments).Where(a => artistTags.Contains(a.Author.ArtistName));
+            
+            
+            // include the ones with tags
+            Func<Art, bool> tagSearchFunc = a =>
+            {
+                foreach (var tag in rawTags)
+                {
+                    // if (!tag.Contains(":") && !a.Tags.Any(t => t.Tag.TagString.Equals(tag)))
+                    if (!tag.Contains(":") && !a.Tags.Any(t => t.Tag.TagString.Equals(tag)))
+                        return false;
+                }
+
+                return true;
+            };
+                
+            if (arts != null)
+                arts = arts.Where(tagSearchFunc);
+            else
+                arts = _db.Arts.Include(a => a.Author).Include(a => a.Tags)
+                    .ThenInclude(t => t.Tag).Include(a => a.Comments)
+                    .Where(tagSearchFunc);
+
+            
+            // by name
+            if (rawTags.Count(a => a.ToLower().Equals("orderby:name")) > 0)
+                arts = arts.OrderBy(a => a.Name);
+            
+            
+            // by name descending
+            if (rawTags.Count(a => a.ToLower().Equals("orderbydesc:name")) > 0)
+                arts = arts.OrderByDescending(a => a.Name);
+            
+            
+            // by upload date
+            if (rawTags.Count(a => a.ToLower().Equals("orderby:date")) > 0)
+                arts = arts.OrderBy(a => a.CreatedAt);
+            
+            
+            // by upload date desc
+            if (rawTags.Count(a => a.ToLower().Equals("orderbydesc:date")) > 0)
+                arts = arts.OrderByDescending(a => a.CreatedAt);
+
+
+            // by artist name
+            if (rawTags.Count(a => a.ToLower().Equals("orderby:artist")) > 0)
+                arts = arts.OrderBy(a => a.Author.ArtistName);
+
+            // by artist name desc
+            if (rawTags.Count(a => a.ToLower().Equals("orderbydesc:artist")) > 0)
+                arts = arts.OrderByDescending(a => a.Author.ArtistName);
+            
+            // >>> Pagination <<<
             ViewBag.PreviousPage = page == 0 ? "" : page.ToString();
             ViewBag.Page = page + 1;
-            ViewBag.NextPage = _db.Arts.Count() > (page+1) * 20 ? (page + 2).ToString() : "";
+            ViewBag.NextPage = arts.Count() > (page+1) * 20 ? (page + 2).ToString() : "";
+            ViewBag.TagString = HttpUtility.UrlEncode(tagString);
             
-            return View(arts);
+            thumbnails = new List<ArtThumbnailViewModel>();
+            
+            arts = arts.Skip(page * 20).Take(20);
+            foreach (Art a in arts)
+                thumbnails.Add(new ArtThumbnailViewModel(a));
+            return View(thumbnails);
         }
 
         [HttpGet]
@@ -135,14 +217,6 @@ namespace neobooru.Controllers
                     else
                         tags.Add(tag);
 
-                    // TODO: Delete if the above works
-                    // var dataSet = _db.Tags.Where(t => t.TagString.Equals(rawTag));
-                    // if (dataSet.Count() == 0)
-                    // {
-                    //
-                    // }
-                    // else
-                    //     tags.Add(dataSet.First());
                 }
                 await _db.SaveChangesAsync();
                 

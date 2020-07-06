@@ -5,12 +5,13 @@
 @model List<neobooru.ViewModels.ArtThumbnailViewModel>
 
 <div id="search-section">
-    <form>
+    <form method="get" action="/Posts/List">
         <div class="input-group mb-3">
             <div class="input-group-prepend">
                 <button class="btn" style="background: #1dd1a1; color: white;"><svg class="svg-inline--fa fa-align-left fa-w-14" aria-hidden="true" data-prefix="fas" data-icon="align-left" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M288 44v40c0 8.837-7.163 16-16 16H16c-8.837 0-16-7.163-16-16V44c0-8.837 7.163-16 16-16h256c8.837 0 16 7.163 16 16zM0 172v40c0 8.837 7.163 16 16 16h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16zm16 312h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm256-200H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16h256c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16z"></path></svg> Toggle Search Options</button>
             </div>
-            <input type="text" class="form-control" placeholder="Ex: blue_sky cloud 1girl" aria-label="Recipient's username" aria-describedby="basic-addon2">
+            <input type="text" class="form-control" placeholder="Ex: blue_sky cloud 1girl" 
+                   name="tagString" aria-label="Art tags" aria-describedby="basic-addon2">
             <div class="input-group-append">
                 <button class="btn" style="background: #218c74; color: white;">Search</button>
             </div>
@@ -59,10 +60,10 @@
         {
             int prevPageLinkNum = Int32.Parse(ViewBag.PreviousPage) - 1;
         <li class="page-item">
-                <a class="page-link" href="@Url.Content("/posts/list?page=" + prevPageLinkNum)" tabindex="-1">Previous</a>
+                <a class="page-link" href="@Url.Content("/posts/list?page=" + prevPageLinkNum + "&tagString=" + ViewBag.TagString)" tabindex="-1">Previous</a>
             </li>
             <li class="page-item">
-                <a class="page-link custom-notactive-page" href="@Url.Content("/posts/list?page=" + prevPageLinkNum)">@ViewBag.PreviousPage</a>
+                <a class="page-link custom-notactive-page" href="@Url.Content("/posts/list?page=" + prevPageLinkNum + "&tagString=" + ViewBag.TagString)">@ViewBag.PreviousPage</a>
             </li>
         }
         else
@@ -79,10 +80,10 @@
             int nextPageLinkNum = Int32.Parse(ViewBag.NextPage) - 1;
             <li class="page-item">
                 <a class="page-link custom-notactive-page"
-                   href="@Url.Content("/posts/list?page=" + nextPageLinkNum)">@ViewBag.NextPage</a></li>
+                   href="@Url.Content("/posts/list?page=" + nextPageLinkNum + "&tagString=" + ViewBag.TagString)">@ViewBag.NextPage</a></li>
             <li class="page-item">
                 <a class="page-link custom-notactive-page"
-                   href="@Url.Content("/posts/list?page=" + nextPageLinkNum)">Next</a>
+                   href="@Url.Content("/posts/list?page=" + nextPageLinkNum + "&tagString=" + ViewBag.TagString)">Next</a>
             </li>
         }
         else
