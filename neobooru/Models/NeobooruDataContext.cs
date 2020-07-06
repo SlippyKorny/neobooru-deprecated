@@ -52,10 +52,14 @@ namespace neobooru.Models
             builder.Entity<TagOccurrence>().HasOne(to => to.Tag)
                 .WithMany(t => t.Occurrences).HasForeignKey(to => to.TagId)
                 .OnDelete(DeleteBehavior.SetNull);
-            // Art <-(many)- Artist 
-            // builder.Entity<Art>().HasOne(ar => ar.Author)
-            //     .WithMany(au => au.Arts);
-            
+
+            // >>> Necessary root data seed <<<
+            builder.Entity<IdentityRole>().HasData(new IdentityRole()
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = "root",
+                NormalizedName = "root".ToUpper()
+            });
 
             foreach (var relationship in builder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
                 relationship.DeleteBehavior = DeleteBehavior.NoAction;
