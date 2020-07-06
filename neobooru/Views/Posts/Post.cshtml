@@ -1,10 +1,20 @@
-﻿@{
+﻿@inject SignInManager<NeobooruUser> signInManager;
+@{
     ViewData["Section"] = "Posts";
     ViewData["Subsection"] = "Post";
 }
 @model neobooru.ViewModels.PostViewModel
 
 <div id="art-box">
+    @if (signInManager.IsSignedIn(User) && User.IsInRole("root"))
+    {
+        <div class="container  mb-2">
+            <div class="row">
+                <div class="col-6"><a href="@Url.Content("/Posts/Edit?postId=" + Model.PostId)" class="btn btn-warning btn-block">Edit</a></div>
+                <div class="col-6"><a class="btn btn-danger btn-block">Delete</a></div>
+            </div>
+        </div>
+    }
     <div id="art-fullsize-container" class="p-2" style="border: 2px dashed #218c74;">
         Click <a target="_blank" href="@Url.Content(Model.LargeFileUrl)" style="color: #218c74">here</a> to see the image at full resolution.
     </div>
@@ -14,7 +24,7 @@
     <div id="art-data" style="margin-top: 10px;">
         <div class="row">
             <h2 class="float-left">@Model.PostName</h2>
-            <div class="float-left ml-3 mt-2 text-muted">by 
+            <div class="float-left ml-3 mt-2 text-muted">by
                 <a href="@Url.Content("/artists/artist?artistId=" + Model.ArtistThumbnail.Id)">@Model.ArtistName</a>
             </div>
         </div>
@@ -71,10 +81,10 @@
                             <h4>Artist</h4>
                         </div>
                         <div class="card-body" style="">
-                            <img src="@Url.Content(Model.ArtistThumbnail.PfpUrl)" class="img-thumbnail float-left" style="max-width: 200px;" />
+                            <img src="@Url.Content(Model.ArtistThumbnail.PfpUrl)" class="img-thumbnail float-left" style="max-width: 200px;"/>
                             <div id="artist-info" class="float-left ml-4 mt-5">
                                 <h5 class="card-title">@Model.ArtistThumbnail.ArtistName</h5>
-                                <p class="">Registered Arts: @Model.ArtistThumbnail.NumberOfArts<br />Registered artist on: @Model.ArtistThumbnail.RegistrationTime.ToString()</p>
+                                <p class="">Registered Arts: @Model.ArtistThumbnail.NumberOfArts<br/>Registered artist on: @Model.ArtistThumbnail.RegistrationTime.ToString()</p>
                                 <div class="row">
                                     <div class="col-sm">
                                         <i class="fas fa-star"></i> @Model.ArtistThumbnail.Subscriptions
@@ -89,7 +99,7 @@
                 </a>
 
 
-<div class="row ml-1 mt-2">
+                <div class="row ml-1 mt-2">
                     <h4>Comments</h4>
                 </div>
                 <div class="row ml-1">

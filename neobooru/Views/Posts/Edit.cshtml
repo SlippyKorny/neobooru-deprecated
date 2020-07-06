@@ -1,0 +1,69 @@
+@{
+    ViewData["Section"] = "Posts";
+    ViewData["Subsection"] = "Edit";
+}
+@model neobooru.ViewModels.Forms.PostEditViewModel
+
+<div class="card mt-4">
+    <div class="card-header pt-2 pb-1">
+        <h3>Post Edit Form</h3>
+    </div>
+    <div class="card-img">
+        <center class="mt-4 mb-2"><img src="@Model.PreviewUrl" alt="Preview image of the edited post"/></center>
+    </div>
+    <div class="card-body">
+        <form method="post" asp-controller="Posts" asp-action="Edit">
+            @Html.HiddenFor(m => Model.SecretId)
+            <div class="text-danger" asp-validation-summary="All"></div>
+            <div class="form-group row">
+                <div class="col-1">
+                    <label asp-for="Name"></label>:
+                </div>
+                <div class="col-4">
+                    <input asp-for="Name" class="form-control"/>
+                </div>
+                <div class="col-1">
+                    <label asp-for="Author"></label>:
+                </div>
+                <div class="col-4">
+                    <input asp-for="Author" class="form-control"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-1">
+                    <label asp-for="Source"></label>:
+                </div>
+                <div class="col-4">
+                    <input asp-for="Source" class="form-control"/>
+                </div>
+                <div class="col-1">
+                    <label asp-for="Rating"></label>:
+                </div>
+                <div class="col-4">
+                    <select asp-for="Rating" class="form-control">
+                        @foreach (Art.ArtRating rating in (Art.ArtRating[]) Enum.GetValues(typeof(Art.ArtRating)))
+                        {
+                            // TODO: Description of each art
+                            @* @{ string descriptor = (Art.ArtRating)rating.); } *@
+                            <option value="@rating">@rating</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-1">
+                    <label asp-for="TagString">Tags</label>:
+                </div>
+                <div class="col-4">
+                    <textarea asp-for="TagString" class="form-control"></textarea>
+                    <i>Separate tags with spaces. (ex: green_eyes purple green_hair) </i>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <button class="btn btn-block" style="background: #1dd1a1; color: #fff;">Upload</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

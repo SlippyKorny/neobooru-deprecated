@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using ImageManipulation;
 using ImageManipulation.Exceptions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using neobooru.Models;
 using neobooru.ViewModels;
+using neobooru.ViewModels.Forms;
 
 namespace neobooru.Controllers
 {
@@ -290,6 +293,104 @@ namespace neobooru.Controllers
                 tags.Add(_db.Tags.First(t => t.Id.ToString().Equals(tag.TagId.ToString())).TagString);
             
             return View(new PostViewModel(art, artCount, subs, tags));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(string postId)
+        {
+            ViewBag.SubsectionPages = _subsectionPages;
+            ViewBag.ActiveSubpage = "Edit";
+            
+            Art art = await _db.Arts.Include(a => a.Author)
+                .Include(a => a.Tags).ThenInclude(t => t.Tag)
+                .FirstOrDefaultAsync(a => a.Id.ToString().Equals(postId));
+            if (art == null)
+                Redirect("/Posts/List");
+            PostEditViewModel puvm = new PostEditViewModel();
+            puvm.SecretId = postId;
+            puvm.PreviewUrl = art.FileUrl;
+            puvm.Author = art.Author.ArtistName;
+            puvm.Name = art.Name;
+            puvm.Rating = art.Rating;
+            puvm.Source = art.Source;
+            StringBuilder sb = new StringBuilder();
+            foreach (var tag in art.Tags.Select(t => t.Tag.TagString))
+                sb.Append(tag.Replace(" ", "_") + " ");
+            puvm.TagString = sb.ToString();
+
+            return View(puvm);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(PostEditViewModel puvm)
+        {
+            // TODO: Edit sometimes causes some key error. Figure out what could be causing it
+            NeobooruUser user = await _userManager.GetUserAsync(User);
+            Art art = await _db.Arts.Include(a => a.Author)
+                .Include(a => a.Tags).ThenInclude(t => t.Tag)
+                .FirstOrDefaultAsync(a => a.Id.ToString().Equals(puvm.SecretId));
+            Artist artist = _db.Artists.FirstOrDefault(a => a.ArtistName.Equals(puvm.Author));
+            if (artist == null)
+                return Redirect("/Posts/List");
+            art.UpdatedAt = DateTime.Now;
+            art.Author = artist;
+            art.Rating = puvm.Rating;
+            art.Source = puvm.Source;
+            List<string> passedTags = puvm.TagString.Split(" ").ToList();
+            ICollection<TagOccurrence> newTags = new List<TagOccurrence>();
+         
+            // register unregistered tags
+            List<Tag> tagModels = new List<Tag>();
+            foreach (var t in passedTags)
+            {
+                if (!_db.Tags.Any(tag => tag.TagString.Equals(t)))
+                {
+                    Tag tag = new Tag()
+                    {
+                        Id = Guid.NewGuid(),
+                        TagString = t,
+                        AddedAt = DateTime.Now,
+                        Creator = user
+                    };
+                    tagModels.Add(tag);
+                    _db.Tags.Add(tag);
+                }
+                else
+                {
+                    Tag tag = _db.Tags.First(tag => tag.TagString.Equals(t));
+                    tagModels.Add(tag);
+                }
+            }
+
+            List<TagOccurrence> occurrences = new List<TagOccurrence>();
+            foreach (var t in tagModels)
+            {
+                TagOccurrence tagOccurrence = _db.TagOccurrences
+                    .FirstOrDefault(to => to.Tag.TagString.Equals(t.TagString));
+                if (tagOccurrence == null)
+                {
+                    _db.TagOccurrences.Add(new TagOccurrence()
+                    {
+                        Art = art,
+                        ArtId = art.Id,
+                        Tag = t,
+                        TagId = t.Id
+                    });
+                }
+                occurrences.Add(tagOccurrence);
+            }
+
+            art.Tags = occurrences;
+            await _db.SaveChangesAsync();
+            
+            return Redirect("/Posts/List");
+        }
+
+        [HttpGet]
+        public IActionResult Delete(string postId)
+        {
+            
+            return Redirect("/Posts/List");
         }
     }
 }

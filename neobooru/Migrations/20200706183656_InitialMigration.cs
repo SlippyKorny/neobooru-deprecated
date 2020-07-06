@@ -44,7 +44,9 @@ namespace neobooru.Migrations
                     RegisteredOn = table.Column<DateTime>(nullable: true),
                     PfpUrl = table.Column<string>(nullable: true),
                     PfpThumbnailUrl = table.Column<string>(nullable: true),
-                    ProfileDescription = table.Column<string>(nullable: true)
+                    ProfileDescription = table.Column<string>(nullable: true),
+                    Gender = table.Column<string>(nullable: true),
+                    Views = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -406,7 +408,7 @@ namespace neobooru.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TagOccurrence",
+                name: "TagOccurrences",
                 columns: table => new
                 {
                     TagId = table.Column<Guid>(nullable: false),
@@ -414,18 +416,23 @@ namespace neobooru.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TagOccurrence", x => new { x.ArtId, x.TagId });
+                    table.PrimaryKey("PK_TagOccurrences", x => new { x.ArtId, x.TagId });
                     table.ForeignKey(
-                        name: "FK_TagOccurrence_Arts_ArtId",
+                        name: "FK_TagOccurrences_Arts_ArtId",
                         column: x => x.ArtId,
                         principalTable: "Arts",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_TagOccurrence_Tags_TagId",
+                        name: "FK_TagOccurrences_Tags_TagId",
                         column: x => x.TagId,
                         principalTable: "Tags",
                         principalColumn: "Id");
                 });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[] { "ce520153-1cd3-487f-9c2f-3e4fce4d6cfa", "61a95a0e-ba18-47e0-9afe-3d383b12c352", "root", "ROOT" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_ArtComments_CommentedArtId",
@@ -542,8 +549,8 @@ namespace neobooru.Migrations
                 column: "CreatorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TagOccurrence_TagId",
-                table: "TagOccurrence",
+                name: "IX_TagOccurrences_TagId",
+                table: "TagOccurrences",
                 column: "TagId");
 
             migrationBuilder.CreateIndex(
@@ -585,7 +592,7 @@ namespace neobooru.Migrations
                 name: "HelpEntries");
 
             migrationBuilder.DropTable(
-                name: "TagOccurrence");
+                name: "TagOccurrences");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

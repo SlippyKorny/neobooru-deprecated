@@ -10,8 +10,8 @@ using neobooru.Models;
 namespace neobooru.Migrations
 {
     [DbContext(typeof(NeobooruDataContext))]
-    [Migration("20200706113938_AddRootRoleSeed")]
-    partial class AddRootRoleSeed
+    [Migration("20200706183656_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -50,8 +50,8 @@ namespace neobooru.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "b74de79c-c569-46c6-9146-d60f51acde46",
-                            ConcurrencyStamp = "46aa5054-bc77-41cf-968d-a46718361b35",
+                            Id = "ce520153-1cd3-487f-9c2f-3e4fce4d6cfa",
+                            ConcurrencyStamp = "61a95a0e-ba18-47e0-9afe-3d383b12c352",
                             Name = "root",
                             NormalizedName = "ROOT"
                         });
@@ -576,7 +576,7 @@ namespace neobooru.Migrations
 
                     b.HasIndex("TagId");
 
-                    b.ToTable("TagOccurrence");
+                    b.ToTable("TagOccurrences");
                 });
 
             modelBuilder.Entity("neobooru.Models.NeobooruUser", b =>

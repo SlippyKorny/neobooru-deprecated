@@ -30,6 +30,8 @@ namespace neobooru.Models
         public virtual DbSet<NeobooruUser> NeobooruUsers { get; set; }
 
         public virtual DbSet<Pool> Pools { get; set; }
+        
+        public virtual DbSet<TagOccurrence> TagOccurrences { get; set; }
 
         public virtual DbSet<Tag> Tags { get; set; }
 
