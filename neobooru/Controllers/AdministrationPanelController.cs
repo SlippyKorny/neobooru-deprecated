@@ -79,24 +79,34 @@ namespace neobooru.Controllers
             string[] arr = new string[usrRoles.Count];
             usrRoles.CopyTo(arr, 0);
             IQueryable<IdentityRole> roles = _roleManager.Roles;
-            List<RoleCheckboxViewModel> viewModel = new List<RoleCheckboxViewModel>();
+            RoleCheckboxesViewModel rcvm = new RoleCheckboxesViewModel();
+            rcvm.UserId = usr.Id;
             foreach (var role in roles)
             {
                 RoleCheckboxViewModel vm = new RoleCheckboxViewModel();
-                vm.Role = role.Name;
+                vm.RoleName = role.Name;
+                vm.RoleId = role.Id;
                 if (arr.Contains(role.Name))
-                    vm.Selected = true;
+                    vm.IsChecked = true;
                 else
-                    vm.Selected = false;
-                viewModel.Add(vm);
+                    vm.IsChecked = false;
+                rcvm.Checkboxes.Add(vm);
             }
 
-            return View(viewModel);
+            return View(rcvm);
         }
 
         [HttpPost]
-        public IActionResult EditUsersRoles(List<RoleCheckboxViewModel> viewModel)
+        public async Task<IActionResult> EditUsersRoles(RoleCheckboxesViewModel viewModel)
         {
+            NeobooruUser usr = await _userManager.FindByIdAsync(viewModel.UserId);
+            foreach (var roleCheckboxViewModel in viewModel.Checkboxes)
+            {
+                if (roleCheckboxViewModel.IsChecked)
+                    await _userManager.AddToRoleAsync(usr, roleCheckboxViewModel.RoleName);
+                else
+                    await _userManager.RemoveFromRoleAsync(usr, roleCheckboxViewModel.RoleName);
+            }
             return RedirectToAction("ListUsers", "AdministrationPanel");
         }
 
