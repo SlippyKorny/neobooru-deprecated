@@ -29,7 +29,7 @@ namespace neobooru.ViewModels
             RegisteredAt = user.RegisteredOn;
             ProfileViews = user.Views; 
             PfpUrl = user.PfpUrl ?? "/img/prototyping/avatar.png";
-            BackgroundUrl = "/img/prototyping/backgrounds/1590x540p Background Placeholder Image.png";
+            BackgroundUrl = user.BgUrl ?? "/img/prototyping/backgrounds/1590x540p Background Placeholder Image.png";
             Gender = user.Gender ?? "Unknown";
             Descritpion = user.ProfileDescription ?? "";
             RecentlyUploaded = uploaded;

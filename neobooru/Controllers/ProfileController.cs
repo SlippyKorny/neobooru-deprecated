@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using ImageManipulation;
+using ImageManipulation.Exceptions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -31,7 +33,7 @@ namespace neobooru.Controllers
         }
 
         [HttpGet]
-        public IActionResult Profile(string profileId)
+        public async Task<IActionResult> Profile(string profileId)
         {
             ViewBag.SubsectionPages = _subsectionPages;
             ViewBag.ActiveSubpage = _subsectionPages[0];
@@ -41,20 +43,13 @@ namespace neobooru.Controllers
             else
                 Redirect("/");
 
-            NeobooruUser user = null;
-            foreach (var usr in _db.NeobooruUsers.ToArray())
-            {
-                if (usr.Id.Equals(profileId))
-                    user = usr;
-            }
-
+            NeobooruUser user = _db.NeobooruUsers.FirstOrDefault(a => a.Id.Equals(profileId));
+            
             if (user == null)
                 Redirect("/");
 
             List<ArtThumbnailViewModel> recentlyUploaded = _db.Arts.Where(a => a.Uploader.Id.Equals(profileId))
                 .OrderByDescending(a => a.CreatedAt).Take(5).Select(a => new ArtThumbnailViewModel(a)).ToList();
-            // TODO: Like date
-
 
             return View(new ProfileViewModel(user, recentlyUploaded));
         }
@@ -144,11 +139,28 @@ namespace neobooru.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        public IActionResult Settings()
+        public async Task<IActionResult> Settings()
         {
             ViewBag.SubsectionPages = _subsectionPages;
             ViewBag.ActiveSubpage = _subsectionPages[1];
-            return View();
+            
+            if (!_signInManager.IsSignedIn(User))
+            {
+                ModelState.AddModelError(string.Empty,
+                    "You have to be logged in to change your settings!");
+                return Redirect("/Profile/Settings");
+            }
+
+            NeobooruUser usr = await _userManager.GetUserAsync(User);
+            ProfileUpdateViewModel puvm = new ProfileUpdateViewModel()
+            {
+                Gender = usr.Gender,
+                Username = usr.UserName,
+                ProfileDescription = usr.ProfileDescription,
+            };
+
+
+            return View(puvm);
         }
 
         public IActionResult Help()
@@ -156,6 +168,77 @@ namespace neobooru.Controllers
             ViewBag.SubsectionPages = _subsectionPages;
             ViewBag.ActiveSubpage = _subsectionPages[2];
             return View();
+        }
+
+        public async Task<IActionResult> Update(ProfileUpdateViewModel puvm)
+        {
+            if (!ModelState.IsValid)
+                return Redirect("/Profile/Settings");
+            
+            if (!_signInManager.IsSignedIn(User))
+            {
+                ModelState.AddModelError(string.Empty,
+                    "You have to be logged in to change your settings!");
+                return Redirect("/Profile/Settings");
+            }
+
+            NeobooruUser usr = await _userManager.GetUserAsync(User);
+            usr.Gender = puvm.Gender;
+            usr.UserName = puvm.Username;
+            usr.ProfileDescription = puvm.ProfileDescription;
+
+            if (puvm.PfpImage != null)
+            {
+                Guid id;
+                if (usr.PfpUrl == null)
+                    id = Guid.NewGuid();
+                else
+                    id = Guid.Parse(usr.PfpUrl);
+
+                ImageFileManager ifmPfp = null;
+                try
+                {
+                    ifmPfp = new ImageFileManager("wwwroot/img/profiles/pfps/",
+                        puvm.PfpImage.OpenReadStream(), ImageUtils.ImgExtensionFromContentType(puvm.PfpImage.ContentType));
+                }
+                catch (InvalidArtDimensionsException e)
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid profile picture or background size! " +
+                                                           "Profile picture must be at least 400px by 400px");
+                    return Redirect("/Profile/Settings");
+                }
+
+                usr.PfpUrl = await ifmPfp.SavePfp(id);
+                usr.PfpUrl = usr.PfpUrl.Remove(0, 7);
+            }
+
+            if (puvm.BgImage != null)
+            {
+                Guid id;
+                if (usr.BgUrl == null)
+                    id = Guid.NewGuid();
+                else
+                    id = Guid.Parse(usr.BgUrl);
+
+                ImageFileManager ifmPfp = null;
+                try
+                {
+                    ifmPfp = new ImageFileManager("wwwroot/img/profiles/bgs/",
+                        puvm.BgImage.OpenReadStream(), ImageUtils.ImgExtensionFromContentType(puvm.BgImage.ContentType));
+                }
+                catch (InvalidArtDimensionsException e)
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid profile picture or background size! " +
+                                                           "Background must be at least 1590px by 540px");
+                    return Redirect("/Profile/Settings");
+                }
+
+                usr.BgUrl = await ifmPfp.SaveBg(id);
+                usr.BgUrl = usr.BgUrl.Remove(0, 7);
+            }
+
+            await _db.SaveChangesAsync();
+            return Redirect("/Profile/Profile");
         }
     }
 }

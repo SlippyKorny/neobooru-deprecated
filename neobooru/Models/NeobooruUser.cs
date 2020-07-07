@@ -10,7 +10,7 @@ namespace neobooru.Models
 
         public string PfpUrl { get; set; }
         
-        public string PfpThumbnailUrl { get; set; }
+        public string BgUrl { get; set; }
 
         public string ProfileDescription { get; set; }
         

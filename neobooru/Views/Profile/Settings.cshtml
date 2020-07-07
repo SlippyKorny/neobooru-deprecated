@@ -2,6 +2,57 @@
     ViewData["Section"] = "Profile";
     ViewData["Subsection"] = "Settings";
 }
+@model neobooru.ViewModels.Forms.ProfileUpdateViewModel
 
-<h1>Nothing here!</h1>
+<div class="card">
+    <div class="card-header">
+        <h3>Profile Settings</h3>
+    </div>
+    <div class="card-body">
+        <form method="post" enctype="multipart/form-data" asp-controller="Profile" asp-action="Update">
+            <div class="text-danger" asp-validation-summary="All"></div>
+            <div class="form-group row">
+                <div class="col-1">
+                    <label asp-for="Username"></label>
+                </div>
+                <div class="col-5">
+                    <input asp-for="Username" class="form-control" />
+                </div>
+                <div class="col-1">
+                    <label asp-for="PfpImage">Profile Picture</label>
+                </div>
+                <div class="col-5">
+                    <input asp-for="PfpImage" type="file" class="form-control-file">
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-1">
+                    <label asp-for="Gender"></label>
+                </div>
+                <div class="col-5">
+                    <input asp-for="Gender" class="form-control" />
+                </div>
+                <div class="col-1">
+                    <label asp-for="BgImage">Background image</label>
+                </div>
+                <div class="col-5">
+                    <input asp-for="BgImage" type="file" class="form-control-file">
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-1">
+                    <label asp-for="ProfileDescription">Description</label>
+                </div>
+                <div class="col-11">
+                    <textarea asp-for="ProfileDescription" class="form-control"></textarea>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <button class="btn btn-block" style="background: #1dd1a1; color: #fff;">Upload</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 
