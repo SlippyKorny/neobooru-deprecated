@@ -329,6 +329,13 @@ namespace neobooru.Controllers
             Art art = await _db.Arts.Include(a => a.Author)
                 .Include(a => a.Tags).ThenInclude(t => t.Tag)
                 .FirstOrDefaultAsync(a => a.Id.ToString().Equals(puvm.SecretId));
+            
+            // Delete old tag occurrences
+            foreach (var tag in art.Tags)
+                _db.TagOccurrences.Remove(tag);
+            await _db.SaveChangesAsync();
+            
+            // Change to new data
             Artist artist = _db.Artists.FirstOrDefault(a => a.ArtistName.Equals(puvm.Author));
             if (artist == null)
                 return Redirect("/Posts/List");
@@ -362,25 +369,41 @@ namespace neobooru.Controllers
                 }
             }
 
+            // Register new tag occurrences
             List<TagOccurrence> occurrences = new List<TagOccurrence>();
             foreach (var t in tagModels)
             {
-                TagOccurrence tagOccurrence = _db.TagOccurrences
-                    .FirstOrDefault(to => to.Tag.TagString.Equals(t.TagString));
-                if (tagOccurrence == null)
+                TagOccurrence to = new TagOccurrence()
                 {
-                    _db.TagOccurrences.Add(new TagOccurrence()
-                    {
-                        Art = art,
-                        ArtId = art.Id,
-                        Tag = t,
-                        TagId = t.Id
-                    });
-                }
-                occurrences.Add(tagOccurrence);
+                    ArtId = art.Id,
+                    TagId = t.Id,
+                    Art = art,
+                    Tag = t
+                };
+                occurrences.Add(to);
             }
 
             art.Tags = occurrences;
+
+            
+            // List<TagOccurrence> occurrences = new List<TagOccurrence>();
+            // foreach (var t in tagModels)
+            // {
+            //     TagOccurrence tagOccurrence = _db.TagOccurrences
+            //         .FirstOrDefault(to => to.Tag.TagString.Equals(t.TagString));
+            //     if (tagOccurrence == null)
+            //     {
+            //         _db.TagOccurrences.Add(new TagOccurrence()
+            //         {
+            //             Art = art,
+            //             ArtId = art.Id,
+            //             Tag = t,
+            //             TagId = t.Id
+            //         });
+            //     }
+            //     occurrences.Add(tagOccurrence);
+            // }
+
             await _db.SaveChangesAsync();
             
             return Redirect("/Posts/List");
