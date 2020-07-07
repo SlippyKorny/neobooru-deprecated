@@ -15,8 +15,6 @@ using neobooru.ViewModels.Forms;
 
 namespace neobooru.Controllers
 {
-    // remember that u can override this with [AllowAnonymous]
-    // [Authorize(Roles = "root")]
     public class AdministrationPanelController : Controller
     {
         
@@ -32,6 +30,12 @@ namespace neobooru.Controllers
             _roleManager = roleManager;
         }
 
+        public async Task<bool> UserIsAdmin()
+        {
+            NeobooruUser usr = await _userManager.GetUserAsync(User);
+            return await _userManager.IsInRoleAsync(usr, "root");
+        }
+
         [HttpGet]
         public IActionResult MainPanel()
         {
@@ -43,6 +47,9 @@ namespace neobooru.Controllers
         [HttpGet]
         public async Task<IActionResult> ListUsers()
         {
+            if (!await UserIsAdmin())
+                return Redirect("/Profile/Profile");
+            
             ViewBag.SubsectionPages = _subsectionPages;
             ViewBag.ActiveSubpage = _subsectionPages[1];
 
@@ -71,6 +78,9 @@ namespace neobooru.Controllers
         [HttpGet]
         public async Task<IActionResult> EditUsersRoles(string id)
         {
+            if (!await UserIsAdmin())
+                return Redirect("/Profile/Profile");
+
             ViewBag.SubsectionPages = _subsectionPages;
             ViewBag.ActiveSubpage = "Edit User";
 
@@ -99,6 +109,9 @@ namespace neobooru.Controllers
         [HttpPost]
         public async Task<IActionResult> EditUsersRoles(RoleCheckboxesViewModel viewModel)
         {
+            if (!await UserIsAdmin())
+                return Redirect("/Profile/Profile");
+
             NeobooruUser usr = await _userManager.FindByIdAsync(viewModel.UserId);
             foreach (var roleCheckboxViewModel in viewModel.Checkboxes)
             {
@@ -111,8 +124,11 @@ namespace neobooru.Controllers
         }
 
         [HttpGet]
-        public IActionResult ListRoles()
+        public async Task<IActionResult> ListRoles()
         {
+            if (!await UserIsAdmin())
+                return Redirect("/Profile/Profile");
+
             ViewBag.SubsectionPages = _subsectionPages;
             ViewBag.ActiveSubpage = _subsectionPages[2];
             var roles = _roleManager.Roles;
@@ -121,8 +137,11 @@ namespace neobooru.Controllers
         }
 
         [HttpGet]
-        public IActionResult CreateRole()
+        public async Task<IActionResult> CreateRole()
         {
+            if (!await UserIsAdmin())
+                return Redirect("/Profile/Profile");
+
             ViewBag.SubsectionPages = _subsectionPages;
             ViewBag.ActiveSubpage = _subsectionPages[3];
             return View();
@@ -131,6 +150,10 @@ namespace neobooru.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateRole(CreateRoleViewModel createRoleViewModel)
         {
+            if (!await UserIsAdmin())
+                return Redirect("/Profile/Profile");
+
+            
             if (ModelState.IsValid)
             {
                 IdentityRole identityRole = new IdentityRole 
@@ -153,6 +176,9 @@ namespace neobooru.Controllers
         [HttpGet]
         public async Task<IActionResult> EditRole(string id)
         {
+            if (!await UserIsAdmin())
+                return Redirect("/Profile/Profile");
+
             ViewBag.SubsectionPages = _subsectionPages;
             ViewBag.ActiveSubpage = "Edit Role";
 
@@ -183,6 +209,9 @@ namespace neobooru.Controllers
         [HttpPost]
         public async Task<IActionResult> EditRole(EditRoleViewModel ervmModel)
         {
+            if (!await UserIsAdmin())
+                return Redirect("/Profile/Profile");
+            
             ViewBag.SubsectionPages = _subsectionPages;
             ViewBag.ActiveSubpage = "Edit Role";
 
@@ -207,8 +236,11 @@ namespace neobooru.Controllers
 
 
         [HttpGet]
-        public IActionResult Help()
+        public async Task<IActionResult> Help()
         {
+            if (!await UserIsAdmin())
+                return Redirect("/Profile/Profile");
+            
             ViewBag.SubsectionPages = _subsectionPages;
             ViewBag.ActiveSubpage = _subsectionPages[4];
             return View();
