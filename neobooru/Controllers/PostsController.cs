@@ -387,9 +387,23 @@ namespace neobooru.Controllers
         }
 
         [HttpGet]
-        public IActionResult Delete(string postId)
+        public async Task<IActionResult> Delete(string postId)
         {
+            Art art = await _db.Arts.Include(a => a.Tags)
+                .Include(a => a.Comments).Include(a => a.Likes)
+                .FirstOrDefaultAsync(a => a.Id.ToString().Equals(postId));
+
+            foreach (var like in art.Likes)
+                _db.ArtLikes.Remove(like);
+
+            foreach (var comment in art.Comments)
+                _db.ArtComments.Remove(comment);
+
+            foreach (var tag in art.Tags)
+                _db.TagOccurrences.Remove(tag);
             
+            _db.Arts.Remove(art);
+            await _db.SaveChangesAsync();
             return Redirect("/Posts/List");
         }
     }
