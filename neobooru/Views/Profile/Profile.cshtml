@@ -56,23 +56,42 @@
                 <h2 style="margin-left: auto; margin-right: auto;">Recent Uploads</h2>
             </div>
         <div class="row">
-            @{ int length = Model.RecentlyUploaded.Count() > 5 ? 5 : Model.RecentlyUploaded.Count();}
-            @for (int i = 0; i < length; i++)
+@*             @{ int length = Model.RecentlyUploaded.Count() > 5 ? 5 : Model.RecentlyUploaded.Count();} *@
+@*             @for (int i = 0; i < length; i++) *@
+@*             { *@
+@*                 <div class="col-sm"> *@
+@*                     <a href="@Url.Content("/posts/post?postId=" + Model.RecentlyUploaded[i].ArtId)"> *@
+@*                         <div class="card w-20"> *@
+@*                             <img src="@Url.Content(Model.RecentlyUploaded[i].FileUrl)" class="card-img-top"/> *@
+@*                             <div class="card-footer"> *@
+@*                                 <h5 class="card-title">@Model.RecentlyUploaded[i].ArtName</h5> *@
+@*                                 <p class="card-text"> *@
+@*                                     Made by @Model.RecentlyUploaded[i].ArtistName<br/> *@
+@*                                     Uploaded: @Model.RecentlyUploaded[i].UploadDate.ToString() *@
+@*                                 </p> *@
+@*                             </div> *@
+@*                         </div> *@
+@*                     </a> *@
+@*                 </div> *@
+@*             } *@
+            @{ int a = 0;}
+            @for (; a < Model.RecentlyUploaded.Count; a++)
             {
                 <div class="col-sm">
-                    <a href="@Url.Content("/posts/post?postId=" + Model.RecentlyUploaded[i].ArtId)">
+                    <a href="@Url.Content("/posts/post?postId=" + Model.RecentlyUploaded[a].ArtId)">
                         <div class="card w-20">
-                            <img src="@Url.Content(Model.RecentlyUploaded[i].FileUrl)" class="card-img-top"/>
+                            <img src="@Url.Content(Model.RecentlyUploaded[a].FileUrl)" class="card-img-top"/>
                             <div class="card-footer">
-                                <h5 class="card-title">@Model.RecentlyUploaded[i].ArtName</h5>
-                                <p class="card-text">
-                                    Made by @Model.RecentlyUploaded[i].ArtistName<br/>
-                                    Uploaded: @Model.RecentlyUploaded[i].UploadDate.ToString()
-                                </p>
+                                <h5 class="card-title">@Model.RecentlyUploaded[a].ArtName</h5>
+                                <p class="card-text">Made by @Model.RecentlyUploaded[a].ArtistName<br/>Uploaded: @Model.RecentlyUploaded[a].UploadDate.ToString()</p>
                             </div>
                         </div>
                     </a>
                 </div>
+            }
+            @for (; a < 5; a++)
+            {
+                <div class="col-sm"></div>
             }
         </div>
         </div>
