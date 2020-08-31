@@ -274,7 +274,7 @@ namespace neobooru.Controllers
         }
 
         [HttpGet]
-        public IActionResult Post(string postId)
+        public async Task<IActionResult> Post(string postId)
         {
             ViewBag.SubsectionPages = _subsectionPages;
             ViewBag.ActiveSubpage = "Artist";
@@ -291,8 +291,50 @@ namespace neobooru.Controllers
             List<string> tags = new List<string>();
             foreach (var tag in art.Tags)
                 tags.Add(_db.Tags.First(t => t.Id.ToString().Equals(tag.TagId.ToString())).TagString);
+
+            bool liked = false;
+            if (_signInManager.IsSignedIn(User))
+            {
+                NeobooruUser usr = await _userManager.GetUserAsync(User);
+                liked = _db.ArtLikes.Any(like =>
+                    like.User.Id.Equals(usr.Id) && like.LikedArt.Id.ToString().Equals(postId));
+            }
+
+            return View(new PostViewModel(art, artCount, subs, tags, liked));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> PostLike(string artId)
+        {
+            if (!_signInManager.IsSignedIn(User))
+                return StatusCode(403);
+
+            NeobooruUser usr = await _userManager.GetUserAsync(User);
+            Art targetArt = await _db.Arts.FirstAsync(a => a.Id.ToString().Equals(artId));
+            ArtLike like = new ArtLike()
+            {
+                Id = Guid.NewGuid(),
+                LikedArt = targetArt,
+                User = usr
+            };
+            await _db.ArtLikes.AddAsync(like);
+            await _db.SaveChangesAsync();
             
-            return View(new PostViewModel(art, artCount, subs, tags));
+            return StatusCode(200);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> PostUnlike(string artId)
+        {
+            if (!_signInManager.IsSignedIn(User))
+                return StatusCode(403);
+
+            NeobooruUser usr = await _userManager.GetUserAsync(User);
+            ArtLike like = await _db.ArtLikes.FirstAsync(a => a.User.Id.Equals(usr.Id) && 
+                                                   a.LikedArt.Id.ToString().Equals(artId));
+            _db.ArtLikes.Remove(like);
+            await _db.SaveChangesAsync();
+            return StatusCode(200);
         }
 
         [HttpGet]

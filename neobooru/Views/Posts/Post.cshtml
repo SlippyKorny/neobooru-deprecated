@@ -5,6 +5,43 @@
 }
 @model neobooru.ViewModels.PostViewModel
 
+<script>
+    var liked = @Model.ArtLiked.ToString().ToLower();
+    
+    function likeBtnHandler() {
+        let btn = document.getElementById('likeBtn');
+        console.log(btn);
+        if (liked) {
+            sendUnlikeRequest();
+            btn.style.backgroundColor = "#fff";
+            btn.style.border = "1px solid #f368e0";
+            btn.style.color = "#f368e0";
+            btn.getElementsByTagName("span")[0].innerText = "Like";
+            liked = false;
+        } else {
+            sendLikeRequest();
+            btn.style.color = "#fff";
+            btn.style.backgroundColor = "#f368e0";
+            btn.getElementsByTagName("span")[0].innerText = "Unlike";
+            liked = true;
+        }
+    }
+    
+    function sendLikeRequest() {
+        var xhttp = new XMLHttpRequest();
+        
+        xhttp.open("GET", "/posts/PostLike?artId=@Model.PostId.ToString()", true);
+        xhttp.send();
+    }
+    
+    function sendUnlikeRequest() {
+        var xhttp = new XMLHttpRequest();
+                
+        xhttp.open("GET", "/posts/PostUnlike?artId=@Model.PostId.ToString()", true);
+        xhttp.send();
+    }
+</script>
+
 <div id="art-box">
     @if (signInManager.IsSignedIn(User) && User.IsInRole("root"))
     {
@@ -23,12 +60,31 @@
     </div>
     <div id="art-data" style="margin-top: 10px;">
         <div class="row">
-            <h2 class="float-left">@Model.PostName</h2>
-            <div class="float-left ml-3 mt-2 text-muted">by
-                <a href="@Url.Content("/artists/artist?artistId=" + Model.ArtistThumbnail.Id)">@Model.ArtistName</a>
+            <div class="col-sm-3">
+                <h2 class="float-left">@Model.PostName</h2>
+                <div class="float-left ml-3 mt-2 text-muted">by
+                    <a href="@Url.Content("/artists/artist?artistId=" + Model.ArtistThumbnail.Id)">@Model.ArtistName</a>
+                </div>
+            </div>
+            <div class="col-sm-8"></div>
+            <div class="col-sm-1 pt-1">
+                @if (!Model.ArtLiked)
+                {
+                    <button style="border: 1px solid #f368e0; color: #f368e0;" class="btn"
+                            onclick="likeBtnHandler()" id="likeBtn">
+                        <i class="far fa-heart"></i> Like
+                    </button>
+                }
+                else
+                {
+                    <button style="border: 1px solid #f368e0; background-color: #f368e0; color: #fff;" class="btn"
+                            onclick="likeBtnHandler()" id="likeBtn">
+                        <i class="fas fa-heart"></i> <span>Unlike</span>
+                    </button>
+                }
             </div>
         </div>
-        <hr/>
+        <hr class="mt-0"/>
 
         <div class="row">
             <div class="col-sm-6">

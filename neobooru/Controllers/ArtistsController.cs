@@ -87,30 +87,34 @@ namespace neobooru.Controllers
             Guid id = Guid.NewGuid();
 
             ImageFileManager ifmPfp = null, ifmBg = null;
+            string pfp, bg = null;
             try
             {
+                // Load images
                 ifmPfp = new ImageFileManager("wwwroot/img/profiles/pfps/", model.Pfp.OpenReadStream(),
                     ImageUtils.ImgExtensionFromContentType(model.Pfp.ContentType));
                 if (model.BackgroundImage != null)
                     ifmBg = new ImageFileManager("wwwroot/img/profiles/bgs/",
                         model.BackgroundImage.OpenReadStream(), 
                         ImageUtils.ImgExtensionFromContentType(model.BackgroundImage.ContentType));
+                
+                // Save images
+                pfp = await ifmPfp.SavePfp(id);
+                pfp = pfp.Remove(0, 7);
+                if (ifmBg != null)
+                {
+                    bg = await ifmBg.SaveBg(id);
+                    bg = bg.Remove(0, 7);
+                }
             }
             catch (InvalidArtDimensionsException e)
             {
                 ModelState.AddModelError(string.Empty, "Invalid profile picture or background size! " +
-                                                       "Profile picture must be at least 400px by 400px and background" +
-                                                       "must be at least 1590px by 540px");
+                                                       "Profile picture must be at least 400px by 400px and in 1:1 ratio " +
+                                                       "and background must be at least 1590px by 540px");
                 return View();
             }
-            string pfp, bg = null;
-            pfp = await ifmPfp.SavePfp(id);
-            pfp = pfp.Remove(0, 7);
-            if (ifmBg != null)
-            {
-                bg = await ifmBg.SaveBg(id);
-                bg = bg.Remove(0, 7);
-            }
+
 
             Artist artist = new Artist()
             {
