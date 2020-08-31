@@ -36,13 +36,13 @@ namespace neobooru.Controllers
         }
         
         [HttpGet]
-        public async Task<IActionResult> List(string tagString, int page)
+        public async Task<IActionResult> List(string tagString, int page, string sortBy, string orderBy)
         {
             ViewBag.SubsectionPages = _subsectionPages;
             ViewBag.ActiveSubpage = _subsectionPages[0];
 
             List<ArtThumbnailViewModel> thumbnails;
-            if (tagString == null)
+            if (tagString == null && sortBy == null && orderBy == null)
             {
                 thumbnails = new List<ArtThumbnailViewModel>();
                 await _db.Arts.Include(a => a.Author)
@@ -55,13 +55,20 @@ namespace neobooru.Controllers
             
                 return View(thumbnails);
             }
-            
-            List<string> rawTags = tagString.Split(" ").ToList();
+
+            List<string> rawTags = new List<string>();
+            if (tagString != null)
+                rawTags.AddRange(tagString.Split(" ").ToList());
             IEnumerable<Art> arts = null;
             
+            // If sortBy and orderBy are available then add them
+            if (sortBy != null && orderBy != null)
+            {
+                string tagStr = orderBy + ":" + sortBy;
+                rawTags.Add(tagStr);
+            }
             
             // >>> Sorting filters <<<
-            
             // author
             IEnumerable<string> artistTags = rawTags.Where(t => t.ToLower().Contains("artist:")).Select(a => a = a.Remove(0, 7));
             if (artistTags.Any())
