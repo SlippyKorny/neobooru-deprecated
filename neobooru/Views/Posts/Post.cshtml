@@ -158,9 +158,42 @@
                 <div class="row ml-1 mt-2">
                     <h4>Comments</h4>
                 </div>
-                <div class="row ml-1">
-                    <i>Nothing to find here!</i>&nbsp;ヽ(￣д￣;)ノ=3=3=3
-                </div>
+                @if (signInManager.IsSignedIn(User))
+                {
+                    <form class="row border bg-white p-2 ml-2 mb-2" method="post"  action="/posts/PostComment">
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <input name="artId" value="@Model.PostId" style="display: none;">
+                                <label class="col-sm-2">Comment content:</label>
+                                <textarea class="form-control col-sm-10" name="CommentString"></textarea>
+                            </div>
+                            <div class="row mt-2">
+                                <button class="col-sm-12" class="btn text-white px-4"
+                                        style="background-color: #218c74; border: 1px solid #218c74; color: #fff !important;">
+                                    Upload the comment
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                }
+                @if (Model.Comments.Count == 0)
+                {
+                    <div class="row ml-1">
+                        <i>Nothing to find here! Nobody has commented yet!</i>&nbsp;ヽ(￣д￣;)ノ=3=3=3
+                    </div>
+                }
+                @foreach (var comment in Model.Comments)
+                {
+                    <div class="row ml-1 border bg-white mt-3">
+                        <div class="col-sm-2 mt-2 mb-3">
+                            <a href="#"><img src="@Url.Content(comment.PfpUrl)" class="img-thumbnail float-left" style="max-width: 100px;"></a>
+                        </div>
+                        <div class="col-sm-10 mt-3">
+                            <h5><a href="#">@comment.AuthorName</a></h5>
+                            <p>@comment.Content</p>
+                        </div>
+                    </div> 
+                }
             </div>
         </div>
 

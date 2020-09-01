@@ -307,7 +307,18 @@ namespace neobooru.Controllers
                     like.User.Id.Equals(usr.Id) && like.LikedArt.Id.ToString().Equals(postId));
             }
 
-            return View(new PostViewModel(art, artCount, subs, tags, liked));
+            List<CommentViewModel> comments = new List<CommentViewModel>();
+            await _db.ArtComments.Where(comment => comment.CommentedArt.Id.ToString().Equals(postId))
+                .ForEachAsync(comment =>
+                {
+                    comments.Add(new CommentViewModel(comment.User.UserName, comment.User.PfpUrl, comment.Content,
+                        comment.CommentedOn));
+                });
+            
+            comments.Sort((a, b) => a.Date > b.Date ? -1 : 1);
+
+            return View(new PostViewModel(art, artCount, subs, tags, comments,
+                liked));
         }
 
         [HttpGet]
@@ -344,6 +355,23 @@ namespace neobooru.Controllers
             return StatusCode(200);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> PostComment(string CommentString, string artId)
+        {
+            ArtComment ac = new ArtComment()
+            {
+                Id = Guid.NewGuid(),
+                User = await _userManager.GetUserAsync(User),
+                Content = CommentString,
+                CommentedOn = DateTime.Now,
+                CommentedArt = await _db.Arts.FirstAsync(a => a.Id.ToString().Equals(artId))
+            };
+            await _db.ArtComments.AddAsync(ac);
+            await _db.SaveChangesAsync();
+            
+            return Redirect("/posts/post?postId=" + artId);
+        }
+        
         [HttpGet]
         public async Task<IActionResult> Edit(string postId)
         {

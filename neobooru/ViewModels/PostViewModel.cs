@@ -29,6 +29,8 @@ namespace neobooru.ViewModels
 
         public readonly string ArtistName;
 
+        public readonly List<CommentViewModel> Comments;
+
         public readonly List<string> Tags;
 
         public readonly ArtistThumbnailViewModel ArtistThumbnail;
@@ -37,7 +39,8 @@ namespace neobooru.ViewModels
 
         private PostViewModel() { }
 
-        public PostViewModel(Art art, int numOfArts, int numOfSubs, List<string> tags, bool liked)
+        public PostViewModel(Art art, int numOfArts, int numOfSubs, List<string> tags, List<CommentViewModel> comments,
+            bool liked)
         {
             ArtistThumbnail = new ArtistThumbnailViewModel(art.Author, numOfArts, numOfSubs);
 
@@ -53,10 +56,11 @@ namespace neobooru.ViewModels
             ArtistName = art.Author.ArtistName;
             Tags = tags;
             ArtLiked = liked;
+            Comments = comments;
 
             // foreach (Tag tag in art.Tags)
             // foreach (Tag tag in art.Tags.Select(to => to.Tag))
-                // Tags.Add(tag.TagString);
+            // Tags.Add(tag.TagString);
         }
     }
 }
