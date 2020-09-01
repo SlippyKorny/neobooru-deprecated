@@ -189,11 +189,7 @@ namespace neobooru.Controllers
 
             if (puvm.PfpImage != null)
             {
-                Guid id;
-                if (usr.PfpUrl == null)
-                    id = Guid.NewGuid();
-                else
-                    id = Guid.Parse(usr.PfpUrl);
+                Guid id = Guid.NewGuid();
 
                 ImageFileManager ifmPfp = null;
                 try
@@ -214,11 +210,7 @@ namespace neobooru.Controllers
 
             if (puvm.BgImage != null)
             {
-                Guid id;
-                if (usr.BgUrl == null)
-                    id = Guid.NewGuid();
-                else
-                    id = Guid.Parse(usr.BgUrl);
+                Guid id = Guid.NewGuid();
 
                 ImageFileManager ifmPfp = null;
                 try
