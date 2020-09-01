@@ -5,10 +5,13 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using ImageManipulation;
 using ImageManipulation.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using neobooru.Models;
+using neobooru.Services;
 using neobooru.ViewModels;
 using neobooru.ViewModels.Forms;
 
@@ -20,16 +23,22 @@ namespace neobooru.Controllers
 
         private SignInManager<NeobooruUser> _signInManager;
 
+        private ILogger<ProfileController> _logger;
+
+        private IMailService _mailService;
+
         private readonly NeobooruDataContext _db;
-        
-        private readonly string[] _subsectionPages = { "Profile", "Settings", "Help"};
+
+        private readonly string[] _subsectionPages = {"Profile", "Settings", "Help"};
 
         public ProfileController(NeobooruDataContext db, UserManager<NeobooruUser> userManager,
-            SignInManager<NeobooruUser> signInManager)
+            SignInManager<NeobooruUser> signInManager, ILogger<ProfileController> logger, IMailService mailService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _db = db;
+            _logger = logger;
+            _mailService = mailService;
         }
 
         [HttpGet]
@@ -44,7 +53,7 @@ namespace neobooru.Controllers
                 Redirect("/");
 
             NeobooruUser user = _db.NeobooruUsers.FirstOrDefault(a => a.Id.Equals(profileId));
-            
+
             if (user == null)
                 Redirect("/");
 
@@ -74,16 +83,34 @@ namespace neobooru.Controllers
             ViewBag.ActiveSubpage = _subsectionPages[1];
             if (ModelState.IsValid)
             {
-                // TODO: Change email -> do not use it as login/username
-                NeobooruUser user = new NeobooruUser { 
-                    UserName = model.Email, 
-                    Email = model.Email, 
+                NeobooruUser user = new NeobooruUser
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
                     RegisteredOn = DateTime.Now
                 };
                 IdentityResult result = await _userManager.CreateAsync(user, model.Password);
 
                 if (result.Succeeded)
                 {
+                    // Generate email confirmation link
+                    string token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    var confirmationLink = Url.Action("ConfirmEmail", "Profile", new
+                    {
+                        userId = user.Id,
+                        token = token,
+                    }, Request.Scheme);
+                    
+                    // Send the mail
+                    MailRequest mr = new MailRequest()
+                    {
+                        ToEmail = user.Email,
+                        Subject = "Confirm your account's email",
+                        Body = "Please click this link to confirm your account: " + confirmationLink
+                    };
+                    await _mailService.SendEmailAsync(mr);
+                    _logger.Log(LogLevel.Warning, confirmationLink);
+
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return RedirectToAction("index", "Home");
                 }
@@ -93,6 +120,22 @@ namespace neobooru.Controllers
             }
 
             return View(model);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> ConfirmEmail(string userId, string token)
+        {
+            if (userId == null || token == null)
+                return RedirectToAction("index", "home");
+            NeobooruUser user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+                return RedirectToAction("index", "home");
+
+            var result = await _userManager.ConfirmEmailAsync(user, token);
+            if (result.Succeeded)
+                return RedirectToAction("Profile", "Profile");
+            return RedirectToAction("index", "home");
         }
 
         [HttpGet]

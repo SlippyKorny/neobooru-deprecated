@@ -8,6 +8,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using neobooru.Models;
 using neobooru.seeds;
+using neobooru.Services;
+using neobooru.Settings;
 
 namespace neobooru
 {
@@ -31,7 +33,8 @@ namespace neobooru
 
             services.AddControllersWithViews();
 
-            services.AddIdentity<NeobooruUser, IdentityRole>().AddEntityFrameworkStores<NeobooruDataContext>();
+            services.AddIdentity<NeobooruUser, IdentityRole>().AddEntityFrameworkStores<NeobooruDataContext>()
+                .AddDefaultTokenProviders();
 
             services.ConfigureApplicationCookie(options =>
             {
@@ -40,6 +43,10 @@ namespace neobooru
                 options.LoginPath = "/Profile/Login";
                 options.LogoutPath = "/Profile/Logout";
             });
+            
+            services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
+
+            services.AddTransient<IMailService, Services.MailService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
