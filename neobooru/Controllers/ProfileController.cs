@@ -8,8 +8,6 @@ using ImageManipulation.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using neobooru.Models;
 using neobooru.Services;
 using neobooru.ViewModels;
@@ -23,8 +21,6 @@ namespace neobooru.Controllers
 
         private SignInManager<NeobooruUser> _signInManager;
 
-        private ILogger<ProfileController> _logger;
-
         private IMailService _mailService;
 
         private readonly NeobooruDataContext _db;
@@ -32,12 +28,11 @@ namespace neobooru.Controllers
         private readonly string[] _subsectionPages = {"Profile", "Settings", "Help"};
 
         public ProfileController(NeobooruDataContext db, UserManager<NeobooruUser> userManager,
-            SignInManager<NeobooruUser> signInManager, ILogger<ProfileController> logger, IMailService mailService)
+            SignInManager<NeobooruUser> signInManager, IMailService mailService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _db = db;
-            _logger = logger;
             _mailService = mailService;
         }
 
@@ -109,7 +104,6 @@ namespace neobooru.Controllers
                         Body = "Please click this link to confirm your account: " + confirmationLink
                     };
                     await _mailService.SendEmailAsync(mr);
-                    _logger.Log(LogLevel.Warning, confirmationLink);
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return RedirectToAction("index", "Home");
