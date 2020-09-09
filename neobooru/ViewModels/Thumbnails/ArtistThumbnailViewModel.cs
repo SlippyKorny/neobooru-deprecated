@@ -20,11 +20,11 @@ namespace neobooru.ViewModels
 
         public readonly int Subscriptions;
 
-        public readonly int ProfileViews;
+        public readonly int ArtistTotalLikes;
 
         private ArtistThumbnailViewModel() { }
 
-        public ArtistThumbnailViewModel(Artist artist, int numOfArts, int numOfSubs)
+        public ArtistThumbnailViewModel(Artist artist, int numOfArts, int numOfSubs, int numberOfLikes)
         {
             Id = artist.Id.ToString();
             ArtistName = artist.ArtistName;
@@ -32,7 +32,7 @@ namespace neobooru.ViewModels
             NumberOfArts = numOfArts;
             RegistrationTime = artist.RegisteredAt;
             Subscriptions = numOfSubs;
-            ProfileViews = artist.ProfileViews;
+            ArtistTotalLikes = numberOfLikes;
         }
     }
 }

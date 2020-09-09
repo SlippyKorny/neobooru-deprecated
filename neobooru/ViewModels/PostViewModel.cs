@@ -40,9 +40,9 @@ namespace neobooru.ViewModels
         private PostViewModel() { }
 
         public PostViewModel(Art art, int numOfArts, int numOfSubs, List<string> tags, List<CommentViewModel> comments,
-            bool liked)
+            bool liked, int totalLikes)
         {
-            ArtistThumbnail = new ArtistThumbnailViewModel(art.Author, numOfArts, numOfSubs);
+            ArtistThumbnail = new ArtistThumbnailViewModel(art.Author, numOfArts, numOfSubs, totalLikes);
 
             PostId = art.Id;
             PostName = art.Name;

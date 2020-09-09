@@ -285,13 +285,15 @@ namespace neobooru.Controllers
         {
             ViewBag.SubsectionPages = _subsectionPages;
             ViewBag.ActiveSubpage = "Artist";
-
+            
             Art art = _db.Arts.Include(a => a.Author).Include(a => a.Uploader)
-                .Include(a => a.Tags).FirstOrDefault(a => a.Id.ToString().Equals(postId));
+                .Include(a => a.Tags).Include(a => a.Likes)
+                .FirstOrDefault(a => a.Id.ToString().Equals(postId));
             if (art == null)
                 return Redirect("/posts/list");
 
-            var artist = _db.Artists.First(a => a.Id.ToString().Equals(art.Author.Id.ToString()));
+            var artist = _db.Artists.Include(a => a.Subscriptions)
+                .First(a => a.Id.ToString().Equals(art.Author.Id.ToString()));
             int artCount = _db.Arts.Include(a => a.Author).Count(a => a.Author.
                 Id.ToString().Equals(artist.Id.ToString()));
             int subs = artist.Subscriptions?.Count() ?? 0;
@@ -317,8 +319,11 @@ namespace neobooru.Controllers
             
             comments.Sort((a, b) => a.Date > b.Date ? -1 : 1);
 
+            int totalLikes = _db.ArtLikes.Include(al => al.LikedArt.Author)
+                .Count(al => al.LikedArt.Author.Id.ToString().Equals(art.Author.Id.ToString()));
+
             return View(new PostViewModel(art, artCount, subs, tags, comments,
-                liked));
+                liked, totalLikes));
         }
 
         [HttpGet]
