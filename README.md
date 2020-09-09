@@ -15,3 +15,11 @@ After that you can simply run the server by running the neobooru.exe file.
 
 # Screenshots
 
+![Post Listing Screenshot](https://github.com/TheSlipper/neobooru/blob/master/screenshots/listing.png)
+*Screenshot 1 - Listing of posts*
+
+![Artist profile screenshot](https://github.com/TheSlipper/neobooru/blob/master/screenshots/artist_profile.png)
+*Screenshot 2 - Profile of an artist*
+
+![Post view screenshot](https://github.com/TheSlipper/neobooru/blob/master/screenshots/art_view.png)
+*Screenshot 3 - Post with details and comments*
