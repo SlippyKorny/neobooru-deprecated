@@ -46,7 +46,8 @@ namespace neobooru.Controllers
             {
                 int artCount = _db.Arts.Count(b => b.Author.Id.Equals(a.Id));
                 int subCount = _db.ArtistSubscriptions.Count(b => b.Artist.Id.Equals(a.Id));
-                int likeCount = _db.ArtLikes.Count(al => al.LikedArt.Id.ToString().Equals(a.Id.ToString()));
+                int likeCount = _db.ArtLikes.Include(al => al.LikedArt.Author)
+                    .Count(al => al.LikedArt.Author.Id.ToString().Equals(a.Id.ToString()));
                 artists.Add(new ArtistThumbnailViewModel(a, artCount, subCount, likeCount));
             });
 
