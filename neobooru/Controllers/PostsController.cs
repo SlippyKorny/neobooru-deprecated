@@ -333,7 +333,8 @@ namespace neobooru.Controllers
             {
                 Id = Guid.NewGuid(),
                 LikedArt = targetArt,
-                User = usr
+                User = usr,
+                LikedDate = DateTime.Now
             };
             await _db.ArtLikes.AddAsync(like);
             await _db.SaveChangesAsync();

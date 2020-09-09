@@ -4,24 +4,6 @@
 }
 @model neobooru.ViewModels.ProfileViewModel
 
-@* <div class="card"> *@
-@*     <div class="card-header"> *@
-@*         My Profile *@
-@*     </div> *@
-@*     <div class="card-body"> *@
-@*         <div class="row"> *@
-@*             <div class="column w-5"> *@
-@*                 <img src="~/img/prototyping/avatar.png" class="rounded"/> *@
-@*             </div> *@
-@*             <div class="col-sm"> *@
-@*                 <b>Nickname:</b> Slipper *@
-@*             </div> *@
-@*         </div> *@
-@*     </div> *@
-@*     $1$ <div class="card-footer"> #1# *@
-@*     $1$ </div> #1#  *@
-@* </div> *@
-
 <div id="artist-profile">
     <div id="artist-upper-section">
         <div class="row">
@@ -39,7 +21,7 @@
                 <div style="margin-top: 140px; margin-left: 20px;"></div>
             </div>
             <div class="col-md-11 h-100">
-                <img src="@Url.Content(Model.PfpUrl)" class="rounded float-left" style="border: solid 1px #1dd1a1; max-height:100%; margin-right: 20px;" />
+                <img src="@Url.Content(Model.PfpUrl)" class="rounded float-left" style="border: solid 1px #1dd1a1; max-height:100%; margin-right: 20px;"/>
                 <h2 class="float-left" style="margin-top: 140px;  display: block;">@Model.Username</h2>
                 <div id="artist-data float-left" style="margin-top: 170px;">
                 </div>
@@ -52,29 +34,11 @@
     </div>
     <hr/>
     <div id="artist-lower-section">
-            <div class="row">
-                <h2 style="margin-left: auto; margin-right: auto;">Recent Uploads</h2>
-            </div>
+        <div class="row mt-5">
+            <h2 style="margin-left: auto; margin-right: auto;">Recent Uploads</h2>
+        </div>
         <div class="row">
-@*             @{ int length = Model.RecentlyUploaded.Count() > 5 ? 5 : Model.RecentlyUploaded.Count();} *@
-@*             @for (int i = 0; i < length; i++) *@
-@*             { *@
-@*                 <div class="col-sm"> *@
-@*                     <a href="@Url.Content("/posts/post?postId=" + Model.RecentlyUploaded[i].ArtId)"> *@
-@*                         <div class="card w-20"> *@
-@*                             <img src="@Url.Content(Model.RecentlyUploaded[i].FileUrl)" class="card-img-top"/> *@
-@*                             <div class="card-footer"> *@
-@*                                 <h5 class="card-title">@Model.RecentlyUploaded[i].ArtName</h5> *@
-@*                                 <p class="card-text"> *@
-@*                                     Made by @Model.RecentlyUploaded[i].ArtistName<br/> *@
-@*                                     Uploaded: @Model.RecentlyUploaded[i].UploadDate.ToString() *@
-@*                                 </p> *@
-@*                             </div> *@
-@*                         </div> *@
-@*                     </a> *@
-@*                 </div> *@
-@*             } *@
-            @{ int a = 0;}
+            @{ int a = 0; }
             @for (; a < Model.RecentlyUploaded.Count; a++)
             {
                 <div class="col-sm">
@@ -94,5 +58,49 @@
                 <div class="col-sm"></div>
             }
         </div>
+        <div class="row mt-4">
+            <div class="col-sm text-center text-secondary">
+                <a href="#">
+                    <h5>
+                        <i>See more...</i>
+                    </h5>
+                </a>
+            </div>
         </div>
+        <hr class="mt-0"/>
+        <div class="row mt-5">
+            <h2 style="margin-left: auto; margin-right: auto;">Recent Likes</h2>
+        </div>
+        <div class="row">
+            @{ a = 0; }
+            @for (; a < Model.RecentlyUploaded.Count; a++)
+            {
+                <div class="col-sm">
+                    <a href="@Url.Content("/posts/post?postId=" + Model.RecentlyUploaded[a].ArtId)">
+                        <div class="card w-20">
+                            <img src="@Url.Content(Model.RecentlyUploaded[a].FileUrl)" class="card-img-top"/>
+                            <div class="card-footer">
+                                <h5 class="card-title">@Model.RecentlyUploaded[a].ArtName</h5>
+                                <p class="card-text">Made by @Model.RecentlyUploaded[a].ArtistName<br/>Uploaded: @Model.RecentlyUploaded[a].UploadDate.ToString()</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            }
+            @for (; a < 5; a++)
+            {
+                <div class="col-sm"></div>
+            }
+        </div>
+        <div class="row mt-4">
+            <div class="col-sm text-center text-secondary">
+                <a href="#">
+                    <h5>
+                        <i>See more...</i>
+                    </h5>
+                </a>
+            </div>
+        </div>
+        <hr class="mt-0"/>
+    </div>
 </div>

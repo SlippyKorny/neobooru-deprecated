@@ -40,22 +40,22 @@ namespace neobooru.Controllers
         {
             ViewBag.SubsectionPages = _subsectionPages;
             ViewBag.ActiveSubpage = _subsectionPages[0];
-            
+
             List<ArtistThumbnailViewModel> artists = new List<ArtistThumbnailViewModel>();
-            await _db.Artists.OrderByDescending(a => a.RegisteredAt).Skip(page*20).Take(20).ForEachAsync(a =>
+            await _db.Artists.OrderByDescending(a => a.RegisteredAt).Skip(page * 20).Take(20).ForEachAsync(a =>
             {
                 int artCount = _db.Arts.Count(b => b.Author.Id.Equals(a.Id));
                 int subCount = _db.ArtistSubscriptions.Count(b => b.Artist.Id.Equals(a.Id));
                 artists.Add(new ArtistThumbnailViewModel(a, artCount, subCount));
             });
-            
+
             ViewBag.PreviousPage = page == 0 ? "" : page.ToString();
             ViewBag.Page = page + 1;
-            ViewBag.NextPage = _db.Arts.Count() > (page+1) * 20 ? (page + 2).ToString() : "";
+            ViewBag.NextPage = _db.Arts.Count() > (page + 1) * 20 ? (page + 2).ToString() : "";
 
             return View(artists);
         }
-        
+
         #endregion
 
         #region ArtistRegistration
@@ -95,9 +95,9 @@ namespace neobooru.Controllers
                     ImageUtils.ImgExtensionFromContentType(model.Pfp.ContentType));
                 if (model.BackgroundImage != null)
                     ifmBg = new ImageFileManager("wwwroot/img/profiles/bgs/",
-                        model.BackgroundImage.OpenReadStream(), 
+                        model.BackgroundImage.OpenReadStream(),
                         ImageUtils.ImgExtensionFromContentType(model.BackgroundImage.ContentType));
-                
+
                 // Save images
                 pfp = await ifmPfp.SavePfp(id);
                 pfp = pfp.Remove(0, 7);
@@ -134,7 +134,7 @@ namespace neobooru.Controllers
 
             await _db.Artists.AddAsync(artist);
             await _db.SaveChangesAsync();
-            
+
             return Redirect("/Artists/List");
         }
 
@@ -157,10 +157,17 @@ namespace neobooru.Controllers
             else
                 await arts.ForEachAsync(exp);
 
-            IQueryable<ArtistSubscription> follows = _db.ArtistSubscriptions
+            IQueryable<ArtistSubscription> subscriptions = _db.ArtistSubscriptions
                 .Where(a => a.Artist.Id.Equals(artist.Id));
+            int likes = 0;
+            await _db.Arts.Include(a => a.Author).Include(a => a.Likes)
+                .ForEachAsync(a =>
+                {
+                    if (a.Author.Id.ToString().Equals(artistId))
+                        likes += a.Likes.Count();
+                });
 
-            ArtistViewModel avm = new ArtistViewModel(artist, list, follows.Count());
+            ArtistViewModel avm = new ArtistViewModel(artist, list, subscriptions.Count(), likes);
 
 
             ViewBag.SubsectionPages = _subsectionPages;

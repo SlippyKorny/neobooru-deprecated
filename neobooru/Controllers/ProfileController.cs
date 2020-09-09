@@ -55,7 +55,12 @@ namespace neobooru.Controllers
             List<ArtThumbnailViewModel> recentlyUploaded = _db.Arts.Where(a => a.Uploader.Id.Equals(profileId))
                 .OrderByDescending(a => a.CreatedAt).Take(5).Select(a => new ArtThumbnailViewModel(a)).ToList();
 
-            return View(new ProfileViewModel(user, recentlyUploaded));
+            List<ArtThumbnailViewModel> recentlyLiked = _db.ArtLikes
+                .Where(a => a.User.Id.ToString().Equals(profileId))
+                .OrderByDescending(a => a.LikedDate).Take(5)
+                .Select(a => new ArtThumbnailViewModel(a.LikedArt)).ToList();
+
+            return View(new ProfileViewModel(user, recentlyUploaded, recentlyLiked));
         }
 
         [HttpGet]

@@ -43,7 +43,7 @@ namespace neobooru.Migrations
                     Discriminator = table.Column<string>(nullable: false),
                     RegisteredOn = table.Column<DateTime>(nullable: true),
                     PfpUrl = table.Column<string>(nullable: true),
-                    PfpThumbnailUrl = table.Column<string>(nullable: true),
+                    BgUrl = table.Column<string>(nullable: true),
                     ProfileDescription = table.Column<string>(nullable: true),
                     Gender = table.Column<string>(nullable: true),
                     Views = table.Column<int>(nullable: true)
@@ -390,7 +390,8 @@ namespace neobooru.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     UserId = table.Column<string>(nullable: false),
-                    LikedArtId = table.Column<Guid>(nullable: false)
+                    LikedArtId = table.Column<Guid>(nullable: false),
+                    LikedDate = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -432,7 +433,7 @@ namespace neobooru.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "ce520153-1cd3-487f-9c2f-3e4fce4d6cfa", "61a95a0e-ba18-47e0-9afe-3d383b12c352", "root", "ROOT" });
+                values: new object[] { "241d1c99-3735-4762-bcef-dec332937ac8", "96a84706-2e53-4ef1-9a0a-d6cc87549dcd", "root", "ROOT" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_ArtComments_CommentedArtId",

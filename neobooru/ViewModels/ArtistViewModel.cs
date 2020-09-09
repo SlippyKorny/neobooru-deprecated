@@ -13,7 +13,7 @@ namespace neobooru.ViewModels
 
         public readonly DateTime RegisteredAt;
 
-        public readonly int ProfileViews;
+        public readonly int TotalArtLikes;
 
         public readonly String PfpUrl;
 
@@ -36,11 +36,11 @@ namespace neobooru.ViewModels
 
         private ArtistViewModel() { }
 
-        public ArtistViewModel(Artist artist, List<ArtThumbnailViewModel> artThumbnails, int followers)
+        public ArtistViewModel(Artist artist, List<ArtThumbnailViewModel> artThumbnails, int followers, int likes)
         {
             ArtistName = artist.ArtistName;
             RegisteredAt = artist.RegisteredAt;
-            ProfileViews = artist.ProfileViews;
+            TotalArtLikes = likes;
             PfpUrl = artist.PfpUrl;
             BackgroundUrl = artist.BackgroundImageUrl;
             Followers = followers;

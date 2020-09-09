@@ -48,8 +48,8 @@ namespace neobooru.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "c030b06c-5fd0-4ae0-84e0-a560ec053d81",
-                            ConcurrencyStamp = "9b1ec352-4ccb-4c38-bca3-5ab5e52a724e",
+                            Id = "241d1c99-3735-4762-bcef-dec332937ac8",
+                            ConcurrencyStamp = "96a84706-2e53-4ef1-9a0a-d6cc87549dcd",
                             Name = "root",
                             NormalizedName = "ROOT"
                         });
@@ -343,6 +343,9 @@ namespace neobooru.Migrations
 
                     b.Property<Guid>("LikedArtId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("LikedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("UserId")
                         .IsRequired()

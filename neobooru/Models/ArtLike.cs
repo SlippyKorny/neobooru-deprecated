@@ -17,5 +17,7 @@ namespace neobooru.Models
 
         [Required]
         public Art LikedArt { get; set; }
+        
+        public DateTime LikedDate { get; set; }
     }
 }
