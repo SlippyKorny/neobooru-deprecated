@@ -8,6 +8,7 @@ using ImageManipulation.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using neobooru.Models;
 using neobooru.Services;
 using neobooru.ViewModels;
@@ -47,17 +48,17 @@ namespace neobooru.Controllers
             else
                 Redirect("/");
 
-            NeobooruUser user = _db.NeobooruUsers.FirstOrDefault(a => a.Id.Equals(profileId));
+            NeobooruUser user = _db.NeobooruUsers
+                .Include(usr => usr.ArtLikes)
+                .Include(usr => usr.UploadedArts)
+                .FirstOrDefault(a => a.Id.Equals(profileId));
 
             if (user == null)
                 Redirect("/");
 
-            List<ArtThumbnailViewModel> recentlyUploaded = _db.Arts.Where(a => a.Uploader.Id.Equals(profileId))
-                .OrderByDescending(a => a.CreatedAt).Take(5).Select(a => new ArtThumbnailViewModel(a)).ToList();
-
-            List<ArtThumbnailViewModel> recentlyLiked = _db.ArtLikes
-                .Where(a => a.User.Id.ToString().Equals(profileId))
-                .OrderByDescending(a => a.LikedDate).Take(5)
+            List<ArtThumbnailViewModel> recentlyUploaded = user.UploadedArts.OrderByDescending(usr => usr.CreatedAt)
+                .Take(5).Select(a => new ArtThumbnailViewModel(a)).ToList();
+            var recentlyLiked = user.ArtLikes.OrderByDescending(al => al.LikedDate).Take(5)
                 .Select(a => new ArtThumbnailViewModel(a.LikedArt)).ToList();
 
             return View(new ProfileViewModel(user, recentlyUploaded, recentlyLiked));
