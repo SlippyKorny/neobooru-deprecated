@@ -11,6 +11,8 @@ namespace neobooru.ViewModels
     {
         public readonly string ArtistName;
 
+        public readonly string ArtistId;
+        
         public readonly DateTime RegisteredAt;
 
         public readonly int TotalArtLikes;
@@ -34,11 +36,15 @@ namespace neobooru.ViewModels
 
         public readonly List<ArtThumbnailViewModel> ArtThumbnails;
 
+        public readonly bool ArtistSubscribed;
+
         private ArtistViewModel() { }
 
-        public ArtistViewModel(Artist artist, List<ArtThumbnailViewModel> artThumbnails, int followers, int likes)
+        public ArtistViewModel(Artist artist, List<ArtThumbnailViewModel> artThumbnails, int followers,
+            int likes, bool artistSubscribed)
         {
             ArtistName = artist.ArtistName;
+            ArtistId = artist.Id.ToString();
             RegisteredAt = artist.RegisteredAt;
             TotalArtLikes = likes;
             PfpUrl = artist.PfpUrl;
@@ -50,6 +56,7 @@ namespace neobooru.ViewModels
             MailAddress = artist.MailAddress;
             Gender = artist.Gender;
             ArtThumbnails = artThumbnails;
+            ArtistSubscribed = artistSubscribed;
         }
     }
 }

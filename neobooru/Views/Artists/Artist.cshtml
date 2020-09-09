@@ -4,6 +4,43 @@
 }
 @model neobooru.ViewModels.ArtistViewModel
 
+<script>
+    var liked = @Model.ArtistSubscribed.ToString().ToLower();
+    
+    function likeBtnHandler() {
+        let btn = document.getElementById('subscribeBtn');
+        console.log(btn);
+        if (liked) {
+            sendUnlikeRequest();
+            // btn.style.backgroundColor = "#fff";
+            // btn.style.border = "1px solid #f368e0";
+            // btn.style.color = "#f368e0";
+            btn.innerHTML = "<i class=\"fas fa-star\"></i> Subscribe";
+            liked = false;
+        } else {
+            sendLikeRequest();
+            // btn.style.color = "#fff";
+            // btn.style.backgroundColor = "#f368e0";
+            btn.innerHTML = "<i class=\"far fa-star\"></i> Unsubscribe";
+            liked = true;
+        }
+    }
+    
+    function sendLikeRequest() {
+        var xhttp = new XMLHttpRequest();
+        
+        xhttp.open("GET", "/artists/subscribe?artistId=@Model.ArtistId", true);
+        xhttp.send();
+    }
+    
+    function sendUnlikeRequest() {
+        var xhttp = new XMLHttpRequest();
+                
+        xhttp.open("GET", "/artists/unsubscribe?artistId=@Model.ArtistId", true);
+        xhttp.send();
+    }
+</script>
+
 <div id="artist-profile">
     <div id="artist-upper-section">
         <div class="row">
@@ -50,7 +87,17 @@
                 </div>
             </div>
             <div class="col-md-1 h-100">
-                <a class="btn btn-primary text-white" style="margin-top: 150px"><i class="fas fa-star"></i> Subscribe</a>
+                @if (!Model.ArtistSubscribed)
+                {
+                    <a class="btn btn-primary text-white" style="margin-top: 150px" onclick="likeBtnHandler()"
+                       id="subscribeBtn"><i class="fas fa-star"></i> Subscribe</a>
+                }
+                else
+                {
+                    <a class="btn btn-primary text-white" style="margin-top: 150px" onclick="likeBtnHandler()"
+                       id="subscribeBtn"><i class="far fa-star"></i> Unsubscribe</a>
+                }
+
             </div>
         </div>
         <div class="row" style="margin-top: 40px;">

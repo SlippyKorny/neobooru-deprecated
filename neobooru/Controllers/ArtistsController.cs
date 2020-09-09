@@ -167,13 +167,75 @@ namespace neobooru.Controllers
                         likes += a.Likes.Count();
                 });
 
-            ArtistViewModel avm = new ArtistViewModel(artist, list, subscriptions.Count(), likes);
+            bool subscribed = false;
+            if (_signInManager.IsSignedIn(User))
+            {
+                NeobooruUser usr = await _userManager.GetUserAsync(User);
+                var foo = _db.ArtistSubscriptions.Include(a => a.Artist)
+                    .Include(a => a.Subscriber).AsEnumerable();
+                    
+                subscribed = foo.Any(a => a.Artist.Id.ToString().Equals(artistId) &&
+                                          a.Subscriber.Id.ToString().Equals(usr.Id));
+            }
+
+            ArtistViewModel avm = new ArtistViewModel(artist, list, subscriptions.Count(), likes, subscribed);
 
 
             ViewBag.SubsectionPages = _subsectionPages;
             ViewBag.ActiveSubpage = "Artist";
 
             return View(avm);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Subscribe(string artistId)
+        {
+            if (!_signInManager.IsSignedIn(User))
+                return StatusCode(403);
+            NeobooruUser usr = await _userManager.GetUserAsync(User);
+            
+            if (_db.ArtistSubscriptions.Include(a => a.Artist)
+                .Include(a => a.Subscriber)
+                .Any(a => a.Artist.Id.ToString().Equals(artistId) && a.Subscriber.Id.Equals(artistId)))
+                return StatusCode(200);
+
+            Artist a = await _db.Artists.FirstAsync(a => a.Id.ToString().Equals(artistId));
+            _db.ArtistSubscriptions.Add(new ArtistSubscription()
+            {
+                Id = Guid.NewGuid(),
+                Artist = a,
+                SubscribedOn = DateTime.Now,
+                Subscriber = usr
+            });
+            await _db.SaveChangesAsync();
+            
+            return StatusCode(200);
+        }
+        
+        [HttpGet]
+        public async Task<IActionResult> Unsubscribe(string artistId)
+        {
+            if (!_signInManager.IsSignedIn(User))
+                return StatusCode(403);
+
+            NeobooruUser usr = await _userManager.GetUserAsync(User);
+            
+            if (!_db.ArtistSubscriptions.Include(a => a.Artist)
+                .Include(a => a.Subscriber)
+                .Any(a => a.Artist.Id.ToString().Equals(artistId) && a.Subscriber.Id.Equals(usr.Id)))
+                return StatusCode(200);
+
+            // Artist a = await _db.Artists.FirstAsync(a => a.Id.ToString().Equals(artistId));
+            var foo = await _db.ArtistSubscriptions.Include(a => a.Artist)
+                .Include(a => a.Subscriber)
+                .FirstAsync(a => a.Artist.Id.ToString().Equals(artistId) && a.Subscriber.Id.Equals(usr.Id));
+            if (foo != null)
+            {
+                _db.ArtistSubscriptions.Remove(foo);
+                await _db.SaveChangesAsync();
+            }
+            
+            return StatusCode(200);
         }
 
         [HttpGet]
