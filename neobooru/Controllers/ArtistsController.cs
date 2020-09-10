@@ -215,7 +215,7 @@ namespace neobooru.Controllers
         }
         
         [HttpGet]
-        public async Task<IActionResult> Unsubscribe(string artistId)
+        public async Task<IActionResult> Unsubscribe(string artistId, string redirect)
         {
             if (!_signInManager.IsSignedIn(User))
                 return StatusCode(403);
@@ -236,8 +236,11 @@ namespace neobooru.Controllers
                 _db.ArtistSubscriptions.Remove(foo);
                 await _db.SaveChangesAsync();
             }
-            
-            return StatusCode(200);
+
+            if (redirect == null || redirect.Equals(""))
+                return StatusCode(200);
+            else
+                return Redirect(redirect);
         }
 
         [HttpGet]

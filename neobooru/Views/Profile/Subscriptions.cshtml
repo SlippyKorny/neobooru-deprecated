@@ -1,8 +1,19 @@
-﻿@{
+﻿@inject SignInManager<NeobooruUser> signInManager;
+@inject UserManager<NeobooruUser> userManager;
+@{
     ViewData["Section"] = "Profile";
     ViewData["Subsection"] = "My Profile";
 }
+@using System.Web
 @model neobooru.ViewModels.SubscriptionsViewModel
+
+@{ bool usersProfile = false; }
+@if (signInManager.IsSignedIn(User))
+{
+    NeobooruUser usr = await userManager.GetUserAsync(User);
+    usersProfile = usr.Id.Equals(Model.ProfileId);
+}
+
 
 <div id="artist-profile">
     <div id="artist-upper-section">
@@ -56,8 +67,10 @@
                                 <img src="@Url.Content(Model.Thumbnails[i].PfpUrl)" class="card-img-top"/>
                                 <div class="card-footer">
                                     <h5 class="card-title">@Model.Thumbnails[i].ArtistName</h5>
-                                    <p class="card-text">Registered Arts: @Model.Thumbnails[i].NumberOfArts <br/>
-                                        Registered artist on: @Model.Thumbnails[i].RegistrationTime.ToString()</p>
+                                    <p class="card-text">
+                                        Registered Arts: @Model.Thumbnails[i].NumberOfArts <br/>
+                                        Registered artist on: @Model.Thumbnails[i].RegistrationTime.ToString()
+                                    </p>
                                     <div class="row">
                                         <div class="col-sm">
                                             <i class="fas fa-star"></i> @Model.Thumbnails[i].Subscriptions
@@ -69,6 +82,16 @@
                                 </div>
                             </div>
                         </a>
+                        @if (usersProfile)
+                        {
+                            <p>
+                                @{ string url = "/artists/unsubscribe?artistId=" + Model.Thumbnails[i].Id + "&redirect="
+                                       + HttpUtility.UrlEncode(Context.Request.Path + "?profileId=" + Model.ProfileId); }
+                                <a href="@Url.Content(url)">
+                                    <i class="fas fa-times"></i> Unsubscribe
+                                </a>
+                            </p>
+                        }
                     </div>
                     i += 1;
                 }
