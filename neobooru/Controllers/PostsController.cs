@@ -25,7 +25,7 @@ namespace neobooru.Controllers
 
         private readonly SignInManager<NeobooruUser> _signInManager;
 
-        private readonly string[] _subsectionPages = {"List", "Trending", "Upload", "Help"};
+        private readonly string[] _subsectionPages = {"List", "Timeline", "Upload", "Help"};
 
         public PostsController(NeobooruDataContext db, UserManager<NeobooruUser> userManager,
             SignInManager<NeobooruUser> signInManager)
@@ -140,12 +140,38 @@ namespace neobooru.Controllers
         }
 
         [HttpGet]
-        public IActionResult Trending()
+        public async Task<IActionResult> Timeline()
         {
             ViewBag.SubsectionPages = _subsectionPages;
             ViewBag.ActiveSubpage = _subsectionPages[1];
 
-            return View();
+            if (!_signInManager.IsSignedIn(User))
+                return View();
+            
+            NeobooruUser usr = await _userManager.GetUserAsync(User);
+            var subscribedAuthors = _db.ArtistSubscriptions.Include(s => s.Artist)
+                .Where(a => a.Subscriber.Id.Equals(usr.Id));
+            
+            List<TimelinePostViewModel> posts = new List<TimelinePostViewModel>();
+            posts.AddRange(_db.Arts.Include(a => a.Author)
+                .Include(a => a.Comments)
+                .ThenInclude(c => c.User)
+                .OrderByDescending(a => a.CreatedAt)
+                .Where(a => subscribedAuthors.Any(ar => ar.Artist.Id.ToString().Equals(a.Author.Id.ToString())))
+                .Take(10).Select(a => new TimelinePostViewModel() {
+                        ArtistName = a.Author.ArtistName,
+                        PfpUrl = a.Author.PfpUrl,
+                        CreationTime = a.CreatedAt,
+                        PostDescription = a.Author.ArtistName + " has uploaded a new art called '" + 
+                            a.Name + "'.",
+                        ArtId = a.Id.ToString(),
+                        ArtUrl = a.FileUrl,
+                        RecentComments = a.Comments.OrderByDescending(c => c.CommentedOn).Take(3)
+                            .Select(c => new CommentViewModel(c.User.UserName, c.User.PfpUrl, c.Content, c.CommentedOn))
+                            .ToList()
+                    }));
+
+            return View(posts);
         }
 
         [HttpGet]

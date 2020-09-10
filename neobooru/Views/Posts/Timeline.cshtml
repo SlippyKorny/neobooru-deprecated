@@ -1,0 +1,58 @@
+﻿@{
+    ViewData["Section"] = "Posts";
+    ViewData["Subsection"] = "Trending";
+}
+@using Microsoft.EntityFrameworkCore.Internal
+@model List<neobooru.ViewModels.TimelinePostViewModel>
+
+
+<div id="timeline-container">
+    @foreach (var entry in Model)
+    {
+        <div class="border bg-white mt-3 mb-1">
+            <div class="row mb-2">
+                <div class="col-sm ml-2 mt-3 mr-0 pr-0">
+                    <div class="row ml-1">
+                        <div class="col-sm-2">
+                            <img src="@Url.Content(entry.PfpUrl)" class="img-thumbnail" style="width: 100px">
+                        </div>
+                        <div class="col-sm-9">
+                            <h4>@entry.ArtistName</h4>
+                            <p class="text-secondary">@entry.CreationTime.ToString()</p>
+                            <p>@entry.PostDescription</p>
+                        </div>
+                    </div>
+                    @if (!entry.RecentComments.Any())
+                    {
+                        <div class="row ml-4 mt-3 mb-3">
+                            <i>Nothing to find here! Nobody has commented yet!</i>&nbsp;ヽ(￣д￣;)ノ=3=3=3
+                        </div>
+                    }
+                    @foreach (var comment in entry.RecentComments)
+                    {
+                        <div class="row ml-1 mb-3 border">
+                            <div class="col-sm-2 mt-2 mb-3">
+                                <a href="#"><img src="@Url.Content(comment.PfpUrl)" class="img-thumbnail float-left" style="max-width: 100px;"></a>
+                            </div>
+                            <div class="col-sm-10 mt-3">
+                                <h5><a href="#">@comment.AuthorName</a></h5>
+                                <p>@comment.Content</p>
+                            </div>
+                        </div> 
+                    }
+                    <div class="row ml-1">
+                        <div class="col-sm">
+                            <a class="btn btn-block btn-success" href="@Url.Content("/posts/post?postId=" + entry.ArtId)">
+                                Go to art
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm ml-2 mt-3 mr-0 pr-0">
+                    <img class="rounded mx-auto d-block" style="max-width: 400px; max-height: 800px" 
+                         src="@Url.Content(entry.ArtUrl)">
+                </div>
+            </div>
+        </div>
+    }
+</div>
