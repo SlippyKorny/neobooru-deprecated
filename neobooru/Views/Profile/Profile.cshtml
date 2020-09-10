@@ -47,7 +47,8 @@
                             <img src="@Url.Content(Model.RecentlyUploaded[a].FileUrl)" class="card-img-top"/>
                             <div class="card-footer">
                                 <h5 class="card-title">@Model.RecentlyUploaded[a].ArtName</h5>
-                                <p class="card-text">Made by @Model.RecentlyUploaded[a].ArtistName<br/>Uploaded: @Model.RecentlyUploaded[a].UploadDate.ToString()</p>
+                                <p class="card-text">Made by @Model.RecentlyUploaded[a].ArtistName<br/>
+                                    Uploaded: @Model.RecentlyUploaded[a].UploadDate.ToString()</p>
                             </div>
                         </div>
                     </a>
@@ -62,7 +63,7 @@
             <div class="col-sm text-center text-secondary">
                 <a href="#">
                     <h5>
-                        <i>See more...</i>
+                        <i><a href="@Url.Content("/profile/uploads?profileId=" + Model.ProfileId)">See more...</a></i>
                     </h5>
                 </a>
             </div>
@@ -73,15 +74,16 @@
         </div>
         <div class="row">
             @{ a = 0; }
-            @for (; a < Model.RecentlyUploaded.Count; a++)
+            @for (; a < Model.RecentlyLiked.Count; a++)
             {
                 <div class="col-sm">
-                    <a href="@Url.Content("/posts/post?postId=" + Model.RecentlyUploaded[a].ArtId)">
+                    <a href="@Url.Content("/posts/post?postId=" + Model.RecentlyLiked[a].ArtId)">
                         <div class="card w-20">
-                            <img src="@Url.Content(Model.RecentlyUploaded[a].FileUrl)" class="card-img-top"/>
+                            <img src="@Url.Content(Model.RecentlyLiked[a].FileUrl)" class="card-img-top"/>
                             <div class="card-footer">
-                                <h5 class="card-title">@Model.RecentlyUploaded[a].ArtName</h5>
-                                <p class="card-text">Made by @Model.RecentlyUploaded[a].ArtistName<br/>Uploaded: @Model.RecentlyUploaded[a].UploadDate.ToString()</p>
+                                <h5 class="card-title">@Model.RecentlyLiked[a].ArtName</h5>
+                                <p class="card-text">Made by @Model.RecentlyLiked[a].ArtistName<br/>
+                                    Uploaded: @Model.RecentlyLiked[a].UploadDate.ToString()</p>
                             </div>
                         </div>
                     </a>
@@ -96,7 +98,7 @@
             <div class="col-sm text-center text-secondary">
                 <a href="#">
                     <h5>
-                        <i>See more...</i>
+                        <i><a href="@Url.Content("/profile/likes?profileId=" + Model.ProfileId)">See more...</a></i>
                     </h5>
                 </a>
             </div>

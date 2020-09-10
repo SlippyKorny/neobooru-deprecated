@@ -1,0 +1,80 @@
+﻿@{
+    ViewData["Section"] = "Profile";
+    ViewData["Subsection"] = "My Profile";
+}
+@model neobooru.ViewModels.AllArtThumbnailsViewModel
+
+<div id="artist-profile">
+    <div id="artist-upper-section">
+        <div class="row">
+            @if (Model.BackgroundUrl == null)
+            {
+                <img src="~/img/prototyping/backgrounds/1590x540p Background Placeholder Image.png"/>
+            }
+            else
+            {
+                <img src="@Url.Content(Model.BackgroundUrl)"/>
+            }
+        </div>
+        <div class="row" style="height: 200px; margin-top: -12.5vh;">
+            <div class="col-md-1 h-100">
+                <div style="margin-top: 140px; margin-left: 20px;"></div>
+            </div>
+            <div class="col-md-11 h-100">
+                <img src="@Url.Content(Model.PfpUrl)" class="rounded float-left" style="border: solid 1px #1dd1a1; max-height:100%; margin-right: 20px;"/>
+                <h2 class="float-left" style="margin-top: 140px;  display: block;">@Model.Username</h2>
+                <div id="artist-data float-left" style="margin-top: 170px;"></div>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 40px;">
+            <div class="text-secondary px-4">@Model.Description</div>
+            @* TODO: Recent uploads, Recent Favourites, Recent subscriptions *@
+        </div>
+    </div>
+    <hr/>
+    <div id="artist-lower-section">
+        <div class="row mt-4">
+            <div class="col-sm text-center text-secondary">
+                <a href="@Url.Content("/profile/profile?profileId=" + Model.ProfileId)">
+                    <h5 class="text-secondary">
+                        <i>Back to profile</i>
+                    </h5>
+                </a>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <h2 style="margin-left: auto; margin-right: auto;">Likes</h2>
+        </div>
+        @for (int i = 0; i < Model.Thumbnails.Count();)
+        {
+            <div class="row mt-3">
+                @for (int j = 0; j < 5 && i < Model.Thumbnails.Count(); j++)
+                {
+                    <div class="col-sm">
+                        <a href="@Url.Content("/posts/post?postId=" + Model.Thumbnails[i].ArtId)">
+                            <div class="card w-20">
+                                <img src="@Url.Content(Model.Thumbnails[i].FileUrl)" class="card-img-top"/>
+                                <div class="card-footer">
+                                    <h5 class="card-title">@Model.Thumbnails[i].ArtName</h5>
+                                    <p class="card-text">
+                                        Made by @Model.Thumbnails[i].ArtistName<br/>
+                                        Uploaded: @Model.Thumbnails[i].UploadDate.ToString()
+                                    </p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    i += 1;
+                }
+                @if (i % 5 != 0)
+                {
+                    @while (i % 5 != 0)
+                    {
+                        <div class="col-sm"></div>
+                        i++;
+                    }
+                }
+            </div>
+        }
+    </div>
+</div>

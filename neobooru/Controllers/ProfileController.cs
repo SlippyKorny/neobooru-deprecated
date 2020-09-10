@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using neobooru.Models;
 using neobooru.Services;
 using neobooru.ViewModels;
@@ -61,7 +62,72 @@ namespace neobooru.Controllers
             var recentlyLiked = user.ArtLikes.OrderByDescending(al => al.LikedDate).Take(5)
                 .Select(a => new ArtThumbnailViewModel(a.LikedArt)).ToList();
 
-            return View(new ProfileViewModel(user, recentlyUploaded, recentlyLiked));
+            return View(new ProfileViewModel(user, recentlyUploaded, recentlyLiked, profileId));
+        }
+
+        [HttpGet]
+        public IActionResult Likes(string profileId)
+        {
+            ViewBag.SubsectionPages = _subsectionPages;
+            ViewBag.ActiveSubpage = "User's Likes";
+            
+            var usr = _db.NeobooruUsers
+                .Include(usr => usr.ArtLikes)
+                .ThenInclude(likes => likes.LikedArt)
+                .FirstOrDefault(a => a.Id.Equals(profileId));
+
+            if (usr == null)
+                Redirect("/");
+
+            List<ArtThumbnailViewModel> likes = usr.ArtLikes.OrderByDescending(al => al.LikedDate)
+                .Select(a => new ArtThumbnailViewModel(a.LikedArt)).ToList();
+            AllArtThumbnailsViewModel lvm = new AllArtThumbnailsViewModel()
+            {
+                Username = usr.UserName,
+                ProfileId = profileId,
+                PfpUrl = usr.PfpUrl,
+                BackgroundUrl = usr.BgUrl,
+                Description = usr.ProfileDescription,
+                Thumbnails = likes
+            };
+
+            return View(lvm);
+        }
+
+        [HttpGet]
+        public IActionResult Subscriptions(string profileId)
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult Uploads(string profileId)
+        {
+            ViewBag.SubsectionPages = _subsectionPages;
+            ViewBag.ActiveSubpage = "User's Subscriptions";
+            
+            var usr = _db.NeobooruUsers
+                .Include(usr => usr.Subscriptions)
+                .ThenInclude(subs => subs.Artist)
+                .FirstOrDefault(a => a.Id.Equals(profileId));
+
+            if (usr == null)
+                Redirect("/");
+
+            List<ArtThumbnailViewModel> uploads = _db.Arts.Where(a => a.Uploader.Id.Equals(profileId))
+                .OrderByDescending(a => a.CreatedAt)
+                .Select(a => new ArtThumbnailViewModel(a)).ToList();
+            
+            AllArtThumbnailsViewModel vm = new AllArtThumbnailsViewModel()
+            {
+                Username = usr.UserName,
+                ProfileId = profileId,
+                PfpUrl = usr.PfpUrl,
+                BackgroundUrl = usr.BgUrl,
+                Description = usr.ProfileDescription,
+                Thumbnails = uploads
+            };
+            return View(vm);
         }
 
         [HttpGet]
