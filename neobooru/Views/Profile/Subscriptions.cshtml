@@ -85,7 +85,7 @@
                         @if (usersProfile)
                         {
                             <p>
-                                @{ string url = "/artists/unsubscribe?artistId=" + Model.Thumbnails[i].Id + "&redirect="
+                                @{ string url = "/artists/unsubscribe?profileId=" + Model.Thumbnails[i].Id + "&redirect="
                                        + HttpUtility.UrlEncode(Context.Request.Path + "?profileId=" + Model.ProfileId); }
                                 <a href="@Url.Content(url)">
                                     <i class="fas fa-times"></i> Unsubscribe

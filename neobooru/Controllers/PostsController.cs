@@ -374,7 +374,7 @@ namespace neobooru.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> PostUnlike(string artId)
+        public async Task<IActionResult> PostUnlike(string artId, string redirect)
         {
             if (!_signInManager.IsSignedIn(User))
                 return StatusCode(403);
@@ -384,7 +384,9 @@ namespace neobooru.Controllers
                                                    a.LikedArt.Id.ToString().Equals(artId));
             _db.ArtLikes.Remove(like);
             await _db.SaveChangesAsync();
-            return StatusCode(200);
+            if (redirect == null || redirect.Equals(""))
+                return StatusCode(200);
+            return Redirect(redirect);
         }
 
         [HttpPost]

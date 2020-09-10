@@ -1,8 +1,18 @@
-﻿@{
+﻿@inject SignInManager<NeobooruUser> signInManager;
+@inject UserManager<NeobooruUser> userManager;
+@{
     ViewData["Section"] = "Profile";
     ViewData["Subsection"] = "My Profile";
 }
+@using System.Web
 @model neobooru.ViewModels.AllArtThumbnailsViewModel
+
+@{ bool usersProfile = false; }
+@if (signInManager.IsSignedIn(User))
+{
+    NeobooruUser usr = await userManager.GetUserAsync(User);
+    usersProfile = usr.Id.Equals(Model.ProfileId);
+}
 
 <div id="artist-profile">
     <div id="artist-upper-section">
@@ -63,6 +73,16 @@
                                 </div>
                             </div>
                         </a>
+                        @if (usersProfile)
+                        {
+                            <p>
+                                @{ string url = "/posts/postUnlike?artId=" + Model.Thumbnails[i].ArtId + "&redirect="
+                                       + HttpUtility.UrlEncode(Context.Request.Path + "?profileId=" + Model.ProfileId); }
+                                <a href="@Url.Content(url)">
+                                    <i class="fas fa-times"></i> Unlike
+                                </a>
+                            </p>
+                        }
                     </div>
                     i += 1;
                 }
