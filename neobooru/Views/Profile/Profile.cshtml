@@ -35,20 +35,28 @@
     <hr/>
     <div id="artist-lower-section">
         <div class="row mt-5">
-            <h2 style="margin-left: auto; margin-right: auto;">Recent Uploads</h2>
+            <h2 style="margin-left: auto; margin-right: auto;">Recent Subscriptions</h2>
         </div>
         <div class="row">
             @{ int a = 0; }
-            @for (; a < Model.RecentlyUploaded.Count; a++)
+            @for (; a < Model.RecentlySubbed.Count; a++)
             {
                 <div class="col-sm">
-                    <a href="@Url.Content("/posts/post?postId=" + Model.RecentlyUploaded[a].ArtId)">
+                    <a href="@Url.Content("/artists/artist?artistId=" + Model.RecentlySubbed[a].Id)">
                         <div class="card w-20">
-                            <img src="@Url.Content(Model.RecentlyUploaded[a].FileUrl)" class="card-img-top"/>
+                            <img src="@Url.Content(Model.RecentlySubbed[a].PfpUrl)" class="card-img-top"/>
                             <div class="card-footer">
-                                <h5 class="card-title">@Model.RecentlyUploaded[a].ArtName</h5>
-                                <p class="card-text">Made by @Model.RecentlyUploaded[a].ArtistName<br/>
-                                    Uploaded: @Model.RecentlyUploaded[a].UploadDate.ToString()</p>
+                                <h5 class="card-title">@Model.RecentlySubbed[a].ArtistName</h5>
+                                <p class="card-text">Registered Arts: @Model.RecentlySubbed[a].NumberOfArts <br/>
+                                    Registered artist on: @Model.RecentlySubbed[a].RegistrationTime.ToString()</p>
+                                <div class="row">
+                                    <div class="col-sm">
+                                        <i class="fas fa-star"></i> @Model.RecentlySubbed[a].Subscriptions
+                                    </div>
+                                    <div class="col-sm">
+                                        <i class="fas fa-heart"></i> @Model.RecentlySubbed[a].ArtistTotalLikes
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </a>
@@ -63,7 +71,49 @@
             <div class="col-sm text-center text-secondary">
                 <a href="#">
                     <h5>
-                        <i><a href="@Url.Content("/profile/uploads?profileId=" + Model.ProfileId)">See more...</a></i>
+                        <i>
+                            <a href="@Url.Content("/profile/subscriptions?profileId=" + Model.ProfileId)">See more...</a>
+                        </i>
+                    </h5>
+                </a>
+            </div>
+        </div>
+        <hr class="mt-0"/>
+
+        <div class="row mt-5">
+            <h2 style="margin-left: auto; margin-right: auto;">Recent Uploads</h2>
+        </div>
+        <div class="row">
+            @{ a = 0; }
+            @for (; a < Model.RecentlyUploaded.Count; a++)
+            {
+                <div class="col-sm">
+                    <a href="@Url.Content("/posts/post?postId=" + Model.RecentlyUploaded[a].ArtId)">
+                        <div class="card w-20">
+                            <img src="@Url.Content(Model.RecentlyUploaded[a].FileUrl)" class="card-img-top"/>
+                            <div class="card-footer">
+                                <h5 class="card-title">@Model.RecentlyUploaded[a].ArtName</h5>
+                                <p class="card-text">
+                                    Made by @Model.RecentlyUploaded[a].ArtistName<br/>
+                                    Uploaded: @Model.RecentlyUploaded[a].UploadDate.ToString()
+                                </p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            }
+            @for (; a < 5; a++)
+            {
+                <div class="col-sm"></div>
+            }
+        </div>
+        <div class="row mt-4">
+            <div class="col-sm text-center text-secondary">
+                <a href="#">
+                    <h5>
+                        <i>
+                            <a href="@Url.Content("/profile/uploads?profileId=" + Model.ProfileId)">See more...</a>
+                        </i>
                     </h5>
                 </a>
             </div>
@@ -82,8 +132,10 @@
                             <img src="@Url.Content(Model.RecentlyLiked[a].FileUrl)" class="card-img-top"/>
                             <div class="card-footer">
                                 <h5 class="card-title">@Model.RecentlyLiked[a].ArtName</h5>
-                                <p class="card-text">Made by @Model.RecentlyLiked[a].ArtistName<br/>
-                                    Uploaded: @Model.RecentlyLiked[a].UploadDate.ToString()</p>
+                                <p class="card-text">
+                                    Made by @Model.RecentlyLiked[a].ArtistName<br/>
+                                    Uploaded: @Model.RecentlyLiked[a].UploadDate.ToString()
+                                </p>
                             </div>
                         </div>
                     </a>
@@ -98,7 +150,9 @@
             <div class="col-sm text-center text-secondary">
                 <a href="#">
                     <h5>
-                        <i><a href="@Url.Content("/profile/likes?profileId=" + Model.ProfileId)">See more...</a></i>
+                        <i>
+                            <a href="@Url.Content("/profile/likes?profileId=" + Model.ProfileId)">See more...</a>
+                        </i>
                     </h5>
                 </a>
             </div>

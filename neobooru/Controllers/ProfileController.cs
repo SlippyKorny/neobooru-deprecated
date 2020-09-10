@@ -52,6 +52,8 @@ namespace neobooru.Controllers
             NeobooruUser user = _db.NeobooruUsers
                 .Include(usr => usr.ArtLikes)
                 .Include(usr => usr.UploadedArts)
+                .Include(usr => usr.Subscriptions)
+                .ThenInclude(s => s.Artist)
                 .FirstOrDefault(a => a.Id.Equals(profileId));
 
             if (user == null)
@@ -61,8 +63,19 @@ namespace neobooru.Controllers
                 .Take(5).Select(a => new ArtThumbnailViewModel(a)).ToList();
             var recentlyLiked = user.ArtLikes.OrderByDescending(al => al.LikedDate).Take(5)
                 .Select(a => new ArtThumbnailViewModel(a.LikedArt)).ToList();
+            var recentlySubbed = user.Subscriptions
+                .OrderByDescending(sub => sub.SubscribedOn)
+                .Take(5).Select(s =>
+                {
+                    var foo = _db.ArtLikes.Include(f => f.LikedArt)
+                        .ThenInclude(f => f.Author)
+                        .Count(f => f.LikedArt.Author.Id.ToString()
+                            .Equals(s.Artist.Id.ToString()));
+                    return new ArtistThumbnailViewModel(s.Artist, s.Artist.Arts.Count(),
+                        s.Artist.Subscriptions.Count(), foo);
+                }).ToList();
 
-            return View(new ProfileViewModel(user, recentlyUploaded, recentlyLiked, profileId));
+            return View(new ProfileViewModel(user, recentlyUploaded, recentlyLiked, recentlySubbed, profileId));
         }
 
         [HttpGet]
@@ -97,7 +110,43 @@ namespace neobooru.Controllers
         [HttpGet]
         public IActionResult Subscriptions(string profileId)
         {
-            return View();
+            ViewBag.SubsectionPages = _subsectionPages;
+            ViewBag.ActiveSubpage = "User's Subscriptions";
+            
+            var usr = _db.NeobooruUsers
+                .Include(usr => usr.Subscriptions)
+                .ThenInclude(subs => subs.Artist)
+                .FirstOrDefault(a => a.Id.Equals(profileId));
+
+            if (usr == null)
+                Redirect("/");
+
+            Func<ArtistSubscription, ArtistThumbnailViewModel> subToThumbnail = (s) =>
+            {
+                int likes = _db.ArtLikes.Include(s => s.LikedArt.Author)
+                    .Count(l => l.LikedArt.Author.Id.ToString().Equals(s.Artist.Id.ToString()));
+                return new ArtistThumbnailViewModel(s.Artist, s.Artist.Arts.Count(),
+                    s.Artist.Subscriptions.Count(), likes);
+            };
+            List<ArtistThumbnailViewModel> thumbnails = _db.ArtistSubscriptions
+                .Include(s => s.Artist)
+                .ThenInclude(s => s.Arts)
+                .Include(s => s.Artist.Subscriptions)
+                .Where(s => s.Subscriber.Id.Equals(profileId))
+                .OrderByDescending(s => s.SubscribedOn)
+                .Select(subToThumbnail).ToList();
+            
+            SubscriptionsViewModel svm = new SubscriptionsViewModel()
+            {
+                Username = usr.UserName,
+                ProfileId = profileId,
+                PfpUrl = usr.PfpUrl,
+                BackgroundUrl = usr.BgUrl,
+                Description = usr.ProfileDescription,
+                Thumbnails = thumbnails
+            };
+            
+            return View(svm);
         }
 
         [HttpGet]

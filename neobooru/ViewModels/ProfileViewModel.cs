@@ -27,8 +27,11 @@ namespace neobooru.ViewModels
 
         public readonly List<ArtThumbnailViewModel> RecentlyLiked;
 
+        public readonly List<ArtistThumbnailViewModel> RecentlySubbed;
+
         public ProfileViewModel(NeobooruUser user, List<ArtThumbnailViewModel> uploaded,
-            List<ArtThumbnailViewModel> recentlyLiked, string profileId)
+            List<ArtThumbnailViewModel> recentlyLiked, List<ArtistThumbnailViewModel> subbed,
+                string profileId)
         {
             Username = user.UserName;
             RegisteredAt = user.RegisteredOn;
@@ -39,6 +42,7 @@ namespace neobooru.ViewModels
             Descritpion = user.ProfileDescription ?? "";
             RecentlyUploaded = uploaded;
             RecentlyLiked = recentlyLiked;
+            RecentlySubbed = subbed;
             ProfileId = profileId;
         }
     }
